@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "9ArQQg7cDQB+CrVAmUz4PImCtfI8aYjSPc3EEcT0DRT5BijIJNtNVkZyeIgp5wCVGomTVkXBexHm350Nu0QDYA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\della\\source\\repos\\DistributedCross\\Distributed.Cross.Common\\Distributed.Cross.Common\\Distributed.Cross.Common.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\della\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\della\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
