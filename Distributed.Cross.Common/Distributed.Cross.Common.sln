@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Distributed.Cross.Common", "Distributed.Cross.Common\Distributed.Cross.Common.csproj", "{45D9ABC9-D8C5-483E-B124-F3FD921591E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Cross.Common", "Distributed.Cross.Common\Distributed.Cross.Common.csproj", "{45D9ABC9-D8C5-483E-B124-F3FD921591E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Distributed.Cross.Gui.Simulation", "Distributed.Cross.Gui.Simulation\Distributed.Cross.Gui.Simulation.csproj", "{91E56FD9-6287-40B5-82F8-71AF0C4502A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{45D9ABC9-D8C5-483E-B124-F3FD921591E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45D9ABC9-D8C5-483E-B124-F3FD921591E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D9ABC9-D8C5-483E-B124-F3FD921591E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91E56FD9-6287-40B5-82F8-71AF0C4502A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91E56FD9-6287-40B5-82F8-71AF0C4502A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91E56FD9-6287-40B5-82F8-71AF0C4502A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91E56FD9-6287-40B5-82F8-71AF0C4502A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
