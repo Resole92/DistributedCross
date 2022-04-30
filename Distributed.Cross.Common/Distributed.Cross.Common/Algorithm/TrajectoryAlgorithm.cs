@@ -49,12 +49,13 @@ namespace Distributed.Cross.Common.Algorithm
             };
 
             //If -1 this means that no trajectory was found
-            while(destination.ParentIdentifier == nodeIdentifier - 1 || destination.ParentIdentifier == -1)
+            while(destination.ParentIdentifier != nodeIdentifier - 1 && destination.ParentIdentifier != -1)
             {
                 result.Trajectory.Add(destination.ParentIdentifier + 1);
                 destination = dist[destination.ParentIdentifier];
             }
-
+            
+            result.Trajectory.Reverse();
             return result;
         }
 
@@ -121,9 +122,10 @@ namespace Distributed.Cross.Common.Algorithm
                     // from src to v through u is smaller
                     // than current value of dist[v]
                     if (!sptSet[v] && graph[u, v] != 0 &&
-                         dist[u].Distance != int.MaxValue && dist[u].Distance + graph[u, v] < dist[v].Distance)
+                         dist[u].Distance != double.MaxValue && dist[u].Distance + graph[u, v] < dist[v].Distance)
                     {
                         dist[v].Distance = dist[u].Distance + graph[u, v];
+                        dist[v].ParentIdentifier = u;
                     }
             }
 

@@ -9,6 +9,7 @@ namespace Distributed.Cross.Common.Module
     {
 
         public Graph<CrossNode> Map { get; set; } = new Graph<CrossNode>();
+        private CrossNode[,] _crossGrid;
 
         public int Height { get; private set; }
         public int Lenght { get; private set; }
@@ -17,7 +18,6 @@ namespace Distributed.Cross.Common.Module
         {
             Height = height;
             Lenght = lenght;
-            BuildIdentifier();
         }
 
         public CrossNode[,] BuildInternalMap()
@@ -25,9 +25,9 @@ namespace Distributed.Cross.Common.Module
 
             var crossMatrix = new CrossNode[Height, Lenght];
 
-            for (int row = 0; row <= Height; row++)
+            for (int row = 0; row < Height; row++)
             {
-                for (int column = 0; column <= Lenght; column++)
+                for (int column = 0; column < Lenght; column++)
                 {
                     crossMatrix[row,column] = new CrossNode
                     {
@@ -68,6 +68,7 @@ namespace Distributed.Cross.Common.Module
                     }
                 }
             }
+            _crossGrid = crossMatrix;
             return crossMatrix;
         }
 
@@ -85,10 +86,10 @@ namespace Distributed.Cross.Common.Module
                 output.Identifier = count++;
             }
 
-            foreach(var cross in Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Cross))
-            {
-                cross.Identifier = count++;
-            }
+            for (int row = 0; row < Height; row++)
+                for (int column = 0; column < Lenght; column++)
+                    _crossGrid[row, column].Identifier = count++;
+
         }
 
 
@@ -96,7 +97,7 @@ namespace Distributed.Cross.Common.Module
         /// Valid only if node choose exists and is on perimeter
         /// </summary>
         /// <param name="externalNodeId"></param>
-        public void AddInputLane(int rowCell, int columnCell, CrossNode[,] crossMatrix)
+        public void AddInputLane(int rowCell, int columnCell)
         {
 
             var inputNode = new CrossNode
@@ -104,7 +105,7 @@ namespace Distributed.Cross.Common.Module
                 Type = CrossNodeType.Input
             };
 
-            var targetNode = crossMatrix[rowCell, columnCell];
+            var targetNode = _crossGrid[rowCell, columnCell];
             Map.AddDirectNeighbor(inputNode, targetNode,1);
 
         }
@@ -113,19 +114,32 @@ namespace Distributed.Cross.Common.Module
         /// Valid only if node choose exists and is on perimeter
         /// </summary>
         /// <param name="externalNodeId"></param>
-        public void AddOutputLane(int rowCell, int columnCell, CrossNode[,] crossMatrix)
+        public void AddOutputLane(int rowCell, int columnCell)
         {
             var outputNode = new CrossNode
             {
                 Type = CrossNodeType.Output
             };
 
-            var targetNode = crossMatrix[rowCell, columnCell];
+            var targetNode = _crossGrid[rowCell, columnCell];
             Map.AddDirectNeighbor(targetNode, outputNode, 1);
         }
 
 
+        public void AddVehicle(Vehicle vehicle, int entryLane)
+        {
+            var node = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == entryLane);
+            if (node is null) throw new Exception($"Entry lane with ID {entryLane} not exists");
+            if (node.Type != CrossNodeType.Input) throw new Exception($"Node with ID is not a entry lane but of type {node.Type}");
 
+            var exitNode = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.DestinationLane);
+            if (exitNode is null) throw new Exception($"Exit lane with ID {vehicle.DestinationLane} not exists");
+            if (exitNode.Type != CrossNodeType.Output) throw new Exception($"Node with ID is not a exit lane but of type {node.Type}");
+
+            node.Identifier = entryLane;
+            node.Vehicle = vehicle;
+            
+        }
 
 
     }

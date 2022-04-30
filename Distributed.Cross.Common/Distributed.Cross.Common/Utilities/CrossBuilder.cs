@@ -19,16 +19,17 @@ namespace Distributed.Cross.Common.Utilities
         }
 
 
-        private void CreateBasicInputOutput()
+        public void CreateBasicInputOutput()
         {
             AddInputLane(0, 0);
+            AddInputLane(0, _length - 1);
+            AddInputLane(_height - 1, _length - 1);
+            AddInputLane(_height - 1, 0);
+
+            AddOutputLane(0, _length - 1);
+            AddOutputLane(_height - 1, _length - 1);
+            AddOutputLane(_height - 1, 0);
             AddOutputLane(0, 0);
-            AddInputLane(0, 3);
-            AddOutputLane(0, 3);
-            AddInputLane(3, 0);
-            AddOutputLane(3, 0);
-            AddInputLane(3, 3);
-            AddOutputLane(3, 3);
         }
 
         public void AddInputLane(int row, int column)
@@ -40,9 +41,9 @@ namespace Distributed.Cross.Common.Utilities
         public CrossMap Build()
         {
             var map = new CrossMap(_height, _length);
-            var crossMatrix = map.BuildInternalMap();
-            Inputs.ForEach(x => map.AddInputLane(x.Item1, x.Item2, crossMatrix));
-            Outputs.ForEach(x => map.AddOutputLane(x.Item1, x.Item2, crossMatrix));
+            map.BuildInternalMap();
+            Inputs.ForEach(x => map.AddInputLane(x.Item1, x.Item2));
+            Outputs.ForEach(x => map.AddOutputLane(x.Item1, x.Item2));
             map.BuildIdentifier();
 
             return map;
