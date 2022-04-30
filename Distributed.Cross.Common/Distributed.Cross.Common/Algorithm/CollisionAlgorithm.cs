@@ -11,6 +11,7 @@ namespace Distributed.Cross.Common.Algorithm
     {
         private CrossMap _map;
         private List<int> _collisionResults { get; set; } = new List<int>();
+        private TrajectoryAlgorithm _trajectoryAlgorithm;
 
         public CollisionAlgorithm(CrossMap map)
         {
@@ -18,7 +19,11 @@ namespace Distributed.Cross.Common.Algorithm
         }
 
         public void Calculate()
-        { 
+        {
+
+            _trajectoryAlgorithm = new TrajectoryAlgorithm(_map);
+            _trajectoryAlgorithm.CreateGraphMatrixRappresentation();
+
             _collisionResults.Clear();
 
             var inputNodeVehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle is not null && node.Type == CrossNodeType.Input);
@@ -55,12 +60,10 @@ namespace Distributed.Cross.Common.Algorithm
 
             foreach(var vehicle in layer.Vehicles.ToList())
             {
-                var trajectoryAlgorithm = new TrajectoryAlgorithm(_map, vehicle);
-                var vehicleTrajectory = trajectoryAlgorithm.Calculate();
+                var vehicleTrajectory = _trajectoryAlgorithm.Calculate(vehicle);
                 foreach (var priorityVehicle in priorityVehicles)
                 {
-                    trajectoryAlgorithm = new TrajectoryAlgorithm(_map, priorityVehicle);
-                    var vehiclePriorityTrajectory = trajectoryAlgorithm.Calculate();
+                    var vehiclePriorityTrajectory = _trajectoryAlgorithm.Calculate(vehicle);
 
                     var collisions = vehicleTrajectory.Trajectory.Intersect(vehiclePriorityTrajectory.Trajectory);
 
@@ -114,8 +117,7 @@ namespace Distributed.Cross.Common.Algorithm
             var collisionsBewtweenVehicles = new List<CollisionVehicles>();
             foreach (var vehicle in layer.Vehicles)
             {
-                var trajectoryAlgorithm = new TrajectoryAlgorithm(_map, vehicle);
-                var trajectory = trajectoryAlgorithm.Calculate();
+                var trajectory = _trajectoryAlgorithm.Calculate(vehicle);
                 trajectories.Add(trajectory);
             }
 

@@ -10,24 +10,24 @@ namespace Distributed.Cross.Common.Module
 
         public Graph<CrossNode> Map { get; set; } = new Graph<CrossNode>();
 
-        private int _height;
-        private int _lenght;
+        public int Height { get; private set; }
+        public int Lenght { get; private set; }
 
         public CrossMap(int height, int lenght)
         {
-            _height = height;
-            _lenght = lenght;
+            Height = height;
+            Lenght = lenght;
             BuildIdentifier();
         }
 
         public CrossNode[,] BuildInternalMap()
         {
 
-            var crossMatrix = new CrossNode[_height, _lenght];
+            var crossMatrix = new CrossNode[Height, Lenght];
 
-            for (int row = 0; row <= _height; row++)
+            for (int row = 0; row <= Height; row++)
             {
-                for (int column = 0; column <= _lenght; column++)
+                for (int column = 0; column <= Lenght; column++)
                 {
                     crossMatrix[row,column] = new CrossNode
                     {
@@ -37,13 +37,13 @@ namespace Distributed.Cross.Common.Module
             }
 
 
-            for (int row = 0; row < _height; row ++)
+            for (int row = 0; row < Height; row ++)
             {
-                for (int column = 0; column < _lenght; column++)
+                for (int column = 0; column < Lenght; column++)
                 {
                     var node = crossMatrix[row, column];
 
-                    if (row != _height -1)
+                    if (row != Height -1)
                     {
                         var bottom = crossMatrix[row + 1, column];
                         Map.AddNeighbor(node, bottom, 1);
@@ -54,14 +54,14 @@ namespace Distributed.Cross.Common.Module
                             Map.AddNeighbor(node, bottomLeft, 1.4);
                         }
 
-                        if (column != _lenght - 1)
+                        if (column != Lenght - 1)
                         {
                             var bottomRight = crossMatrix[row + 1, column + 1];
                             Map.AddNeighbor(node, bottomRight, 1.4);
                         }
                     }
 
-                    if(column != _lenght -1 )
+                    if(column != Lenght -1 )
                     {
                         var left = crossMatrix[row, column + 1];
                         Map.AddNeighbor(node, left, 1);

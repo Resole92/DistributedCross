@@ -9,7 +9,7 @@ namespace Distributed.Cross.Common.Module
     {
         private RoundState _roundState;
         private int _leaderIdentifier;
-        private int _destinationLane;
+        public int DestinationLane { get; private set; }
         public int Identifier { get; private set; }
         private int _actualPosition;
         public int Priority { get; private set; }
