@@ -13,13 +13,13 @@ namespace Distributed.Cross.Common.Module
 
         public IEnumerable<T> GetAllNodes() => AdjacentMatrix.Select(x => x.Head);
 
-        public void AddNeighbor(T first, T second)
+        public void AddNeighbor(T first, T second, double weight)
         {
-            AddDirectNeighbor(first, second);
-            AddDirectNeighbor(second, first);
+            AddDirectNeighbor(first, second, weight);
+            AddDirectNeighbor(second, first, weight);
         }
 
-        public void AddDirectNeighbor(T first, T second)
+        public void AddDirectNeighbor(T first, T second, double weight)
         {
 
             var firstFound = AdjacentMatrix.FirstOrDefault(x => x.Head.Equals(first));
@@ -42,7 +42,12 @@ namespace Distributed.Cross.Common.Module
             var nodeAlreadyPresent = firstFound.Adjacents.FirstOrDefault(x => x.Equals(second));
             if (nodeAlreadyPresent == null)
             {
-                firstFound.Adjacents.Add(second);
+                firstFound.Adjacents.Add(new Edge<T>
+                {
+                    Head = first,
+                    Tail = second,
+                    Weight = weight
+                });
             }
 
         }
@@ -65,26 +70,38 @@ namespace Distributed.Cross.Common.Module
                 AdjacentMatrix.Remove(adjacentNodesFound);
                 foreach (var adjacent in AdjacentMatrix)
                 {
-                    adjacent.Adjacents.Remove(node);
+                    var foundEdge = adjacent.Adjacents.FirstOrDefault(x => x.Tail.Equals(node));
+                    adjacent.Adjacents.Remove(foundEdge);
+
                 }
             }
         }
 
-        public IEnumerable<T> GetToNeighbors(T node) => AdjacentMatrix.FirstOrDefault(x => x.Head.Equals(node))?.Adjacents;
+        public IEnumerable<T> GetToNeighbors(T node) => GetToEdges(node).Select(x => x.Tail);
+
+        public IEnumerable<Edge<T>> GetToEdges(T node) => AdjacentMatrix.FirstOrDefault(x => x.Head.Equals(node))?.Adjacents;
 
 
         public IEnumerable<T> GetFromNeighbors(T node)
+        => GetFromEdges(node).Select(x => x.Head);
+
+
+        public IEnumerable<Edge<T>> GetFromEdges(T node)
         {
             foreach (var adjacent in AdjacentMatrix.Where(x => !x.Head.Equals(node)))
             {
-                if (adjacent.Adjacents.Contains(node)) yield return adjacent.Head;
+                var nodeFound = adjacent.Adjacents.FirstOrDefault(x => x.Tail.Equals(node));
+                if (nodeFound is not null) yield return nodeFound;
             }
         }
 
         public void RemoveNeighbors(T first, T second)
         {
             var adjacentNodesFound = AdjacentMatrix.FirstOrDefault(x => x.Head.Equals(first));
-            adjacentNodesFound?.Adjacents.Remove(second);
+
+            var foundEdge = adjacentNodesFound?.Adjacents.FirstOrDefault(x => x.Tail.Equals(second));
+            adjacentNodesFound?.Adjacents.Remove(foundEdge);
+
         }
 
 
@@ -95,7 +112,7 @@ namespace Distributed.Cross.Common.Module
 
         public T Head { get; set; }
 
-        public List<T> Adjacents { get; set; } = new List<T>();
+        public List<Edge<T>> Adjacents { get; set; } = new List<Edge<T>>();
 
         public AdjacentNodes() { }
 
@@ -103,5 +120,13 @@ namespace Distributed.Cross.Common.Module
         {
             Head = head;
         }
+    }
+
+
+    public class Edge<T>
+    {
+        public T Head { get; set; }
+        public T Tail { get; set; }
+        public double Weight { get; set; }
     }
 }
