@@ -23,12 +23,34 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
         public RelayCommand StartTrajectoryAlgorithmCommand
         => new RelayCommand(_ =>
         {
-            var builder = new CrossBuilder(3,3);
-            builder.CreateBasicInputOutput();
-            var crossMap = builder.Build();
+
+            var crossMap = BuildMap();
 
             var trajectoryAlgorithm = new TrajectoryAlgorithm(crossMap);
             trajectoryAlgorithm.CreateGraphMatrixRappresentation();
+
+            var trajectory1 = trajectoryAlgorithm.Calculate(1);
+            var trajectory2 = trajectoryAlgorithm.Calculate(2);
+            var trajectory3 = trajectoryAlgorithm.Calculate(3);
+            var trajectory4 = trajectoryAlgorithm.Calculate(4);
+        });
+
+        public RelayCommand StartCollisionAlgorithmCommand
+            => new RelayCommand(_ =>
+            {
+                var crossMap = BuildMap();
+                var collisionAlgorithm = new CollisionAlgorithm(crossMap);
+                collisionAlgorithm.Calculate();
+
+
+            });
+
+        private CrossMap BuildMap()
+        {
+            var builder = new CrossBuilder(3, 3);
+            builder.CreateBasicInputOutput();
+            var crossMap = builder.Build();
+
             var vehicle1 = new Vehicle
             {
                 DestinationLane = 6,
@@ -51,17 +73,8 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             crossMap.AddVehicle(vehicle3, 3);
             crossMap.AddVehicle(vehicle4, 4);
 
-            var trajectory1 = trajectoryAlgorithm.Calculate(1);
-            var trajectory2 = trajectoryAlgorithm.Calculate(2);
-            var trajectory3 = trajectoryAlgorithm.Calculate(3);
-            var trajectory4 = trajectoryAlgorithm.Calculate(4);
-        });
-
-        public RelayCommand StartCollisionAlgorithmCommand
-            => new RelayCommand(_ =>
-            {
-
-            })
+            return crossMap;
+        }
 
 
 

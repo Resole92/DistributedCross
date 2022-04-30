@@ -136,9 +136,10 @@ namespace Distributed.Cross.Common.Module
             if (exitNode is null) throw new Exception($"Exit lane with ID {vehicle.DestinationLane} not exists");
             if (exitNode.Type != CrossNodeType.Output) throw new Exception($"Node with ID is not a exit lane but of type {node.Type}");
 
-            node.Identifier = entryLane;
-            node.Vehicle = vehicle;
             
+            node.Vehicle = vehicle;
+            node.Vehicle.Identifier = entryLane;
+
         }
 
 

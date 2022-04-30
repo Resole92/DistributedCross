@@ -54,7 +54,7 @@ namespace Distributed.Cross.Common.Algorithm
             }
         }
 
-        public void UpperLayerCalculation(CollisionLayer layer, List<CollisionLayer> upperLayers)
+        private void UpperLayerCalculation(CollisionLayer layer, List<CollisionLayer> upperLayers)
         {
             var priorityVehicles = upperLayers.SelectMany(x => x.Vehicles);
 
@@ -77,7 +77,7 @@ namespace Distributed.Cross.Common.Algorithm
             }
         }
 
-        public void InternalLayerCalculation(CollisionLayer layer)
+        private void InternalLayerCalculation(CollisionLayer layer)
         {
             var collisions = LayerCollisionCalculation(layer);
 
@@ -111,7 +111,7 @@ namespace Distributed.Cross.Common.Algorithm
             }
         }
 
-        public List<CollisionVehicles> LayerCollisionCalculation(CollisionLayer layer)
+        private List<CollisionVehicles> LayerCollisionCalculation(CollisionLayer layer)
         {
             var trajectories = new List<TrajectoryResult>();
             var collisionsBewtweenVehicles = new List<CollisionVehicles>();
@@ -121,7 +121,7 @@ namespace Distributed.Cross.Common.Algorithm
                 trajectories.Add(trajectory);
             }
 
-            for (var first = 0; first <= trajectories.Count; first++)
+            for (var first = 0; first < trajectories.Count; first++)
             {
                 var firstTrajectory = trajectories[first];
 
@@ -132,9 +132,10 @@ namespace Distributed.Cross.Common.Algorithm
                     {
                         VehicleIdentifier = firstTrajectory.Identifier
                     };
+                    collisionsBewtweenVehicles.Add(firstVehicleCollisionFound);
                 }
 
-                for (var second = first; second <= trajectories.Count; second++)
+                for (var second = first + 1; second < trajectories.Count; second++)
                 {
 
                     var secondTrajectory = trajectories[second];
@@ -146,6 +147,7 @@ namespace Distributed.Cross.Common.Algorithm
                         {
                             VehicleIdentifier = secondTrajectory.Identifier
                         };
+                        collisionsBewtweenVehicles.Add(secondVehicleCollisionFound);
                     }
 
                     var collisions = firstTrajectory.Trajectory.Intersect(secondTrajectory.Trajectory);

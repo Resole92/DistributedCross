@@ -11,7 +11,7 @@ namespace Distributed.Cross.Common.Algorithm.Utilities
     {
         public int VehicleIdentifier { get; set; }
         public int NumberVehiclesCollision { get; set; }
-        public List<CollisionDetection> VehicleCollided { get; set; }
+        public List<CollisionDetection> VehicleCollided { get; set; } = new List<CollisionDetection>();
 
         public bool IsHappenCollision => VehicleCollided.Any();
         public int CollisionCounter => VehicleCollided.Count();
