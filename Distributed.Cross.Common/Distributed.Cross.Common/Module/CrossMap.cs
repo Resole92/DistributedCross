@@ -46,25 +46,25 @@ namespace Distributed.Cross.Common.Module
                     if (row != _height -1)
                     {
                         var bottom = crossMatrix[row + 1, column];
-                        Map.AddNeighbor(node, bottom);
+                        Map.AddNeighbor(node, bottom, 1);
 
                         if (column != 0)
                         {
                             var bottomLeft = crossMatrix[row + 1, column -1];
-                            Map.AddNeighbor(node, bottomLeft);
+                            Map.AddNeighbor(node, bottomLeft, 1.4);
                         }
 
                         if (column != _lenght - 1)
                         {
                             var bottomRight = crossMatrix[row + 1, column + 1];
-                            Map.AddNeighbor(node, bottomRight);
+                            Map.AddNeighbor(node, bottomRight, 1.4);
                         }
                     }
 
                     if(column != _lenght -1 )
                     {
                         var left = crossMatrix[row, column + 1];
-                        Map.AddNeighbor(node, left);
+                        Map.AddNeighbor(node, left, 1);
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace Distributed.Cross.Common.Module
             };
 
             var targetNode = crossMatrix[rowCell, columnCell];
-            Map.AddDirectNeighbor(inputNode, targetNode);
+            Map.AddDirectNeighbor(inputNode, targetNode,1);
 
         }
 
@@ -121,7 +121,7 @@ namespace Distributed.Cross.Common.Module
             };
 
             var targetNode = crossMatrix[rowCell, columnCell];
-            Map.AddDirectNeighbor(targetNode, outputNode);
+            Map.AddDirectNeighbor(targetNode, outputNode, 1);
         }
 
 
