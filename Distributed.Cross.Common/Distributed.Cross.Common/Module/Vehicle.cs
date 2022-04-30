@@ -10,8 +10,9 @@ namespace Distributed.Cross.Common.Module
         private RoundState _roundState;
         private int _leaderIdentifier;
         private int _destinationLane;
-        private int _identifier;
+        public int Identifier { get; private set; }
         private int _actualPosition;
+        public int Priority { get; private set; }
         private Logger _logger;
         private CrossMap _map;
 
