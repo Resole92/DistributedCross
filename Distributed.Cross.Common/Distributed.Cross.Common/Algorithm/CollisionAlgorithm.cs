@@ -63,7 +63,7 @@ namespace Distributed.Cross.Common.Algorithm
                 var vehicleTrajectory = _trajectoryAlgorithm.Calculate(vehicle);
                 foreach (var priorityVehicle in priorityVehicles)
                 {
-                    var vehiclePriorityTrajectory = _trajectoryAlgorithm.Calculate(vehicle);
+                    var vehiclePriorityTrajectory = _trajectoryAlgorithm.Calculate(priorityVehicle);
 
                     var collisions = vehicleTrajectory.Trajectory.Intersect(vehiclePriorityTrajectory.Trajectory);
 
@@ -176,7 +176,21 @@ namespace Distributed.Cross.Common.Algorithm
         }
 
         public bool AmIRunner(int identifier)
-        => _collisionResults.Any(x => x == identifier);
+        => !_collisionResults.Any(x => x == identifier);
+
+        public void IncrementPriority()
+        {
+            var inputNodeVehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle is not null && node.Type == CrossNodeType.Input);
+
+            var inputVehicles = inputNodeVehicles.Select(node => node.Vehicle);
+            foreach(var inputVehicle in inputVehicles)
+            {
+                if (!AmIRunner(inputVehicle.Identifier))
+                {
+                    inputVehicle.Priority++;
+                }
+            }
+        }
         
 
     }

@@ -142,6 +142,14 @@ namespace Distributed.Cross.Common.Module
 
         }
 
+        public void RemoveVehicle(int vehicleId)
+        {
+            var node = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicleId);
+            if (node is null) throw new Exception($"Vehicle with ID {vehicleId} not exists");
+            if (node.Vehicle is null) throw new Exception($"Vehicle with ID {vehicleId} not exists");
+            node.Vehicle = null;
+        }
+
 
     }
 

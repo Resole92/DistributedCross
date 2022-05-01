@@ -40,13 +40,60 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             {
                 var crossMap = BuildMap();
                 var collisionAlgorithm = new CollisionAlgorithm(crossMap);
-                collisionAlgorithm.Calculate();
+
+                var round = 0;
+                do
+                {
+                    round++;
+                    Console.WriteLine($"---------------------------");
+                    Console.WriteLine($"Running round number {round}");
+                    collisionAlgorithm.Calculate();
+                }
+                while (CheckCrossVehicle(collisionAlgorithm, crossMap, round));
+                Console.WriteLine($"All vehicle cross!");
 
 
             });
 
+
+        private List<int> VehiclesCross = new List<int>();
+
+        private bool CheckCrossVehicle(CollisionAlgorithm collisionAlgorithm, CrossMap crossMap, int round)
+        {
+            foreach (var vehicleCross in VehiclesCross.ToList())
+            {
+                var isRunner = collisionAlgorithm.AmIRunner(vehicleCross);
+                if (isRunner)
+                {
+                    Console.WriteLine($"Vehicle number {vehicleCross} is cross on round {round}...");
+                    crossMap.RemoveVehicle(vehicleCross);
+                    VehiclesCross.Remove(vehicleCross);
+                }
+            }
+
+            collisionAlgorithm.IncrementPriority();
+
+            if (round == 2)
+            {
+                crossMap.AddVehicle(new Vehicle
+                {
+                    DestinationLane = 6,
+                }, 1);
+                VehiclesCross.Add(1);
+
+                crossMap.AddVehicle(new Vehicle
+                {
+                    DestinationLane = 5,
+                }, 2);
+                VehiclesCross.Add(2);
+            }
+
+            return VehiclesCross.Any();
+        }
+
         private CrossMap BuildMap()
         {
+
             var builder = new CrossBuilder(3, 3);
             builder.CreateBasicInputOutput();
             var crossMap = builder.Build();
@@ -73,11 +120,13 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             crossMap.AddVehicle(vehicle3, 3);
             crossMap.AddVehicle(vehicle4, 4);
 
+            VehiclesCross = new List<int> { 1, 2, 3, 4 };
+
             return crossMap;
         }
 
 
 
-     
+
     }
 }
