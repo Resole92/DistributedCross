@@ -75,16 +75,10 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
 
             if (round == 2)
             {
-                crossMap.AddVehicle(new Vehicle
-                {
-                    DestinationLane = 6,
-                }, 1);
+                crossMap.AddVehicle(new Vehicle(1,6), 1);
                 VehiclesCross.Add(1);
 
-                crossMap.AddVehicle(new Vehicle
-                {
-                    DestinationLane = 5,
-                }, 2);
+                crossMap.AddVehicle(new Vehicle(2,5), 2);
                 VehiclesCross.Add(2);
             }
 
@@ -98,22 +92,10 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             builder.CreateBasicInputOutput();
             var crossMap = builder.Build();
 
-            var vehicle1 = new Vehicle
-            {
-                DestinationLane = 6,
-            };
-            var vehicle2 = new Vehicle
-            {
-                DestinationLane = 5,
-            };
-            var vehicle3 = new Vehicle
-            {
-                DestinationLane = 7,
-            };
-            var vehicle4 = new Vehicle
-            {
-                DestinationLane = 8,
-            };
+            var vehicle1 = new Vehicle(1,6);
+            var vehicle2 = new Vehicle(2,5);
+            var vehicle3 = new Vehicle(3,7);
+            var vehicle4 = new Vehicle(4,8);
 
             crossMap.AddVehicle(vehicle1, 1);
             crossMap.AddVehicle(vehicle2, 2);
