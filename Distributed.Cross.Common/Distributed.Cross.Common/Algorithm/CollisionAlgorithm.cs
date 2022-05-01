@@ -83,7 +83,8 @@ namespace Distributed.Cross.Common.Algorithm
 
             while (collisions.Any())
             {
-                var firstCollisionLayer = collisions.GroupBy(x => x.CollisionCounter).OrderByDescending(counter => counter).First();
+               
+                var firstCollisionLayer = collisions.GroupBy(x => x.CollisionCounter).OrderByDescending(group => group.Key).First();
                 if (firstCollisionLayer.Key > 0)
                 {
                     //Take the ID which greater id and put on next layer
@@ -140,7 +141,7 @@ namespace Distributed.Cross.Common.Algorithm
 
                     var secondTrajectory = trajectories[second];
 
-                    var secondVehicleCollisionFound = collisionsBewtweenVehicles.FirstOrDefault(x => x.VehicleIdentifier == firstTrajectory.Identifier);
+                    var secondVehicleCollisionFound = collisionsBewtweenVehicles.FirstOrDefault(x => x.VehicleIdentifier == secondTrajectory.Identifier);
                     if (secondVehicleCollisionFound is null)
                     {
                         secondVehicleCollisionFound = new CollisionVehicles
