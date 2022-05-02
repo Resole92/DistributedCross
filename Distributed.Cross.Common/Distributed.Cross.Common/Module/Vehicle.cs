@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Distributed.Cross.Common.Module
 {
-    public class Vehicle : ReceiveActor
+    public class Vehicle
     {
         private RoundState _roundState;
         private int _leaderIdentifier;
@@ -25,40 +25,7 @@ namespace Distributed.Cross.Common.Module
             DestinationLane = destinationLane;
             Identifier = startLane;
 
-            Context.ActorOf(Props(1, 4), "WaitingSubaru");
-
-            Receive<ElectionStart>(message => {
-                _logger.LogInformation("An election is start...");
-                //Sender.Tell(message);
-            });
-
-            Receive<TestRequest>(message => {
-                _logger.LogInformation($"Message come with data {message.Message}");
-                Sender.Tell(new TestReponse
-                {
-                    Message = "Bella raga"
-                }, Self); 
-            });
 
         }
-
-        public static Props Props(int startLane, int destinationLane)
-        {
-            return Akka.Actor.Props.Create(() => new Vehicle(startLane, destinationLane));
-        }
-
-
-
-    }
-
-
-    public class WaitingVehicle : ReceiveActor
-    {
-
-    }
-
-    public class CrossingVehicle : ReceiveActor
-    {
-
     }
 }

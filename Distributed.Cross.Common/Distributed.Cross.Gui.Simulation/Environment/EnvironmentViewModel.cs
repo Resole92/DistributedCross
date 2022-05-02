@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using Distributed.Cross.Common.Actors;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Module;
 using Distributed.Cross.Gui.Simulation.Utilities;
@@ -16,28 +17,63 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         public static EnvironmentViewModel Instance => _instance ??= new EnvironmentViewModel();
 
 
+        private int _numberTest;
+
         public RelayCommand StartEnvironmentCommand
             => new RelayCommand(_ =>
             {
-                Task.Run(() =>
+                var actors = new Dictionary<int, IActorRef>();
+                ActorSystem system = ActorSystem.Create("MySystem");                
+
+                var map = AlgorithmSimulation.AlgorithmViewModel.Instance.BuildMap();
+                var totalNode = map.Map.GetAllNodes().Count();
+
+                for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
                 {
-                    
-                });
+                    var actor = system.ActorOf(NodeActor.Props(actorname), actorname.ToString());
+                    actors.Add(actorname, actor);
+                }
 
-                ActorSystem system = ActorSystem.Create("MySystem");
-                system.ActorOf(Vehicle.Props(1, 4), "Subaru");
-                system.ActorOf(Vehicle.Props(2, 5), "Fiat");
-
-                var actors = system.ActorSelection($"akka://MySystem/user");
+                //var waitingSubaru = system.\($"akka://MySystem/user/*/1");
+                //var waitingFiat = system.ActorSelection($"akka://MySystem/user/*/2");
                 //var waitingSubaru = system.ActorSelection("akka://MySystem/user/Subaru/WaitingSubaru");
 
 
-                //var response = waitingSubaru.Ask<TestReponse>(new TestRequest
+                //waitingSubaru.Tell(new TestRequest
                 //{
                 //    Message = "cacchio"
                 //});
 
-                //Console.WriteLine($"Response received: {response.Result.Message}");
+
+
+                _numberTest++;
+
+                //subarissima.Tell(new TestRequest
+                //{
+                //    Message = $"Is round {_numberTest}"
+                //});
+
+               
+
+                var randActor = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);
+                var actorNumber = randActor.Next(0, totalNode);
+
+                var actor1 = actors[actorNumber];
+
+                var response = actor1.Ask<TestReponse>(new TestRequest
+                {
+                    Message =  $"Is round {_numberTest}"
+                }, TimeSpan.FromSeconds(5));
+
+                //var response = waitingSubaru.Ask<TestReponse>(new TestRequest
+                //{
+                //    Message =  $"Is round {_numberTest}"
+                //}, TimeSpan.FromSeconds(5));
+
+                Console.WriteLine($"Response received: {response.Result.Message}");
+
+                // Console.WriteLine($"Actual test {_numberTest}");
+
 
 
             });

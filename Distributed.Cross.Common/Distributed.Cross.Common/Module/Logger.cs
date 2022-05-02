@@ -9,19 +9,19 @@ namespace Distributed.Cross.Common.Module
         public void LogError(string error)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(error);
+            Console.WriteLine(error);
         }
 
         public void LogWarning(string warning)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(warning);
+            Console.WriteLine(warning);
         }
 
         public void LogInformation(string information)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(information);
+            Console.WriteLine(information);
         }
     }
 }
