@@ -1,8 +1,10 @@
 ﻿using Akka.Actor;
 using Distributed.Cross.Common.Actors;
+using Distributed.Cross.Common.Algorithm;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Data;
 using Distributed.Cross.Common.Enums;
+using Distributed.Cross.Common.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +26,23 @@ namespace Distributed.Cross.Common.Module
 
 
 
-        public Vehicle(VehicleDto vehicleDto, CrossMap map, NodeActor parentNode)
+        public Vehicle(VehicleDto vehicleDto, CrossBuilder builder, NodeActor parentNode)
         {
-            _map = map;
+
+            BuildMap(builder);
+
             Data = vehicleDto;
             _parentNode = parentNode;
+            _map.AddVehicle(vehicleDto);
         }
+
+        private void BuildMap(CrossBuilder builder)
+        {
+            builder.CreateBasicInputOutput();
+            var crossMap = builder.Build();
+            _map = crossMap;
+        }
+
         public void RemoveParentNode()
         {
             _parentNode = null;
@@ -76,6 +89,7 @@ namespace Distributed.Cross.Common.Module
             for (int vehicle = 1; vehicle <= totalInputLane; vehicle++)
             {
 
+                if (vehicle == Data.StartLane) continue;
                 var targetActor = _parentNode.ActorsMap[vehicle];
                 var requestSubmitted = targetActor.Ask<LeaderNotificationResponse>(new LeaderNotificationRequest
                 {
@@ -104,19 +118,48 @@ namespace Distributed.Cross.Common.Module
 
             var vehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle != null && node.Type == CrossNodeType.Input).Select(x => x.Vehicle);
 
+            var coordinationDetail = new CoordinationNotificationRequest
+            {
+                VehiclesDetail = vehicles.ToList()
+            };
+
             foreach (var vehicleThatHaveResponse in vehiclesThatHaveResponse)
             {
                 var targetActor = _parentNode.ActorsMap[vehicleThatHaveResponse.StartLane];
-                targetActor.Tell(new CoordinationNotificationRequest
-                {
-                    VehiclesDetail = vehicles.ToList()
-                });
+                targetActor.Tell(coordinationDetail);
             };
 
+            _parentNode.ActorsMap[Data.StartLane].Tell(coordinationDetail);
         }
 
         public void CoordinationInformationReceive(CoordinationNotificationRequest coordinationRequest)
-        => coordinationRequest.VehiclesDetail.ForEach(_map.AddVehicle);
+        {
+            coordinationRequest.VehiclesDetail.ForEach(_map.AddVehicle);
+
+            var collisionAlgorithm = new CollisionAlgorithm(_map);
+            collisionAlgorithm.Calculate();
+            var amIrunner = collisionAlgorithm.AmIRunner(Data.StartLane);
+            if (amIrunner)
+            {
+                var destinationActor = _parentNode.ActorsMap[Data.DestinationLane];
+                var startActor = _parentNode.ActorsMap[Data.StartLane];
+
+                startActor.Tell(new VehicleRemoveNotification());
+
+                destinationActor.Tell(new VehicleOnNodeNotification
+                {
+                    Vehicle = Data
+                });
+
+                _logger.LogInformation($"Vehicle is crossing now from lane {Data.StartLane} to lane {Data.DestinationLane}");
+
+            }
+            else
+            {
+                _logger.LogInformation($"Vehicle NOT CROSSING from lane {Data.StartLane} to lane {Data.DestinationLane}...");
+                collisionAlgorithm.IncrementPriority();
+            }
+        }
 
 
         public VehicleDto LeaderElected(LeaderNotificationRequest request)

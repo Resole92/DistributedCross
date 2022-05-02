@@ -46,6 +46,9 @@ namespace Distributed.Cross.Common.Utilities
             Outputs.ForEach(x => map.AddOutputLane(x.Item1, x.Item2));
             map.BuildIdentifier();
 
+            Inputs.Clear();
+            Outputs.Clear();
+
             return map;
         }
 

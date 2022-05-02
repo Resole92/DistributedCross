@@ -93,6 +93,14 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             return VehiclesCross.Any();
         }
 
+        public CrossMap BuildEmptyMap()
+        {
+            var builder = new CrossBuilder(3, 3);
+            builder.CreateBasicInputOutput();
+            var crossMap = builder.Build();
+            return crossMap;
+        }
+
         public CrossMap BuildMap()
         {
 

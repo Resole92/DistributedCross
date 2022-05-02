@@ -1,6 +1,7 @@
 ﻿using Akka.Actor;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Module;
+using Distributed.Cross.Common.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,35 +16,21 @@ namespace Distributed.Cross.Common.Actors
         public int Identifier { get; private set; }
         private Vehicle _vehicle;
         private Logger _logger = new Logger();
-        private CrossMap _map;
+        private CrossBuilder _builder;
 
-        public NodeActor(int identifier, CrossMap map, Dictionary<int, IActorRef> actorsMap)
+        public NodeActor(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {
             Identifier = identifier;
             ActorsMap = actorsMap;
-            _map = map;
+            _builder = builder;
+            StartBehaviour();
+        }
 
-            Receive<VehicleOnNodeNotification>(message =>
-            _vehicle = new Vehicle(message.Vehicle, map, this));
 
-            Receive<VehicleRemoveNotification>(message =>
-            {
-                _vehicle.RemoveParentNode();
-                this._vehicle = null;
-            });
 
-            Receive<LeaderNotificationRequest>(message =>
-            {
-                if (_vehicle is not null)
-                {
-                    _logger.LogInformation($"A leader is elected with id {message.Identifier}");
-                    var data = _vehicle.LeaderElected(message);
-                    Sender.Tell(new LeaderNotificationResponse
-                    {
-                        VehicleDetail = data
-                    }, Self);
-                }
-            });
+        public void StartBehaviour()
+        {
+           
 
             Receive<LeaderElectionRequest>(message =>
             {
@@ -51,11 +38,16 @@ namespace Distributed.Cross.Common.Actors
                 {
                     Sender.Tell(new LeaderElectionResponse(), Self);
                     _logger.LogInformation($"A leader election is requested");
+
+                    var self = Self;
                     Task.Run(() =>
                     {
                         _vehicle.LeaderRequestAsk();
-                    });
+                    });//.PipeTo(self);
 
+                    //ReceiveAny(o => Stash.Stash());
+
+                    Become(ElectionBehaviour);
                 }
             });
 
@@ -72,14 +64,55 @@ namespace Distributed.Cross.Common.Actors
                 //Sender.Tell(message);
             });
 
-            Receive<TestRequest>(message =>
+
+            BaseBehaviour();
+        }
+
+
+        public void ElectionBehaviour()
+        {
+
+            Receive<ElectionStart>(message =>
             {
                 if (_vehicle is not null)
                 {
-                    _logger.LogInformation($"Message come with data {message.Message}");
-                    Sender.Tell(new TestReponse
+                    _logger.LogInformation("An election is already started...");
+                }
+            });
+
+            Receive<LeaderElectionRequest>(message =>
+            {
+                if (_vehicle is not null)
+                {
+                    Sender.Tell(new LeaderElectionResponse(), Self);
+                    _logger.LogInformation($"A leader election is requested");
+                }
+            });
+
+            BaseBehaviour();
+        }
+
+        private void BaseBehaviour()
+        {
+            Receive<VehicleOnNodeNotification>(message =>
+           _vehicle = new Vehicle(message.Vehicle, _builder, this));
+
+            Receive<VehicleRemoveNotification>(message =>
+            {
+                if (_vehicle is null) return;
+                _vehicle.RemoveParentNode();
+                _vehicle = null;
+            });
+
+            Receive<LeaderNotificationRequest>(message =>
+            {
+                if (_vehicle is not null)
+                {
+                    _logger.LogInformation($"A leader is elected with id {message.Identifier}");
+                    var data = _vehicle.LeaderElected(message);
+                    Sender.Tell(new LeaderNotificationResponse
                     {
-                        Message = $"I'm {Identifier}"
+                        VehicleDetail = data
                     }, Self);
                 }
             });
@@ -94,14 +127,16 @@ namespace Distributed.Cross.Common.Actors
             });
         }
 
+
+
         public void ComunicatePresence()
         {
             Sender.Tell(new LeaderElectionResponse(), Self);
         }
 
-        public static Props Props(int identifier, CrossMap map, Dictionary<int, IActorRef> actorsMap)
+        public static Props Props(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {
-            return Akka.Actor.Props.Create(() => new NodeActor(identifier, map, actorsMap));
+            return Akka.Actor.Props.Create(() => new NodeActor(identifier, builder, actorsMap));
         }
 
 

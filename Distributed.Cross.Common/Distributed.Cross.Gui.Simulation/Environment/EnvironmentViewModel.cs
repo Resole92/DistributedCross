@@ -2,6 +2,7 @@
 using Distributed.Cross.Common.Actors;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Module;
+using Distributed.Cross.Common.Utilities;
 using Distributed.Cross.Gui.Simulation.Utilities;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,12 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 var actors = new Dictionary<int, IActorRef>();
                 ActorSystem system = ActorSystem.Create("MySystem");                
 
-                var map = AlgorithmSimulation.AlgorithmViewModel.Instance.BuildMap();
+                var map = AlgorithmSimulation.AlgorithmViewModel.Instance.BuildEmptyMap();
                 var totalNode = map.Map.GetAllNodes().Count();
 
                 for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
                 {
-                    var actor = system.ActorOf(NodeActor.Props(actorname, map, actors), actorname.ToString());
+                    var actor = system.ActorOf(NodeActor.Props(actorname, new CrossBuilder(3,3), actors), actorname.ToString());
                     actors.Add(actorname, actor);
 
                 }
@@ -44,6 +45,15 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     {
                         StartLane = 1,
                         DestinationLane = 6,
+                    }
+                });
+
+                actor2.Tell(new VehicleOnNodeNotification
+                {
+                    Vehicle = new Common.Data.VehicleDto
+                    {
+                        StartLane = 2,
+                        DestinationLane = 7,
                     }
                 });
 
