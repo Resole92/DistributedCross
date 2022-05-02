@@ -11,6 +11,6 @@ namespace Distributed.Cross.Common.Communication.Messages
 
     public class LeaderElectionResponse
     {
-        public bool Acknowledge { get; set; }
+        public bool Acknowledge { get; set; } = true;
     }
 }

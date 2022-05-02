@@ -6,13 +6,8 @@ using System.Text;
 
 namespace Distributed.Cross.Common.Communication.Messages
 {
-    public class LeaderNotificationRequest
+    public class VehicleOnNodeNotification
     {
-        public int Identifier { get; set; }
-    }
-
-    public class LeaderNotificationResponse
-    {
-        public VehicleDto VehicleDetail { get; set; } 
+        public VehicleDto Vehicle { get; set; }
     }
 }

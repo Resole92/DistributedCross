@@ -30,8 +30,9 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
                 for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
                 {
-                    var actor = system.ActorOf(NodeActor.Props(actorname), actorname.ToString());
+                    var actor = system.ActorOf(NodeActor.Props(actorname, map, actors), actorname.ToString());
                     actors.Add(actorname, actor);
+
                 }
 
                 //var waitingSubaru = system.\($"akka://MySystem/user/*/1");
@@ -53,24 +54,68 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 //    Message = $"Is round {_numberTest}"
                 //});
 
+
+
+                //var randActor = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);
+                //var actorNumber = randActor.Next(0, totalNode);
+
+                //var actor1 = actors[actorNumber];
+
+                var actor1 = actors[1];
+                var actor2 = actors[2];
+                var actor3 = actors[3];
+                var actor4 = actors[4];
+
+                actor1.Tell(new VehicleOnNodeNotification
+                {
+                    Vehicle = new Common.Data.VehicleDto
+                    {
+                        StartLane = 1,
+                        DestinationLane = 4,
+                    }
+                });
+
+                //actor2.Tell(new VehicleOnNodeNotification
+                //{
+                //    Vehicle = new Common.Data.VehicleDto
+                //    {
+                //        StartLane = 1,
+                //        DestinationLane = 4,
+                //    }
+                //});
+
+                actor3.Tell(new VehicleOnNodeNotification
+                {
+                    Vehicle = new Common.Data.VehicleDto
+                    {
+                        StartLane = 3,
+                        DestinationLane = 4,
+                    }
+                });
+
+                actor1.Tell(new ElectionStart());
+
+                actor4.Tell(new VehicleOnNodeNotification
+                {
+                    Vehicle = new Common.Data.VehicleDto
+                    {
+                        StartLane = 4,
+                        DestinationLane = 4,
+                    }
+                });
+
+                actor4.Tell(new VehicleRemoveNotification());
+
                
 
-                var randActor = new Random((int) DateTime.Now.Ticks & 0x0000FFFF);
-                var actorNumber = randActor.Next(0, totalNode);
 
-                var actor1 = actors[actorNumber];
-
-                var response = actor1.Ask<TestReponse>(new TestRequest
-                {
-                    Message =  $"Is round {_numberTest}"
-                }, TimeSpan.FromSeconds(5));
 
                 //var response = waitingSubaru.Ask<TestReponse>(new TestRequest
                 //{
                 //    Message =  $"Is round {_numberTest}"
                 //}, TimeSpan.FromSeconds(5));
 
-                Console.WriteLine($"Response received: {response.Result.Message}");
+
 
                 // Console.WriteLine($"Actual test {_numberTest}");
 
