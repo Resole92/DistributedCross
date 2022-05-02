@@ -68,8 +68,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     }
                 });
 
-                actor1.Tell(new ElectionStart());
-                actor1.Tell(new ElectionStart());
+                //actor1.Tell(new ElectionStart());
+                //actor1.Tell(new ElectionStart());
 
 
             });

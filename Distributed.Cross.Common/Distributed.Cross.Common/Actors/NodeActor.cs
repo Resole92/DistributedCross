@@ -110,7 +110,10 @@ namespace Distributed.Cross.Common.Actors
         private void BaseBehaviour()
         {
             Receive<VehicleOnNodeNotification>(message =>
-           _vehicle = new Vehicle(message.Vehicle, _builder, this));
+            {
+                _vehicle = new Vehicle(message.Vehicle, _builder, this);
+                Self.Tell(new ElectionStart());
+            });
 
             Receive<VehicleRemoveNotification>(message =>
             {
@@ -119,6 +122,7 @@ namespace Distributed.Cross.Common.Actors
                 _vehicle = null;
 
                 Become(EntryBehaviour);
+               
             });
 
             Receive<LeaderNotificationRequest>(message =>
