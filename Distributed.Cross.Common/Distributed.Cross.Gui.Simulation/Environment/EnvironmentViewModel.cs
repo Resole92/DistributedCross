@@ -43,7 +43,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     Vehicle = new Common.Data.VehicleDto
                     {
                         StartLane = 1,
-                        DestinationLane = 4,
+                        DestinationLane = 6,
                     }
                 });
 
@@ -53,22 +53,22 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     Vehicle = new Common.Data.VehicleDto
                     {
                         StartLane = 3,
-                        DestinationLane = 4,
+                        DestinationLane = 5,
                     }
                 });
 
                 actor1.Tell(new ElectionStart());
 
-                actor4.Tell(new VehicleOnNodeNotification
-                {
-                    Vehicle = new Common.Data.VehicleDto
-                    {
-                        StartLane = 4,
-                        DestinationLane = 4,
-                    }
-                });
+                //actor4.Tell(new VehicleOnNodeNotification
+                //{
+                //    Vehicle = new Common.Data.VehicleDto
+                //    {
+                //        StartLane = 4,
+                //        DestinationLane = 4,
+                //    }
+                //});
 
-                actor4.Tell(new VehicleRemoveNotification());
+                //actor4.Tell(new VehicleRemoveNotification());
 
             });
     }

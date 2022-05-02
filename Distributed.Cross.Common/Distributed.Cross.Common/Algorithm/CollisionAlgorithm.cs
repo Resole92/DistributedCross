@@ -29,7 +29,7 @@ namespace Distributed.Cross.Common.Algorithm
             var inputNodeVehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle is not null && node.Type == CrossNodeType.Input);
 
             var inputVehicles = inputNodeVehicles.Select(node => node.Vehicle);
-            var priorityGrouped = inputVehicles.GroupBy(vehicle => vehicle.Data.Priority).OrderByDescending(x => x.Key);
+            var priorityGrouped = inputVehicles.GroupBy(vehicle => vehicle.Priority).OrderByDescending(x => x.Key);
 
             List<CollisionLayer> layers = new List<CollisionLayer>();
             foreach (var inputGroup in priorityGrouped)
@@ -37,7 +37,7 @@ namespace Distributed.Cross.Common.Algorithm
                 var layer = new CollisionLayer
                 {
                     Priority = inputGroup.Key,
-                    Vehicles = inputGroup.Select(x => x.Data.StartLane).ToList(),
+                    Vehicles = inputGroup.Select(x => x.StartLane).ToList(),
                 };
 
                 layers.Add(layer);
@@ -185,9 +185,9 @@ namespace Distributed.Cross.Common.Algorithm
             var inputVehicles = inputNodeVehicles.Select(node => node.Vehicle);
             foreach(var inputVehicle in inputVehicles)
             {
-                if (!AmIRunner(inputVehicle.Data.StartLane))
+                if (!AmIRunner(inputVehicle.StartLane))
                 {
-                    inputVehicle.Data.Priority++;
+                    inputVehicle.Priority++;
                 }
             }
         }

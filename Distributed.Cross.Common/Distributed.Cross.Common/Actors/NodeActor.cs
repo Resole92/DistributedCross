@@ -47,7 +47,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<LeaderElectionRequest>(message =>
             {
-                if(_vehicle is not null)
+                if (_vehicle is not null)
                 {
                     Sender.Tell(new LeaderElectionResponse(), Self);
                     _logger.LogInformation($"A leader election is requested");
@@ -55,11 +55,12 @@ namespace Distributed.Cross.Common.Actors
                     {
                         _vehicle.LeaderRequestAsk();
                     });
-                    
+
                 }
             });
 
-            Receive<ElectionStart>(message => {
+            Receive<ElectionStart>(message =>
+            {
                 if (_vehicle is not null)
                 {
                     _logger.LogInformation("An election is start...");
@@ -71,7 +72,8 @@ namespace Distributed.Cross.Common.Actors
                 //Sender.Tell(message);
             });
 
-            Receive<TestRequest>(message => {
+            Receive<TestRequest>(message =>
+            {
                 if (_vehicle is not null)
                 {
                     _logger.LogInformation($"Message come with data {message.Message}");
@@ -79,6 +81,15 @@ namespace Distributed.Cross.Common.Actors
                     {
                         Message = $"I'm {Identifier}"
                     }, Self);
+                }
+            });
+
+            Receive<CoordinationNotificationRequest>(message =>
+            {
+                if (_vehicle is not null)
+                {
+                    _logger.LogInformation($"Coordination data received!");
+                    _vehicle.CoordinationInformationReceive(message);
                 }
             });
         }

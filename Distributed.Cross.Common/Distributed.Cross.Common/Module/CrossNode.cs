@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Distributed.Cross.Common.Data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace Distributed.Cross.Common.Module
         public CrossNodePosition Position { get; set; }
         public CrossNodeType Type { get; set; }
         public int Identifier { get; set; }
-        public Vehicle Vehicle {get ;set; }
+        public VehicleDto Vehicle {get ;set; }
     }
 
     public enum CrossNodePosition

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Distributed.Cross.Common.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -126,14 +127,14 @@ namespace Distributed.Cross.Common.Module
         }
 
 
-        public void AddVehicle(Vehicle vehicle)
+        public void AddVehicle(VehicleDto vehicle)
         {
-            var node = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.Data.StartLane);
-            if (node is null) throw new Exception($"Entry lane with ID {vehicle.Data.StartLane} not exists");
+            var node = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.StartLane);
+            if (node is null) throw new Exception($"Entry lane with ID {vehicle.StartLane} not exists");
             if (node.Type != CrossNodeType.Input) throw new Exception($"Node with ID is not a entry lane but of type {node.Type}");
 
-            var exitNode = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.Data.DestinationLane);
-            if (exitNode is null) throw new Exception($"Exit lane with ID {vehicle.Data.DestinationLane} not exists");
+            var exitNode = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.DestinationLane);
+            if (exitNode is null) throw new Exception($"Exit lane with ID {vehicle.DestinationLane} not exists");
             if (exitNode.Type != CrossNodeType.Output) throw new Exception($"Node with ID is not a exit lane but of type {node.Type}");
                     
             node.Vehicle = vehicle;

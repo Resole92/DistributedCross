@@ -6,6 +6,7 @@ namespace Distributed.Cross.Common.Communication.Messages
 {
     public class InformationVehicleRequest
     {
+
     }
 
     public class InformationVehicleResponse

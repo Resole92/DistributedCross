@@ -22,9 +22,9 @@ namespace Distributed.Cross.Common.Module
         public VehicleDto Data { get; private set; }
         private NodeActor _parentNode;
 
-       
 
-        public Vehicle(VehicleDto vehicleDto, CrossMap map, NodeActor parentNode) 
+
+        public Vehicle(VehicleDto vehicleDto, CrossMap map, NodeActor parentNode)
         {
             _map = map;
             Data = vehicleDto;
@@ -42,28 +42,28 @@ namespace Distributed.Cross.Common.Module
 
             var requests = new List<Task<LeaderElectionResponse>>();
 
-            for(int vehicleId = _parentNode.Identifier + 1; vehicleId <= totalInputLane; vehicleId++)
+            for (int vehicleId = _parentNode.Identifier + 1; vehicleId <= totalInputLane; vehicleId++)
             {
                 var targetActor = _parentNode.ActorsMap[vehicleId];
 
-               var request = targetActor.Ask<LeaderElectionResponse>(new LeaderElectionRequest(), TimeSpan.FromSeconds(5));
+                var request = targetActor.Ask<LeaderElectionResponse>(new LeaderElectionRequest(), TimeSpan.FromSeconds(2));
                 requests.Add(request);
             }
 
             var someoneBetter = new List<object>();
 
-            foreach(var request in requests)
+            foreach (var request in requests)
             {
                 try
                 {
                     var result = request.Result;
-                    if(result.Acknowledge)
+                    if (result.Acknowledge)
                     {
                         someoneBetter.Add(result);
                         return;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError("Failed to request" + ex.Message);
                 }
@@ -71,16 +71,53 @@ namespace Distributed.Cross.Common.Module
 
             _logger.LogInformation($"I'm LEADER {_parentNode.Identifier}");
 
-            for(int vehicle = 1; vehicle <= totalInputLane; vehicle++)
+            var requestsSubmitted = new List<Task<LeaderNotificationResponse>>();
+
+            for (int vehicle = 1; vehicle <= totalInputLane; vehicle++)
             {
-                
+
                 var targetActor = _parentNode.ActorsMap[vehicle];
-                targetActor.Tell(new LeaderNotificationRequest
+                var requestSubmitted = targetActor.Ask<LeaderNotificationResponse>(new LeaderNotificationRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, _parentNode.ActorsMap[_parentNode.Identifier]);
+                }, TimeSpan.FromSeconds(2));
+
+                requestsSubmitted.Add(requestSubmitted);
             }
+
+            var vehiclesThatHaveResponse = new List<VehicleDto>();
+
+            foreach (var requestSubmitted in requestsSubmitted)
+            {
+                try
+                {
+                    var result = requestSubmitted.Result;
+                    var data = result.VehicleDetail;
+                    _map.AddVehicle(data);
+                    vehiclesThatHaveResponse.Add(data);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Failed to request" + ex.Message);
+                }
+            }
+
+            var vehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle != null && node.Type == CrossNodeType.Input).Select(x => x.Vehicle);
+
+            foreach (var vehicleThatHaveResponse in vehiclesThatHaveResponse)
+            {
+                var targetActor = _parentNode.ActorsMap[vehicleThatHaveResponse.StartLane];
+                targetActor.Tell(new CoordinationNotificationRequest
+                {
+                    VehiclesDetail = vehicles.ToList()
+                });
+            };
+
         }
+
+        public void CoordinationInformationReceive(CoordinationNotificationRequest coordinationRequest)
+        => coordinationRequest.VehiclesDetail.ForEach(_map.AddVehicle);
+
 
         public VehicleDto LeaderElected(LeaderNotificationRequest request)
         {
