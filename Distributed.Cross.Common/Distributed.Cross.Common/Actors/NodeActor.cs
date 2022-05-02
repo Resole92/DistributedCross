@@ -4,6 +4,7 @@ using Distributed.Cross.Common.Module;
 using Distributed.Cross.Common.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,18 +18,30 @@ namespace Distributed.Cross.Common.Actors
         private Vehicle _vehicle;
         private Logger _logger = new Logger();
         private CrossBuilder _builder;
+        private CrossMap _map;
 
         public NodeActor(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {
             Identifier = identifier;
             ActorsMap = actorsMap;
             _builder = builder;
-            StartBehaviour();
+
+            BuildMap(builder);
+
+            if (Identifier == 0) return;
+
+            EntryBehaviour();
+        }
+
+        private void BuildMap(CrossBuilder builder)
+        {
+            builder.CreateBasicInputOutput();
+            var crossMap = builder.Build();
+            _map = crossMap;
         }
 
 
-
-        public void StartBehaviour()
+        public void EntryBehaviour()
         {
            
 
@@ -60,6 +73,8 @@ namespace Distributed.Cross.Common.Actors
                     {
                         _vehicle.LeaderRequestAsk();
                     });
+
+                    Become(ElectionBehaviour);
                 }
                 //Sender.Tell(message);
             });
@@ -102,6 +117,8 @@ namespace Distributed.Cross.Common.Actors
                 if (_vehicle is null) return;
                 _vehicle.RemoveParentNode();
                 _vehicle = null;
+
+                Become(EntryBehaviour);
             });
 
             Receive<LeaderNotificationRequest>(message =>
@@ -122,17 +139,28 @@ namespace Distributed.Cross.Common.Actors
                 if (_vehicle is not null)
                 {
                     _logger.LogInformation($"Coordination data received!");
-                    _vehicle.CoordinationInformationReceive(message);
+                    var isRunner = _vehicle.CoordinationInformationReceive(message);
+                    Become(EntryBehaviour);
+                      
                 }
+            });
+
+            Receive<VehicleExitNotification>(message =>
+            {
+                if (_vehicle is not null)
+                {
+                    _vehicle.VehicleExit(message.Identifier);
+                }
+            });
+
+            Receive<VehicleMoveNotification>(message =>
+            {
+                _vehicle = new Vehicle(message.Vehicle, _builder, this);
+                _vehicle.UpdateCrossingStatus(message);
+                _vehicle.StartCrossing();
             });
         }
 
-
-
-        public void ComunicatePresence()
-        {
-            Sender.Tell(new LeaderElectionResponse(), Self);
-        }
 
         public static Props Props(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {

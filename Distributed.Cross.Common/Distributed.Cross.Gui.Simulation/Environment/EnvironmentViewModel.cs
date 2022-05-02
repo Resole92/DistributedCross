@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Distributed.Cross.Gui.Simulation.Environment
@@ -68,17 +69,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 });
 
                 actor1.Tell(new ElectionStart());
+                actor1.Tell(new ElectionStart());
 
-                //actor4.Tell(new VehicleOnNodeNotification
-                //{
-                //    Vehicle = new Common.Data.VehicleDto
-                //    {
-                //        StartLane = 4,
-                //        DestinationLane = 4,
-                //    }
-                //});
-
-                //actor4.Tell(new VehicleRemoveNotification());
 
             });
     }

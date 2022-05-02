@@ -9,5 +9,6 @@ namespace Distributed.Cross.Common.Communication.Messages
     public class VehicleOnNodeNotification
     {
         public VehicleDto Vehicle { get; set; }
+      
     }
 }

@@ -9,5 +9,6 @@ namespace Distributed.Cross.Common.Data
         public int Priority { get; set; }
         public int StartLane { get; set; }
         public int DestinationLane { get; set; }
+
     }
 }
