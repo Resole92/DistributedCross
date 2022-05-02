@@ -126,19 +126,17 @@ namespace Distributed.Cross.Common.Module
         }
 
 
-        public void AddVehicle(Vehicle vehicle, int entryLane)
+        public void AddVehicle(Vehicle vehicle)
         {
-            var node = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == entryLane);
-            if (node is null) throw new Exception($"Entry lane with ID {entryLane} not exists");
+            var node = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.Data.StartLane);
+            if (node is null) throw new Exception($"Entry lane with ID {vehicle.Data.StartLane} not exists");
             if (node.Type != CrossNodeType.Input) throw new Exception($"Node with ID is not a entry lane but of type {node.Type}");
 
-            var exitNode = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.DestinationLane);
-            if (exitNode is null) throw new Exception($"Exit lane with ID {vehicle.DestinationLane} not exists");
+            var exitNode = Map.GetAllNodes().FirstOrDefault(x => x.Identifier == vehicle.Data.DestinationLane);
+            if (exitNode is null) throw new Exception($"Exit lane with ID {vehicle.Data.DestinationLane} not exists");
             if (exitNode.Type != CrossNodeType.Output) throw new Exception($"Node with ID is not a exit lane but of type {node.Type}");
-
-            
+                    
             node.Vehicle = vehicle;
-            node.Vehicle.Identifier = entryLane;
 
         }
 

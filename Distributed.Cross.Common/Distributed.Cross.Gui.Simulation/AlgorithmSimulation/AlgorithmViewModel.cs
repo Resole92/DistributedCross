@@ -75,10 +75,18 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
 
             if (round == 2)
             {
-                crossMap.AddVehicle(new Vehicle(1,6), 1);
+                crossMap.AddVehicle(new Vehicle(new Common.Data.VehicleDto
+                {
+                    StartLane = 1,
+                    DestinationLane = 6,
+                }, null, null));
                 VehiclesCross.Add(1);
 
-                crossMap.AddVehicle(new Vehicle(2,5), 2);
+                crossMap.AddVehicle(new Vehicle(new Common.Data.VehicleDto
+                {
+                    StartLane = 2,
+                    DestinationLane = 5,
+                }, null, null));
                 VehiclesCross.Add(2);
             }
 
@@ -92,15 +100,30 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             builder.CreateBasicInputOutput();
             var crossMap = builder.Build();
 
-            var vehicle1 = new Vehicle(1,6);
-            var vehicle2 = new Vehicle(2,5);
-            var vehicle3 = new Vehicle(3,7);
-            var vehicle4 = new Vehicle(4,8);
+            crossMap.AddVehicle(new Vehicle(new Common.Data.VehicleDto
+            {
+                StartLane = 1,
+                DestinationLane = 6,
+            }, null, null));
 
-            crossMap.AddVehicle(vehicle1, 1);
-            crossMap.AddVehicle(vehicle2, 2);
-            crossMap.AddVehicle(vehicle3, 3);
-            crossMap.AddVehicle(vehicle4, 4);
+            crossMap.AddVehicle(new Vehicle(new Common.Data.VehicleDto
+            {
+                StartLane = 2,
+                DestinationLane = 5,
+            }, null, null));
+
+            crossMap.AddVehicle(new Vehicle(new Common.Data.VehicleDto
+            {
+                StartLane = 3,
+                DestinationLane = 7,
+            }, null, null));
+
+            crossMap.AddVehicle(new Vehicle(new Common.Data.VehicleDto
+            {
+                StartLane = 4,
+                DestinationLane = 8,
+            }, null, null));
+
 
             VehiclesCross = new List<int> { 1, 2, 3, 4 };
 

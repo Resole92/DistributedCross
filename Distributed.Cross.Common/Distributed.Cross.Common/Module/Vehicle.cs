@@ -15,14 +15,11 @@ namespace Distributed.Cross.Common.Module
     {
         private RoundState _roundState;
         private int _leaderIdentifier;
-        public int DestinationLane { get; private set; }
-        public int Identifier { get; set; }
         private int _actualPosition;
-        public int Priority { get; set; }
         private Logger _logger = new Logger();
         private CrossMap _map;
 
-        private VehicleDto _data;
+        public VehicleDto Data { get; private set; }
         private NodeActor _parentNode;
 
        
@@ -30,23 +27,12 @@ namespace Distributed.Cross.Common.Module
         public Vehicle(VehicleDto vehicleDto, CrossMap map, NodeActor parentNode) 
         {
             _map = map;
-            _data = vehicleDto;
+            Data = vehicleDto;
             _parentNode = parentNode;
         }
         public void RemoveParentNode()
         {
             _parentNode = null;
-        }
-
-        public Vehicle(int startLane, int destinationLane) {
-
-            DestinationLane = destinationLane;
-            Identifier = startLane;
-            _data = new VehicleDto
-            {
-                StartLane = startLane,
-                DestinationLane = destinationLane
-            };
         }
 
 
@@ -92,14 +78,14 @@ namespace Distributed.Cross.Common.Module
                 targetActor.Tell(new LeaderNotificationRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, _parentNode.ActorsMap[Identifier]);
+                }, _parentNode.ActorsMap[_parentNode.Identifier]);
             }
         }
 
         public VehicleDto LeaderElected(LeaderNotificationRequest request)
         {
             _leaderIdentifier = request.Identifier;
-            return _data;
+            return Data;
         }
     }
 }

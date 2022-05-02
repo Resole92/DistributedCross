@@ -41,7 +41,7 @@ namespace Distributed.Cross.Common.Algorithm
             var dist = Dijkstra(_graphEdgeMatrix, nodeIdentifier - 1);
 
             var vehicle = _map.Map.GetAllNodes().First(x => x.Identifier == nodeIdentifier).Vehicle;
-            var destination = dist[vehicle.DestinationLane - 1];
+            var destination = dist[vehicle.Data.DestinationLane - 1];
 
             var result = new TrajectoryResult
             {
