@@ -9,8 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
 
-
-        <Storyboard x:Key="From3To5Storyboard">
+        <Storyboard x:Key="From1To5Storyboard">
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
@@ -18,7 +17,116 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,250 V 0" />
+                    <PathGeometry Figures="M 70,40 V 50 Q 100,120 120,50 V 0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From1To6Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 70,40 Q 70,120 140,120 H190" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From1To7Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 70,40 V 50 V190" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+
+        <Storyboard x:Key="From1To8Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2"  >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 70,40 V 50 Q 70,70 50,70 H 0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+
+        <Storyboard x:Key="From2To5Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,70 H 140 Q 120,70 120,50 V 0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From2To6Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,70 H 140 Q 70,100 140,120 H190" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From2To7Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,70 H 140 Q 70,70 70,140 V190" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+
+        <Storyboard x:Key="From2To8Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2"  >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,70 H 140 H0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+
+
+        <Storyboard x:Key="From3To5Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=Vehicle3}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 120,150 V 0" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -27,11 +135,11 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,250 Q 150,200 180,200 H 200" />
+                    <PathGeometry Figures="M 120,150 V 140 Q 120,120 140,120 H 190" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -40,11 +148,11 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,250 Q 80,70 20,250 V 270" />
+                    <PathGeometry Figures="M 120,150 V 140 Q 100,80 70,140 V 190" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -54,11 +162,67 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
+                Storyboard.Target="{Binding ElementName=Vehicle3}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2"  >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 120,150 V 140 Q 120,70 50,70 H 0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+
+
+
+        <Storyboard x:Key="From4To5Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 40,120 H 50 Q 120,120 120,50 V 0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From4To6Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 40,120 H 50 H 190" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From4To7Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 40,120 H 50 Q 70,120 70,140 V190" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+
+        <Storyboard x:Key="From4To8Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,250 Q 150,50 30,50 H 0" />
+                    <PathGeometry Figures="M 40,120 H 50 Q 110,100 50,70 H 0" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -79,7 +243,7 @@
         Stretch="None" />-->
 
 
-                <!--<Path Name="From1To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From1To5" VerticalAlignment="Top" Margin="15,15,15,15" 
         Data="M 70,40 V 50 Q 100,120 120,50 V 0"
         Stroke="Green" StrokeThickness="2"
         Stretch="None" />
@@ -97,7 +261,7 @@
                 <Path Name="From1To8" VerticalAlignment="Top" Margin="15,15,15,15" 
         Data="M 70,40 V 50 Q 70,70 50,70 H 0"
         Stroke="Green" StrokeThickness="2"
-        Stretch="None" />-->
+        Stretch="None" />
 
                 <Path Name="From2To5" VerticalAlignment="Top" Margin="15,15,15,15" 
         Data="M 150,70 H 140 Q 120,70 120,50 V 0"
@@ -120,7 +284,7 @@
         Stretch="None" />
 
 
-                <!--<Path Name="From3To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From3To5" VerticalAlignment="Top" Margin="15,15,15,15" 
         Data="M 120,150 V 0"
         Stroke="Blue" StrokeThickness="2"
         Stretch="None" />
@@ -159,23 +323,53 @@
                 <Path Name="From4To8" VerticalAlignment="Top" Margin="15,15,15,15" 
         Data="M 40,120 H 50 Q 110,100 50,70 H 0"
         Stroke="Red" StrokeThickness="2"
-        Stretch="None" />-->
+        Stretch="None" />
 
 
+                <Path Fill="Green" Margin="15,15,15,15">
+                    <Path.Data>
 
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry x:Name="Vehicle1"
+            Center="70,40" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Orange" Margin="15,15,15,15">
+                    <Path.Data>
+
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry x:Name="Vehicle2"
+            Center="150,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
 
 
                 <Path Fill="Blue" Margin="15,15,15,15">
                 <Path.Data>
 
                     <!-- Describes an ellipse. -->
-                    <EllipseGeometry x:Name="MyAnimatedEllipseGeometry"
-            Center="10,100" RadiusX="10" RadiusY="10" >
+                    <EllipseGeometry x:Name="Vehicle3"
+            Center="120,150" RadiusX="10" RadiusY="10" >
                     </EllipseGeometry>
                 </Path.Data>
             </Path>
 
-            <Canvas.Style>
+                <Path Fill="Red" Margin="15,15,15,15">
+                    <Path.Data>
+
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry x:Name="Vehicle4"
+            Center="40,120" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+            
+            
+
+                <Canvas.Style>
                 <Style TargetType="Canvas">
                     <Style.Triggers>
 
