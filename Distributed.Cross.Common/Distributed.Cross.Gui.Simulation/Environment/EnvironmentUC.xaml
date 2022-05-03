@@ -13,7 +13,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -26,7 +26,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -39,7 +39,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -53,7 +53,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
@@ -67,7 +67,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -80,7 +80,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -93,7 +93,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -107,7 +107,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
@@ -178,7 +178,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -191,7 +191,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -204,7 +204,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                 Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
@@ -218,7 +218,7 @@
 
             <!-- Animates the ellipse along the path. -->
             <PointAnimationUsingPath
-                Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
@@ -231,6 +231,9 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Viewbox Grid.Column="0" MaxHeight="500">
@@ -373,42 +376,153 @@
                 <Style TargetType="Canvas">
                     <Style.Triggers>
 
-                        <DataTrigger Value="5" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                            <DataTrigger Value="5" Binding="{Binding Vehicle1Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin15" Storyboard="{StaticResource From1To5Storyboard}"/>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin15"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="6" Binding="{Binding Vehicle1Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin16" Storyboard="{StaticResource From1To6Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin16"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="7" Binding="{Binding Vehicle1Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin17" Storyboard="{StaticResource From1To7Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin17"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="8" Binding="{Binding Vehicle1Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin18" Storyboard="{StaticResource From1To8Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin18"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="5" Binding="{Binding Vehicle2Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin25" Storyboard="{StaticResource From2To5Storyboard}"/>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin25"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="6" Binding="{Binding Vehicle2Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin26" Storyboard="{StaticResource From2To6Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin26"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="7" Binding="{Binding Vehicle2Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin27" Storyboard="{StaticResource From2To7Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin27"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="8" Binding="{Binding Vehicle2Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin28" Storyboard="{StaticResource From2To8Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin28"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+
+                            <DataTrigger Value="5" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin5" Storyboard="{StaticResource From3To5Storyboard}"/>
+                                <BeginStoryboard  x:Name="Begin35" Storyboard="{StaticResource From3To5Storyboard}"/>
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin5"/>
+                                <RemoveStoryboard BeginStoryboardName="Begin35"/>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
                         
                         <DataTrigger Value="6" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin6" Storyboard="{StaticResource From3To6Storyboard}" />
+                                <BeginStoryboard  x:Name="Begin36" Storyboard="{StaticResource From3To6Storyboard}" />
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin6"/>
+                                <RemoveStoryboard BeginStoryboardName="Begin36"/>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
                         
                         <DataTrigger Value="7" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin7" Storyboard="{StaticResource From3To7Storyboard}" />
+                                <BeginStoryboard  x:Name="Begin37" Storyboard="{StaticResource From3To7Storyboard}" />
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin7"/>
+                                <RemoveStoryboard BeginStoryboardName="Begin37"/>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
                         
                         <DataTrigger Value="8" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin8" Storyboard="{StaticResource From3To8Storyboard}" />
+                                <BeginStoryboard  x:Name="Begin38" Storyboard="{StaticResource From3To8Storyboard}" />
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin8"/>
+                                <RemoveStoryboard BeginStoryboardName="Begin38"/>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
-                    </Style.Triggers> 
+
+
+                            <DataTrigger Value="5" Binding="{Binding Vehicle4Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin45" Storyboard="{StaticResource From4To5Storyboard}"/>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin45"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="6" Binding="{Binding Vehicle4Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin46" Storyboard="{StaticResource From4To6Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin46"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="7" Binding="{Binding Vehicle4Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin47" Storyboard="{StaticResource From4To7Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin47"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="8" Binding="{Binding Vehicle4Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin48" Storyboard="{StaticResource From4To8Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin48"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers> 
                 </Style>
             </Canvas.Style>
         </Canvas>
@@ -428,29 +542,146 @@
             Margin="3"
             Height="30"
             Width="100"
-            Content="Destination 5!" 
-            Command="{Binding DestinationLane5Command}">
+            Content="Destination 1 to 5" 
+            Command="{Binding Destination1Lane5Command}">
             </Button>
             <Button 
             Margin="3"
             Height="30"
             Width="100"
-            Content="Destination 6" 
-            Command="{Binding DestinationLane6Command}">
+            Content="Destination 1 to 6" 
+            Command="{Binding Destination1Lane6Command}">
             </Button>
             <Button 
             Margin="3"
             Height="30"
             Width="100"
-            Content="Destination 7" 
-            Command="{Binding DestinationLane7Command}">
+            Content="Destination 1 to 7" 
+            Command="{Binding Destination1Lane7Command}">
             </Button>
             <Button 
             Margin="3"
             Height="30"
             Width="100"
-            Content="Destination 8" 
-            Command="{Binding DestinationLane8Command}">
+            Content="Destination 1 to 8" 
+            Command="{Binding Destination1Lane8Command}">
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2">
+
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Create!" 
+            Command="{Binding StartEnvironmentCommand}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 2 to 5" 
+            Command="{Binding Destination2Lane5Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 2 to 6" 
+            Command="{Binding Destination2Lane6Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 2 to 7" 
+            Command="{Binding Destination2Lane7Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 2 to 8" 
+            Command="{Binding Destination2Lane8Command}">
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Column="3">
+
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Create!" 
+            Command="{Binding StartEnvironmentCommand}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 3 to 5" 
+            Command="{Binding Destination3Lane5Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 3 to 6" 
+            Command="{Binding Destination3Lane6Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 3 to 7" 
+            Command="{Binding Destination3Lane7Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 3 to 8" 
+            Command="{Binding Destination3Lane8Command}">
+            </Button>
+        </StackPanel>
+
+        <StackPanel Grid.Column="4">
+
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Create!" 
+            Command="{Binding StartEnvironmentCommand}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 4 to 5" 
+            Command="{Binding Destination4Lane5Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 4 to 6" 
+            Command="{Binding Destination4Lane6Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 4 to 7" 
+            Command="{Binding Destination4Lane7Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 4 to 8" 
+            Command="{Binding Destination4Lane8Command}">
             </Button>
         </StackPanel>
 
