@@ -7,12 +7,258 @@
              mc:Ignorable="d" 
              DataContext="{Binding Source={x:Static local:EnvironmentViewModel.Instance}}"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+
+        <Storyboard x:Key="From3To5Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,250 V 0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From3To6Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,250 Q 150,200 180,200 H 200" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+        <Storyboard x:Key="From3To7Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                 Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2" >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,250 Q 80,70 20,250 V 270" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+
+        <Storyboard x:Key="From3To8Storyboard">
+
+            <!-- Animates the ellipse along the path. -->
+            <PointAnimationUsingPath
+                Storyboard.Target="{Binding ElementName=MyAnimatedEllipseGeometry}"
+                Storyboard.TargetProperty="Center"
+                Duration="0:0:2"  >
+                <PointAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 150,250 Q 150,50 30,50 H 0" />
+                </PointAnimationUsingPath.PathGeometry>
+            </PointAnimationUsingPath>
+        </Storyboard>
+
+    </UserControl.Resources>  
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Viewbox Grid.Column="0" MaxHeight="500">
+        <Canvas HorizontalAlignment="Left" Width="340" Height="240" >
+
+            <!-- This Path is only to show the path that the animated object will follow. -->
+            <!--<Path VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 10,100 C 35,0 135,0 160,100 180,190 285,200 310,100"
+        Stroke="Black" StrokeThickness="2"
+        Stretch="None" />-->
+
+
+                <!--<Path Name="From1To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 70,40 V 50 Q 100,120 120,50 V 0"
+        Stroke="Green" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From1To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 70,40 Q 70,120 140,120 H190"
+        Stroke="Green" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From1To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 70,40 V 50 V190"
+        Stroke="Green" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From1To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 70,40 V 50 Q 70,70 50,70 H 0"
+        Stroke="Green" StrokeThickness="2"
+        Stretch="None" />-->
+
+                <Path Name="From2To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 150,70 H 140 Q 120,70 120,50 V 0"
+        Stroke="DarkOrange" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From2To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 150,70 H 140 Q 70,100 140,120 H190"
+        Stroke="DarkOrange" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From2To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 150,70 H 140 Q 70,70 70,140 V190"
+        Stroke="DarkOrange" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From2To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 150,70 H 140 H0"
+        Stroke="DarkOrange" StrokeThickness="2"
+        Stretch="None" />
+
+
+                <!--<Path Name="From3To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 120,150 V 0"
+        Stroke="Blue" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From3To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 120,150 V 140 Q 120,120 140,120 H 190"
+        Stroke="Blue" StrokeThickness="2"
+        Stretch="None" />
+
+
+                <Path Name="From3To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 120,150 V 140 Q 100,80 70,140 V 190"
+        Stroke="Blue" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From3To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 120,150 V 140 Q 120,70 50,70 H 0"
+        Stroke="Blue" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From4To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 40,120 H 50 Q 120,120 120,50 V 0"
+        Stroke="Red" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From4To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 40,120 H 50 H 190"
+        Stroke="Red" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From4To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 40,120 H 50 Q 70,120 70,140 V190"
+        Stroke="Red" StrokeThickness="2"
+        Stretch="None" />
+
+                <Path Name="From4To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+        Data="M 40,120 H 50 Q 110,100 50,70 H 0"
+        Stroke="Red" StrokeThickness="2"
+        Stretch="None" />-->
+
+
+
+
+
+                <Path Fill="Blue" Margin="15,15,15,15">
+                <Path.Data>
+
+                    <!-- Describes an ellipse. -->
+                    <EllipseGeometry x:Name="MyAnimatedEllipseGeometry"
+            Center="10,100" RadiusX="10" RadiusY="10" >
+                    </EllipseGeometry>
+                </Path.Data>
+            </Path>
+
+            <Canvas.Style>
+                <Style TargetType="Canvas">
+                    <Style.Triggers>
+
+                        <DataTrigger Value="5" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard  x:Name="Begin5" Storyboard="{StaticResource From3To5Storyboard}"/>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="Begin5"/>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                        
+                        <DataTrigger Value="6" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard  x:Name="Begin6" Storyboard="{StaticResource From3To6Storyboard}" />
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="Begin6"/>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                        
+                        <DataTrigger Value="7" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard  x:Name="Begin7" Storyboard="{StaticResource From3To7Storyboard}" />
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="Begin7"/>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                        
+                        <DataTrigger Value="8" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard  x:Name="Begin8" Storyboard="{StaticResource From3To8Storyboard}" />
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <RemoveStoryboard BeginStoryboardName="Begin8"/>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers> 
+                </Style>
+            </Canvas.Style>
+        </Canvas>
+
+        </Viewbox>
+        <StackPanel Grid.Column="1">
+            
         <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Create!" 
-            Command="{Binding StartEnvironmentCommand}"></Button>
+            Command="{Binding StartEnvironmentCommand}">
+            </Button>
+            <Button 
+                x:Name="DestinstionLane4Button"
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 5!" 
+            Command="{Binding DestinationLane5Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 6" 
+            Command="{Binding DestinationLane6Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 7" 
+            Command="{Binding DestinationLane7Command}">
+            </Button>
+            <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Destination 8" 
+            Command="{Binding DestinationLane8Command}">
+            </Button>
+        </StackPanel>
+
     </Grid>
 </UserControl>

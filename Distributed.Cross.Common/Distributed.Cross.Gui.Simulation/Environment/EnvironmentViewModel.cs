@@ -6,17 +6,40 @@ using Distributed.Cross.Common.Utilities;
 using Distributed.Cross.Gui.Simulation.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Distributed.Cross.Gui.Simulation.Environment
 {
-    public class EnvironmentViewModel
+    public class EnvironmentViewModel : INotifyPropertyChanged
     {
         private static EnvironmentViewModel _instance;
         public static EnvironmentViewModel Instance => _instance ??= new EnvironmentViewModel();
+
+        private int _vehicle3Destination = 0;
+        public int Vehicle3Destination
+        {
+            get => _vehicle3Destination;
+            set
+            {
+                _vehicle3Destination = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public RelayCommand DestinationLane5Command =>
+            new RelayCommand(_ => Vehicle3Destination = 5);
+        public RelayCommand DestinationLane6Command =>
+            new RelayCommand(_ => Vehicle3Destination = 6);
+        public RelayCommand DestinationLane7Command =>
+            new RelayCommand(_ => Vehicle3Destination = 7);
+        public RelayCommand DestinationLane8Command =>
+            new RelayCommand(_ => Vehicle3Destination = 8);
+
 
         public RelayCommand StartEnvironmentCommand
             => new RelayCommand(_ =>
@@ -58,7 +81,6 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     }
                 });
 
-
                 actor3.Tell(new VehicleOnNodeNotification
                 {
                     Vehicle = new Common.Data.VehicleDto
@@ -68,10 +90,20 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     }
                 });
 
-                //actor1.Tell(new ElectionStart());
-                //actor1.Tell(new ElectionStart());
-
-
             });
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // This method is called by the Set accessor of each property.
+        // The CallerMemberName attribute that is applied to the optional propertyName
+        // parameter causes the property name of the caller to be substituted as an argument.
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }
