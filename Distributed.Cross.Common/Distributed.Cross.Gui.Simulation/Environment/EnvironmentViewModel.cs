@@ -92,7 +92,12 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             new RelayCommand(_ => Vehicle3Destination = 8);
 
         public RelayCommand Destination4Lane5Command =>
-            new RelayCommand(_ => Vehicle4Destination = 5);
+            new RelayCommand(_ =>
+            {
+                Vehicle4Destination = 0;
+                Vehicle4Destination = 5;
+            }
+           );
         public RelayCommand Destination4Lane6Command =>
             new RelayCommand(_ => Vehicle4Destination = 6);
         public RelayCommand Destination4Lane7Command =>
@@ -110,6 +115,9 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 var map = AlgorithmSimulation.AlgorithmViewModel.Instance.BuildEmptyMap();
                 var totalNode = map.Map.GetAllNodes().Count();
 
+                var environmentActor = system.ActorOf<EnvironmentActor>("Environment");
+                actors.Add(-1, environmentActor);
+
                 for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
                 {
                     var actor = system.ActorOf(NodeActor.Props(actorname, new CrossBuilder(3,3), actors), actorname.ToString());
@@ -118,39 +126,96 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 }
 
 
-                var actor1 = actors[1];
-                var actor2 = actors[2];
-                var actor3 = actors[3];
-                var actor4 = actors[4];
-
-                actor1.Tell(new VehicleOnNodeNotification
-                {
-                    Vehicle = new Common.Data.VehicleDto
-                    {
-                        StartLane = 1,
-                        DestinationLane = 6,
-                    }
-                });
-
-                actor2.Tell(new VehicleOnNodeNotification
-                {
-                    Vehicle = new Common.Data.VehicleDto
-                    {
-                        StartLane = 2,
-                        DestinationLane = 7,
-                    }
-                });
-
-                actor3.Tell(new VehicleOnNodeNotification
-                {
-                    Vehicle = new Common.Data.VehicleDto
-                    {
-                        StartLane = 3,
-                        DestinationLane = 5,
-                    }
-                });
+                //Example1(actors);
+                Example2(actors);
 
             });
+
+        /// <summary>
+        /// In this example there are 3 vehicle and 3 round
+        /// </summary>
+        /// <param name="actors"></param>
+        public void Example1(Dictionary<int,IActorRef> actors)
+        {
+            var actor1 = actors[1];
+            var actor2 = actors[2];
+            var actor3 = actors[3];
+
+            actor1.Tell(new VehicleOnNodeNotification
+            {
+                Vehicle = new Common.Data.VehicleDto
+                {
+                    StartLane = 1,
+                    DestinationLane = 6,
+                }
+            });
+
+            actor2.Tell(new VehicleOnNodeNotification
+            {
+                Vehicle = new Common.Data.VehicleDto
+                {
+                    StartLane = 2,
+                    DestinationLane = 7,
+                }
+            });
+
+            actor3.Tell(new VehicleOnNodeNotification
+            {
+                Vehicle = new Common.Data.VehicleDto
+                {
+                    StartLane = 3,
+                    DestinationLane = 5,
+                }
+            });
+
+        }
+
+        /// <summary>
+        /// For vehicle and 1 round
+        /// </summary>
+        public void Example2(Dictionary<int, IActorRef> actors)
+        {
+            var actor1 = actors[1];
+            var actor2 = actors[2];
+            var actor3 = actors[3];
+            var actor4 = actors[4];
+
+            actor1.Tell(new VehicleOnNodeNotification
+            {
+                Vehicle = new Common.Data.VehicleDto
+                {
+                    StartLane = 1,
+                    DestinationLane = 8,
+                }
+            });
+
+            actor2.Tell(new VehicleOnNodeNotification
+            {
+                Vehicle = new Common.Data.VehicleDto
+                {
+                    StartLane = 2,
+                    DestinationLane = 5,
+                }
+            });
+
+            actor3.Tell(new VehicleOnNodeNotification
+            {
+                Vehicle = new Common.Data.VehicleDto
+                {
+                    StartLane = 3,
+                    DestinationLane = 6,
+                }
+            });
+
+            actor4.Tell(new VehicleOnNodeNotification
+            {
+                Vehicle = new Common.Data.VehicleDto
+                {
+                    StartLane = 4,
+                    DestinationLane = 7,
+                }
+            });
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

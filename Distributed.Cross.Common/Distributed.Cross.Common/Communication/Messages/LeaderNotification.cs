@@ -13,6 +13,7 @@ namespace Distributed.Cross.Common.Communication.Messages
 
     public class LeaderNotificationResponse
     {
-        public VehicleDto VehicleDetail { get; set; } 
+        public VehicleDto VehicleDetail { get; set; }
+        public bool Acknowledge { get; set; } = true;
     }
 }
