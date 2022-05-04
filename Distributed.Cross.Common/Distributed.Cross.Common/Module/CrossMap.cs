@@ -21,6 +21,15 @@ namespace Distributed.Cross.Common.Module
             Lenght = lenght;
         }
 
+        public void EraseMapFromVehicles()
+        {
+            foreach (var node in Map.GetAllNodes())
+            {
+                node.Vehicle = null;
+            }
+        }
+
+
         public CrossNode[,] BuildInternalMap()
         {
 

@@ -15,7 +15,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 V 50 Q 100,120 120,50 V 0" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -28,7 +28,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 Q 70,120 140,120 H190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -41,7 +41,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 V 50 V190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -55,7 +55,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2"  >
+                Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 V 50 Q 70,70 50,70 H 0" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -69,7 +69,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 Q 120,70 120,50 V 0" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -82,7 +82,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 Q 70,100 140,120 H190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -95,7 +95,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 Q 70,70 70,140 V190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -109,7 +109,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2"  >
+                Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 H0" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -124,7 +124,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 0" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -137,7 +137,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 140 Q 120,120 140,120 H 190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -150,7 +150,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 140 Q 100,80 70,140 V 190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -164,7 +164,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2"  >
+                Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 140 Q 120,70 50,70 H 0" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -236,7 +236,7 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Viewbox Grid.Column="0" MaxHeight="500">
+        <Viewbox Grid.Column="0" MaxHeight="700">
         <Canvas HorizontalAlignment="Left" Width="340" Height="240" >
 
             <!-- This Path is only to show the path that the animated object will follow. -->

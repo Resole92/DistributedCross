@@ -52,9 +52,12 @@ namespace Distributed.Cross.Common.Module
             _parentNode = null;
         }
 
+       
 
         public ElectionResult LeaderRequestAsk(CancellationToken token)
         {
+
+          
 
             _logger.LogInformation($"A leader election algorithm is started");
 
@@ -136,6 +139,8 @@ namespace Distributed.Cross.Common.Module
             }
 
 
+            _map.EraseMapFromVehicles();
+            _map.AddVehicle(Data);
 
             var vehiclesThatHaveResponse = new List<VehicleDto>();
 
@@ -170,7 +175,7 @@ namespace Distributed.Cross.Common.Module
 
             var coordinationDetail = new CoordinationNotificationRequest
             {
-                VehiclesDetail = vehicles.ToList()
+                VehiclesDetail = vehicles.Select(x => x.Clone()).ToList()
             };
 
             foreach (var vehicleThatHaveResponse in vehiclesThatHaveResponse)
@@ -193,6 +198,15 @@ namespace Distributed.Cross.Common.Module
         /// <returns></returns>
         public bool CoordinationInformationReceive(CoordinationNotificationRequest coordinationRequest)
         {
+            _map.EraseMapFromVehicles();
+
+            _logger.LogInformation("Log coordination vehicle detail");
+
+            foreach (var vehicle in coordinationRequest.VehiclesDetail)
+            {
+                _logger.LogInformation($"{vehicle}");
+            }
+
             coordinationRequest.VehiclesDetail.ForEach(_map.AddVehicle);
             var collisionAlgorithm = new CollisionAlgorithm(_map);
             collisionAlgorithm.Calculate();
@@ -231,8 +245,7 @@ namespace Distributed.Cross.Common.Module
             else
             {
                 _logger.LogInformation($"Vehicle NOT CROSSING from lane {Data.StartLane} to lane {Data.DestinationLane}...");
-                collisionAlgorithm.IncrementPriority();
-
+                Data.Priority++;
             }
 
             return amIrunner;

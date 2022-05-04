@@ -184,6 +184,7 @@ namespace Distributed.Cross.Common.Actors
 
                     if (response.Acknowledge)
                     {
+                        _tokenAsk.Cancel();
                         _logger.LogInformation($"A leader with ID {message.Identifier} is elected");
                     }
                     else
@@ -224,7 +225,6 @@ namespace Distributed.Cross.Common.Actors
         }
 
         #endregion
-
 
         #region Coordination behaviour
 
@@ -280,7 +280,6 @@ namespace Distributed.Cross.Common.Actors
 
 
         #endregion
-
 
         #region CrossingBehaviour
 
@@ -363,15 +362,21 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (message.IsFailed)
                 {
+                    _logger.LogInformation("An election is failed");
                     Become(EntryBehaviour);
+                }
+                else
+                {
+                    _logger.LogInformation("An election is conclude successfully");
                 }
 
             });
 
         }
 
-        #endregion 
+        #endregion
 
+        #region Idle behaviour
 
         public void IdleBehaviour()
         {
@@ -392,10 +397,9 @@ namespace Distributed.Cross.Common.Actors
                 Become(CrossingBehaviour);
             });
 
-
-
         }
 
+        #endregion
 
         public static Props Props(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {
