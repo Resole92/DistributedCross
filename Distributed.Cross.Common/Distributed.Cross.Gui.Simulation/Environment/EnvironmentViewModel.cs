@@ -157,8 +157,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 
 
 
-                //Example1(_actors);
-                Example2(_actors);
+                Example1(_actors);
+                //Example2(_actors);
 
             });
 

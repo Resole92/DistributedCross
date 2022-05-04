@@ -51,6 +51,8 @@ namespace Distributed.Cross.Common.Actors
                        
                     }
                 }
+
+                //EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
             });
         }
         

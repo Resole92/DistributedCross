@@ -73,7 +73,7 @@ namespace Distributed.Cross.Common.Module
                 var request = targetActor.Ask<LeaderElectionResponse>(new LeaderElectionRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, TimeSpan.FromSeconds(2));
+                }, TimeSpan.FromSeconds(1.5));
                 requests.Add(request);
             }
 
@@ -128,7 +128,7 @@ namespace Distributed.Cross.Common.Module
                 var requestSubmitted = targetActor.Ask<LeaderNotificationResponse>(new LeaderNotificationRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, TimeSpan.FromSeconds(2));
+                }, TimeSpan.FromSeconds(1.5));
 
 
 
@@ -318,22 +318,21 @@ namespace Distributed.Cross.Common.Module
             Task.Run(() =>
             {
                 _logger.LogInformation($"I'm moving on destination lane {Data.DestinationLane}");
-                Thread.Sleep(4000);
+                Thread.Sleep(2500);
                 var self = parentNode.ActorsMap[Data.DestinationLane];
 
                 var leaderActor = parentNode.ActorsMap[_leaderIdentifier];
-                leaderActor.Tell(new VehicleExitNotification
-                {
-                    Identifier = parentNode.Identifier
-                });
-
-
+               
                 if (parentNode.Identifier != _leaderIdentifier)
                 {
                     _logger.LogInformation($"I have cross!");
                     self.Tell(new VehicleRemoveNotification());
-
                 }
+
+                leaderActor.Tell(new VehicleExitNotification
+                {
+                    Identifier = parentNode.Identifier
+                });
 
             });
         }
