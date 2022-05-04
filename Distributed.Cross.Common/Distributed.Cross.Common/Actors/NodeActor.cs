@@ -6,20 +6,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Distributed.Cross.Common.Actors
 {
-    public class NodeActor : ReceiveActor
+    public class NodeActor : ReceiveActor, IWithUnboundedStash
     {
 
         public Dictionary<int, IActorRef> ActorsMap { get; private set; }
         public int Identifier { get; private set; }
         public Vehicle Vehicle { get; set; }
+        public IStash Stash { get; set; }
+
         private Logger _logger = new Logger();
         private CrossBuilder _builder;
         private CrossMap _map;
-
+        private CancellationTokenSource _tokenAsk;
 
 
         public NodeActor(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
@@ -53,12 +56,31 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    Sender.Tell(new LeaderElectionResponse(), Self);
-                    Become(ElectionBehaviour);
-                    Task.Run(() =>
+                    Sender.Tell(new LeaderElectionResponse
                     {
-                        Vehicle?.LeaderRequestAsk();
-                    });//.PipeTo(self);
+                        Identifier = Identifier
+                    }, Self);
+                    Become(ElectionBehaviour);
+                    _tokenAsk = new CancellationTokenSource();
+
+                    var self = Self;
+                    var vehicle = Vehicle;
+
+                    Task.Run(() =>
+                        vehicle.LeaderRequestAsk(_tokenAsk.Token)
+                        , _tokenAsk.Token)
+                    .ContinueWith(x =>
+                    {
+                        if (x.IsCanceled || x.IsFaulted)
+                            return new ElectionResult
+                            {
+                                IsFailed = false,
+                            };
+
+                        return x.Result;
+                      
+                    }, TaskContinuationOptions.ExecuteSynchronously)
+                    .PipeTo(self);
 
                     //ReceiveAny(o => Stash.Stash());
                    
@@ -70,11 +92,7 @@ namespace Distributed.Cross.Common.Actors
                 if (Vehicle is not null)
                 {
                     _logger.LogInformation("An election is start...");
-                    Become(ElectionBehaviour);
-                    Task.Run(() =>
-                    {
-                        Vehicle.LeaderRequestAsk();
-                    });
+                    Self.Tell(new LeaderElectionRequest(), Self);
                 }
             });
 
@@ -91,11 +109,16 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
+            Receive<VehicleRemoveNotification>(message =>
+            {
+                Stash.Stash();
+            });
+
 
             BaseBehaviour();
         }
 
-        #endregion 
+        #endregion
 
         #region Election behaviour
 
@@ -114,7 +137,10 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    Sender.Tell(new LeaderElectionResponse(), Self);
+                    Sender.Tell(new LeaderElectionResponse
+                    {
+                        Identifier = Identifier
+                    }, Self);
                     _logger.LogInformation($"A node  {message.Identifier} want to be a leader but i'm a node with bigger identifier {Identifier}");
                 }
             });
@@ -136,6 +162,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
+                    _tokenAsk.Cancel();
                     _logger.LogInformation($"Coordination data received!");
                     var isRunner = Vehicle.CoordinationInformationReceive(message);
                     if (isRunner)
@@ -148,6 +175,11 @@ namespace Distributed.Cross.Common.Actors
                     }
 
                 }
+            });
+
+            Receive<VehicleRemoveNotification>(message =>
+            {
+                Stash.Stash();
             });
 
             BaseBehaviour();
@@ -173,7 +205,10 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    Sender.Tell(new LeaderElectionResponse());
+                    Sender.Tell(new LeaderElectionResponse
+                    {
+                        Identifier = Identifier
+                    });
                     _logger.LogInformation($"A election leader request is refused from node {Identifier} because is in coordination behaviour");
                 }
             });
@@ -188,6 +223,15 @@ namespace Distributed.Cross.Common.Actors
                         Acknowledge = false
                     });
                 }
+            });
+
+            Receive<VehicleRemoveNotification>(message =>
+            {
+                if (Vehicle is null) return;
+                Vehicle.RemoveParentNode();
+                Vehicle = null;
+
+                Become(IdleBehaviour);
             });
 
 
@@ -216,7 +260,10 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    Sender.Tell(new LeaderElectionResponse(), Self);
+                    Sender.Tell(new LeaderElectionResponse
+                    {
+                        Identifier = Identifier
+                    }, Self);
                     _logger.LogInformation($"A leader election is refused from node {Identifier} because is in crossing behaviour");
                 }
             });
@@ -231,8 +278,15 @@ namespace Distributed.Cross.Common.Actors
             });
 
 
+            Receive<VehicleRemoveNotification>(message =>
+            {
+                if (Vehicle is null) return;
+                Vehicle.RemoveParentNode();
+                Vehicle = null;
 
-         
+                Become(IdleBehaviour);
+            });
+
 
             BaseBehaviour();
 
@@ -265,14 +319,14 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<VehicleRemoveNotification>(message =>
+            Receive<ElectionResult>(message =>
             {
-                if (Vehicle is null) return;
-                Vehicle.RemoveParentNode();
-                Vehicle = null;
+                if (message.IsFailed)
+                {
+                    Become(EntryBehaviour);
+                }
 
-                Become(IdleBehaviour);
-
+                Stash.UnstashAll();
 
             });
 

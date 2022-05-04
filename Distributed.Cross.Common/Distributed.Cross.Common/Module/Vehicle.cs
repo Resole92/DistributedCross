@@ -25,7 +25,6 @@ namespace Distributed.Cross.Common.Module
         private List<int> _vehicleRunner;
 
 
-
         public VehicleDto Data { get; private set; }
         private NodeActor _parentNode;
 
@@ -54,8 +53,9 @@ namespace Distributed.Cross.Common.Module
         }
 
 
-        public void LeaderRequestAsk()
+        public ElectionResult LeaderRequestAsk(CancellationToken token)
         {
+
             _logger.LogInformation($"A leader election algorithm is started on node {_parentNode.Identifier}");
 
             var totalInputLane = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input).Count();
@@ -68,27 +68,18 @@ namespace Distributed.Cross.Common.Module
 
             for (int vehicleId = _parentNode.Identifier + 1; vehicleId <= totalElectionRequests; vehicleId++)
             {
+
                 var targetActor = _parentNode.ActorsMap[vehicleId];
-
-                if (vehicleId > 4)
-                {
-                    targetActor.Tell(new LeaderNotificationRequest
-                    {
-                        Identifier = _parentNode.Identifier
-                    }, self);
-                }
-
                 var request = targetActor.Ask<LeaderElectionResponse>(new LeaderElectionRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, TimeSpan.FromSeconds(5));
+                }, TimeSpan.FromSeconds(2));
                 requests.Add(request);
 
 
-               
             }
 
-            var someoneBetter = new List<object>();
+            var someoneBetter = new List<int>();
 
             foreach (var request in requests)
             {
@@ -97,8 +88,8 @@ namespace Distributed.Cross.Common.Module
                     var result = request.Result;
                     if (result.Acknowledge)
                     {
-                        someoneBetter.Add(result);
-                        return;
+
+                        someoneBetter.Add(result.Identifier);
                     }
                 }
                 catch (Exception ex)
@@ -107,19 +98,35 @@ namespace Distributed.Cross.Common.Module
                 }
             }
 
+            var isSomeoneCrossing = someoneBetter.Any(x => x > totalInputLane);
+
+            if(isSomeoneCrossing)
+            {
+                return new ElectionResult
+                {
+                    IsFailed = true
+                };
+            }
+
+            var isSomeoneResponse = someoneBetter.Any();
+            if(isSomeoneResponse)
+            {
+                return new ElectionResult();
+            }
+
+
             _logger.LogInformation($"I'm LEADER {_parentNode.Identifier} try to notify!");
 
             var requestsSubmitted = new List<Task<LeaderNotificationResponse>>();
 
             for (int vehicle = 1; vehicle <= totalInputLane; vehicle++)
             {
-
                 if (vehicle == Data.StartLane) continue;
                 var targetActor = _parentNode.ActorsMap[vehicle];
                 var requestSubmitted = targetActor.Ask<LeaderNotificationResponse>(new LeaderNotificationRequest
                 {
                     Identifier = _parentNode.Identifier
-                },TimeSpan.FromSeconds(2));
+                }, TimeSpan.FromSeconds(2));
 
 
 
@@ -137,6 +144,10 @@ namespace Distributed.Cross.Common.Module
                     if (!result.Acknowledge)
                     {
                         _logger.LogInformation("Some leader is already present...");
+                        return new ElectionResult
+                        {
+                            IsFailed = true
+                        };
                     }
                     var data = result.VehicleDetail;
                     _map.AddVehicle(data);
@@ -165,6 +176,9 @@ namespace Distributed.Cross.Common.Module
             };
 
             _parentNode.ActorsMap[Data.StartLane].Tell(coordinationDetail);
+
+            return new ElectionResult();
+
         }
 
 
@@ -245,6 +259,14 @@ namespace Distributed.Cross.Common.Module
 
             _logger.LogInformation("All vehicle left the cross. ROUND IS FINISH"!);
 
+            var leaderPresentOnCrossing = _vehicleRunner.Any(x => x == _parentNode.Identifier);
+            if (leaderPresentOnCrossing)
+            {
+                _logger.LogInformation($"LEADER {_parentNode.Identifier} left the cross! Bye bye");
+                var self = _parentNode.ActorsMap[Data.DestinationLane];
+                self.Tell(new VehicleRemoveNotification());
+            }
+
 
             var inputLanes = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input).Select(x => x.Identifier);
             foreach (var inputLane in inputLanes)
@@ -264,14 +286,7 @@ namespace Distributed.Cross.Common.Module
                 Vehicles = _map.Map.GetAllNodes().Where(x => x.Vehicle != null).Select(x => x.Vehicle).ToList()
             });
 
-            var leaderPresentOnCrossing = _vehicleRunner.Any(x => x == _parentNode.Identifier);
-            if (leaderPresentOnCrossing)
-            {
-                _logger.LogInformation($"LEADER {_parentNode.Identifier} left the cross! Bye bye");
-                var self = _parentNode.ActorsMap[Data.DestinationLane];
-                self.Tell(new VehicleRemoveNotification());
-            }
-
+           
             return true;
 
         }
@@ -282,7 +297,7 @@ namespace Distributed.Cross.Common.Module
             Task.Run(() =>
             {
                 _logger.LogInformation($"I'm moving {_parentNode.Identifier} on destination lane");
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
                 var self = _parentNode.ActorsMap[Data.DestinationLane];
 
                 var leaderActor = _parentNode.ActorsMap[_leaderIdentifier];
@@ -290,7 +305,7 @@ namespace Distributed.Cross.Common.Module
                 {
                     Identifier = _parentNode.Identifier
                 });
-            
+
 
                 if (_parentNode.Identifier != _leaderIdentifier)
                 {

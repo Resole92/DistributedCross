@@ -103,7 +103,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             new RelayCommand(_ =>
             {
                 var actor = _actors[SelectedVehicle];
-                var response = actor.Ask<InformationVehicleResponse>(new InformationVehicleRequest());
+                var response = actor.Ask<InformationVehicleResponse>(new InformationVehicleRequest(), TimeSpan.FromSeconds(5));
 
                 var result = response.Result;
             });
