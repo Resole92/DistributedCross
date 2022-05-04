@@ -19,7 +19,7 @@ namespace Distributed.Cross.Common.Actors
         public Vehicle Vehicle { get; set; }
         public IStash Stash { get; set; }
 
-        private Logger _logger = new Logger();
+        private Logger _logger;
         private CrossBuilder _builder;
         private CrossMap _map;
         private CancellationTokenSource _tokenAsk;
@@ -27,9 +27,11 @@ namespace Distributed.Cross.Common.Actors
 
         public NodeActor(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {
+       
             Identifier = identifier;
             ActorsMap = actorsMap;
             _builder = builder;
+            _logger = new Logger($"Vehicle {Identifier}");
 
             BuildMap(builder);
 
@@ -50,7 +52,8 @@ namespace Distributed.Cross.Common.Actors
 
         public void EntryBehaviour()
         {
-           
+
+            Stash.UnstashAll();
 
             Receive<LeaderElectionRequest>(message =>
             {
@@ -60,11 +63,12 @@ namespace Distributed.Cross.Common.Actors
                     {
                         Identifier = Identifier
                     }, Self);
-                    Become(ElectionBehaviour);
                     _tokenAsk = new CancellationTokenSource();
 
                     var self = Self;
                     var vehicle = Vehicle;
+
+                    Become(ElectionBehaviour);
 
                     Task.Run(() =>
                         vehicle.LeaderRequestAsk(_tokenAsk.Token)
@@ -82,8 +86,7 @@ namespace Distributed.Cross.Common.Actors
                     }, TaskContinuationOptions.ExecuteSynchronously)
                     .PipeTo(self);
 
-                    //ReceiveAny(o => Stash.Stash());
-                   
+
                 }
             });
 
@@ -100,18 +103,46 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    _logger.LogInformation($"A leader is elected with id {message.Identifier}");
-                    var data = Vehicle.LeaderElected(message);
-                    Sender.Tell(new LeaderNotificationResponse
+                   
+                    var response = Vehicle.LeaderElected(message);
+                    if (response.Acknowledge)
                     {
-                        VehicleDetail = data
-                    }, Self);
+                        _logger.LogInformation($"A leader with ID {message.Identifier} is elected");
+                    }
+                    else
+                        _logger.LogInformation($"A leader with ID {message.Identifier} is refused");
+
+                    Sender.Tell(response, Self);
+                   
                 }
             });
 
             Receive<VehicleRemoveNotification>(message =>
             {
-                Stash.Stash();
+                if (Vehicle is null) return;
+                Vehicle.RemoveParentNode();
+                Vehicle = null;
+
+                Become(IdleBehaviour);
+            });
+
+            Receive<CoordinationNotificationRequest>(message =>
+            {
+                if (Vehicle is not null)
+                {
+                    _tokenAsk.Cancel();
+                    _logger.LogInformation($"Coordination data received!");
+                    var isRunner = Vehicle.CoordinationInformationReceive(message);
+                    if (isRunner)
+                    {
+                        Become(CoordinationBehaviour);
+                    }
+                    else
+                    {
+                        Become(EntryBehaviour);
+                    }
+
+                }
             });
 
 
@@ -137,11 +168,11 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
+                   
                     Sender.Tell(new LeaderElectionResponse
                     {
                         Identifier = Identifier
                     }, Self);
-                    _logger.LogInformation($"A node  {message.Identifier} want to be a leader but i'm a node with bigger identifier {Identifier}");
                 }
             });
 
@@ -149,12 +180,18 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    _logger.LogInformation($"A leader is elected with id {message.Identifier}");
-                    var data = Vehicle.LeaderElected(message);
-                    Sender.Tell(new LeaderNotificationResponse
+                   var response = Vehicle.LeaderElected(message);
+
+                    if (response.Acknowledge)
                     {
-                        VehicleDetail = data
-                    }, Self);
+                        _logger.LogInformation($"A leader with ID {message.Identifier} is elected");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"A leader with ID {message.Identifier} is refused");
+                    }
+
+                    Sender.Tell(response, Self); 
                 }
             });
 
@@ -179,6 +216,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleRemoveNotification>(message =>
             {
+                _logger.LogInformation($"Message removing is stashed");
                 Stash.Stash();
             });
 
@@ -197,7 +235,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    _logger.LogInformation($"An election start is refused from node {Identifier} because is in coordination behaviour");
+                    _logger.LogInformation($"An election start is refused because i'm coordination behaviour");
                 }
             });
 
@@ -209,7 +247,7 @@ namespace Distributed.Cross.Common.Actors
                     {
                         Identifier = Identifier
                     });
-                    _logger.LogInformation($"A election leader request is refused from node {Identifier} because is in coordination behaviour");
+                    _logger.LogInformation($"A election leader request is refused because I'm coordination behaviour");
                 }
             });
 
@@ -217,7 +255,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    _logger.LogInformation($"An new leader is refused from node {Identifier} because is in coordination behaviour");
+                    _logger.LogInformation($"An new leader is refused from node because I'm coordination behaviour");
                     Sender.Tell(new LeaderNotificationResponse
                     {
                         Acknowledge = false
@@ -228,6 +266,7 @@ namespace Distributed.Cross.Common.Actors
             Receive<VehicleRemoveNotification>(message =>
             {
                 if (Vehicle is null) return;
+                _logger.LogInformation($"Vehicle is removed");
                 Vehicle.RemoveParentNode();
                 Vehicle = null;
 
@@ -252,7 +291,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    _logger.LogInformation($"An election start is refused from node {Identifier} because is in crossing behaviour");
+                    _logger.LogInformation($"An election start is refused because I'm crossing behaviour");
                 }
             });
 
@@ -264,7 +303,7 @@ namespace Distributed.Cross.Common.Actors
                     {
                         Identifier = Identifier
                     }, Self);
-                    _logger.LogInformation($"A leader election is refused from node {Identifier} because is in crossing behaviour");
+                    _logger.LogInformation($"A leader election is refused because I'm crossing behaviour");
                 }
             });
 
@@ -272,7 +311,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    _logger.LogInformation($"An new leader is refused from node {Identifier} because is in crossing behaviour");
+                    _logger.LogInformation($"An new leader is refused from node because I'm in crossing behaviour");
                     Sender.Tell(new LeaderNotificationResponse());
                 }
             });
@@ -281,6 +320,7 @@ namespace Distributed.Cross.Common.Actors
             Receive<VehicleRemoveNotification>(message =>
             {
                 if (Vehicle is null) return;
+                _logger.LogInformation($"Vehicle is removed");
                 Vehicle.RemoveParentNode();
                 Vehicle = null;
 
@@ -326,8 +366,6 @@ namespace Distributed.Cross.Common.Actors
                     Become(EntryBehaviour);
                 }
 
-                Stash.UnstashAll();
-
             });
 
         }
@@ -339,16 +377,16 @@ namespace Distributed.Cross.Common.Actors
         {
             Receive<VehicleOnNodeNotification>(message =>
             {
-                _logger.LogInformation($"A new vehicle {Identifier} enter on cross");
-                Vehicle = new Vehicle(message.Vehicle, _builder, this);
+                _logger.LogInformation($"A new vehicle enter on cross");
+                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Self.Tell(new ElectionStart());
                 Become(EntryBehaviour);
             });
 
             Receive<VehicleMoveNotification>(message =>
             {
-                _logger.LogInformation($"A new vehicle is crossing to lane {Identifier}");
-                Vehicle = new Vehicle(message.Vehicle, _builder, this);
+                _logger.LogInformation($"A new vehicle is crossing into this lane");
+                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Vehicle.UpdateCrossingStatus(message);
                 Vehicle.StartCrossing();
                 Become(CrossingBehaviour);
