@@ -64,15 +64,28 @@ namespace Distributed.Cross.Common.Module
             var totalElectionRequests = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input || x.Type == CrossNodeType.Output).Count();
             var requests = new List<Task<LeaderElectionResponse>>();
 
+            var self = _parentNode.ActorsMap[_parentNode.Identifier];
+
             for (int vehicleId = _parentNode.Identifier + 1; vehicleId <= totalElectionRequests; vehicleId++)
             {
                 var targetActor = _parentNode.ActorsMap[vehicleId];
 
+                if (vehicleId > 4)
+                {
+                    targetActor.Tell(new LeaderNotificationRequest
+                    {
+                        Identifier = _parentNode.Identifier
+                    }, self);
+                }
+
                 var request = targetActor.Ask<LeaderElectionResponse>(new LeaderElectionRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, TimeSpan.FromSeconds(2));
+                }, TimeSpan.FromSeconds(5));
                 requests.Add(request);
+
+
+               
             }
 
             var someoneBetter = new List<object>();
@@ -106,7 +119,9 @@ namespace Distributed.Cross.Common.Module
                 var requestSubmitted = targetActor.Ask<LeaderNotificationResponse>(new LeaderNotificationRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, TimeSpan.FromSeconds(2));
+                },TimeSpan.FromSeconds(2));
+
+
 
                 requestsSubmitted.Add(requestSubmitted);
             }
@@ -119,7 +134,7 @@ namespace Distributed.Cross.Common.Module
                 {
                     var result = requestSubmitted.Result;
 
-                    if(!result.Acknowledge)
+                    if (!result.Acknowledge)
                     {
                         _logger.LogInformation("Some leader is already present...");
                     }
@@ -152,7 +167,7 @@ namespace Distributed.Cross.Common.Module
             _parentNode.ActorsMap[Data.StartLane].Tell(coordinationDetail);
         }
 
-        
+
         /// <summary>
         /// Return if is runner vehicle
         /// </summary>
@@ -182,10 +197,6 @@ namespace Distributed.Cross.Common.Module
             {
                 var destinationActor = _parentNode.ActorsMap[Data.DestinationLane];
                 var startActor = _parentNode.ActorsMap[Data.StartLane];
-
-                _parentNode.Vehicle = null;
-                _parentNode = null;
-
                 startActor.Tell(new VehicleRemoveNotification());
 
                 destinationActor.Tell(new VehicleMoveNotification
@@ -194,7 +205,7 @@ namespace Distributed.Cross.Common.Module
                     LeaderIdentifier = _leaderIdentifier,
                     AllVehicles = coordinationRequest.VehiclesDetail,
                     VehiclesRunning = allRunner
-                }); 
+                });
 
                 _logger.LogInformation($"Vehicle is crossing now from lane {Data.StartLane} to lane {Data.DestinationLane}");
 
@@ -203,7 +214,7 @@ namespace Distributed.Cross.Common.Module
             {
                 _logger.LogInformation($"Vehicle NOT CROSSING from lane {Data.StartLane} to lane {Data.DestinationLane}...");
                 collisionAlgorithm.IncrementPriority();
-               
+
             }
 
             return amIrunner;
@@ -227,7 +238,7 @@ namespace Distributed.Cross.Common.Module
         //Return true if round must be terminate
         public bool VehicleExit(int identifier)
         {
-           
+
             _vehicleRunnerLeft.Remove(identifier);
             _logger.LogInformation($"Leader is notified about an exit vehicle with ID {identifier}");
             if (_vehicleRunnerLeft.Any()) return false;
@@ -236,13 +247,13 @@ namespace Distributed.Cross.Common.Module
 
 
             var inputLanes = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input).Select(x => x.Identifier);
-            foreach(var inputLane in inputLanes)
+            foreach (var inputLane in inputLanes)
             {
                 var actorLane = _parentNode.ActorsMap[inputLane];
                 actorLane.Tell(new ElectionStart
                 {
                     LastRoundVehicleRunning = _vehicleRunner,
-                   
+
                 });
             }
 
@@ -253,10 +264,16 @@ namespace Distributed.Cross.Common.Module
                 Vehicles = _map.Map.GetAllNodes().Where(x => x.Vehicle != null).Select(x => x.Vehicle).ToList()
             });
 
-
+            var leaderPresentOnCrossing = _vehicleRunner.Any(x => x == _parentNode.Identifier);
+            if (leaderPresentOnCrossing)
+            {
+                _logger.LogInformation($"LEADER {_parentNode.Identifier} left the cross! Bye bye");
+                var self = _parentNode.ActorsMap[Data.DestinationLane];
+                self.Tell(new VehicleRemoveNotification());
+            }
 
             return true;
-            
+
         }
 
 
@@ -265,16 +282,22 @@ namespace Distributed.Cross.Common.Module
             Task.Run(() =>
             {
                 _logger.LogInformation($"I'm moving {_parentNode.Identifier} on destination lane");
-                Thread.Sleep(12000);
+                Thread.Sleep(5000);
+                var self = _parentNode.ActorsMap[Data.DestinationLane];
+
                 var leaderActor = _parentNode.ActorsMap[_leaderIdentifier];
                 leaderActor.Tell(new VehicleExitNotification
                 {
                     Identifier = _parentNode.Identifier
                 });
-                _logger.LogInformation($"I have cross! I' am {_parentNode.Identifier}");
+            
 
-                //var self = _parentNode.ActorsMap[Data.DestinationLane];
-                //self.Tell(new VehicleRemoveNotification());
+                if (_parentNode.Identifier != _leaderIdentifier)
+                {
+                    _logger.LogInformation($"I have cross! I' am {_parentNode.Identifier}");
+                    self.Tell(new VehicleRemoveNotification());
+
+                }
 
             });
         }

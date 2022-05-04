@@ -70,12 +70,24 @@ namespace Distributed.Cross.Common.Actors
                 if (Vehicle is not null)
                 {
                     _logger.LogInformation("An election is start...");
+                    Become(ElectionBehaviour);
                     Task.Run(() =>
                     {
                         Vehicle.LeaderRequestAsk();
                     });
+                }
+            });
 
-                    Become(ElectionBehaviour);
+            Receive<LeaderNotificationRequest>(message =>
+            {
+                if (Vehicle is not null)
+                {
+                    _logger.LogInformation($"A leader is elected with id {message.Identifier}");
+                    var data = Vehicle.LeaderElected(message);
+                    Sender.Tell(new LeaderNotificationResponse
+                    {
+                        VehicleDetail = data
+                    }, Self);
                 }
             });
 
@@ -104,6 +116,37 @@ namespace Distributed.Cross.Common.Actors
                 {
                     Sender.Tell(new LeaderElectionResponse(), Self);
                     _logger.LogInformation($"A node  {message.Identifier} want to be a leader but i'm a node with bigger identifier {Identifier}");
+                }
+            });
+
+            Receive<LeaderNotificationRequest>(message =>
+            {
+                if (Vehicle is not null)
+                {
+                    _logger.LogInformation($"A leader is elected with id {message.Identifier}");
+                    var data = Vehicle.LeaderElected(message);
+                    Sender.Tell(new LeaderNotificationResponse
+                    {
+                        VehicleDetail = data
+                    }, Self);
+                }
+            });
+
+            Receive<CoordinationNotificationRequest>(message =>
+            {
+                if (Vehicle is not null)
+                {
+                    _logger.LogInformation($"Coordination data received!");
+                    var isRunner = Vehicle.CoordinationInformationReceive(message);
+                    if (isRunner)
+                    {
+                        Become(CoordinationBehaviour);
+                    }
+                    else
+                    {
+                        Become(EntryBehaviour);
+                    }
+
                 }
             });
 
@@ -148,6 +191,7 @@ namespace Distributed.Cross.Common.Actors
             });
 
 
+
             BaseBehaviour();
         }
 
@@ -182,12 +226,13 @@ namespace Distributed.Cross.Common.Actors
                 if (Vehicle is not null)
                 {
                     _logger.LogInformation($"An new leader is refused from node {Identifier} because is in crossing behaviour");
-                    Sender.Tell(new LeaderNotificationResponse
-                    {
-                        Acknowledge = false
-                    });
+                    Sender.Tell(new LeaderNotificationResponse());
                 }
             });
+
+
+
+         
 
             BaseBehaviour();
 
@@ -196,10 +241,11 @@ namespace Distributed.Cross.Common.Actors
 
         #endregion
 
+        #region Base behaviour
+
         private void BaseBehaviour()
         {
           
-
             Receive<VehicleExitNotification>(message =>
             {
                 if (Vehicle is not null)
@@ -208,7 +254,16 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-           
+            Receive<InformationVehicleRequest>(messsage =>
+            {
+                if (Vehicle is not null)
+                {
+                    Sender.Tell(new InformationVehicleResponse
+                    {
+                        Vehicle = Vehicle.Data
+                    });
+                }
+            });
 
             Receive<VehicleRemoveNotification>(message =>
             {
@@ -221,31 +276,9 @@ namespace Distributed.Cross.Common.Actors
 
             });
 
-            Receive<LeaderNotificationRequest>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    _logger.LogInformation($"A leader is elected with id {message.Identifier}");
-                    var data = Vehicle.LeaderElected(message);
-                    Sender.Tell(new LeaderNotificationResponse
-                    {
-                        VehicleDetail = data
-                    }, Self);
-                }
-            });
-
-            Receive<CoordinationNotificationRequest>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    _logger.LogInformation($"Coordination data received!");
-                    var isRunner = Vehicle.CoordinationInformationReceive(message);
-                    Become(CoordinationBehaviour);
-                      
-                }
-            });
-
         }
+
+        #endregion 
 
 
         public void IdleBehaviour()
@@ -266,6 +299,9 @@ namespace Distributed.Cross.Common.Actors
                 Vehicle.StartCrossing();
                 Become(CrossingBehaviour);
             });
+
+
+
         }
 
 

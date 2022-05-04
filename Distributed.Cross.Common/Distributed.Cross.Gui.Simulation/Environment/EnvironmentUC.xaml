@@ -574,8 +574,8 @@
             Margin="3"
             Height="30"
             Width="100"
-            Content="Create!" 
-            Command="{Binding StartEnvironmentCommand}">
+            Content="Information!" 
+            Command="{Binding RequestInformationVehicle}">
             </Button>
             <Button 
             Margin="3"

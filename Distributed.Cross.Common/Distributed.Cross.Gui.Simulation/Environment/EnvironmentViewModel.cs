@@ -20,6 +20,11 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         private static EnvironmentViewModel _instance;
         public static EnvironmentViewModel Instance => _instance ??= new EnvironmentViewModel();
 
+        EnvironmentViewModel()
+        {
+            EnvironmentInitialization();
+        }
+
         private int _vehicle1Destination = 0;
         public int Vehicle1Destination
         {
@@ -64,6 +69,45 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
+
+        private int _selectedVehicle = 8;
+        public int SelectedVehicle
+        {
+            get => _selectedVehicle;
+            set
+            {
+                _selectedVehicle = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private void EnvironmentInitialization()
+        {
+            ActorSystem system = ActorSystem.Create("MySystem");
+
+            var map = AlgorithmSimulation.AlgorithmViewModel.Instance.BuildEmptyMap();
+            var totalNode = map.Map.GetAllNodes().Count();
+
+            var environmentActor = system.ActorOf<EnvironmentActor>("Environment");
+            _actors.Add(-1, environmentActor);
+
+            for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
+            {
+                var actor = system.ActorOf(NodeActor.Props(actorname, new CrossBuilder(3, 3), _actors), actorname.ToString());
+                _actors.Add(actorname, actor);
+
+            }
+        }
+
+        public RelayCommand RequestInformationVehicle =>
+            new RelayCommand(_ =>
+            {
+                var actor = _actors[SelectedVehicle];
+                var response = actor.Ask<InformationVehicleResponse>(new InformationVehicleRequest());
+
+                var result = response.Result;
+            });
+
         public RelayCommand Destination1Lane5Command =>
             new RelayCommand(_ => Vehicle1Destination = 5);
         public RelayCommand Destination1Lane6Command =>
@@ -105,29 +149,16 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         public RelayCommand Destination4Lane8Command =>
             new RelayCommand(_ => Vehicle4Destination = 8);
 
-
+        private Dictionary<int, IActorRef> _actors = new Dictionary<int, IActorRef>();
+        
         public RelayCommand StartEnvironmentCommand
             => new RelayCommand(_ =>
             {
-                var actors = new Dictionary<int, IActorRef>();
-                ActorSystem system = ActorSystem.Create("MySystem");                
-
-                var map = AlgorithmSimulation.AlgorithmViewModel.Instance.BuildEmptyMap();
-                var totalNode = map.Map.GetAllNodes().Count();
-
-                var environmentActor = system.ActorOf<EnvironmentActor>("Environment");
-                actors.Add(-1, environmentActor);
-
-                for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
-                {
-                    var actor = system.ActorOf(NodeActor.Props(actorname, new CrossBuilder(3,3), actors), actorname.ToString());
-                    actors.Add(actorname, actor);
-
-                }
+                
 
 
-                //Example1(actors);
-                Example2(actors);
+                //Example1(_actors);
+                Example2(_actors);
 
             });
 
