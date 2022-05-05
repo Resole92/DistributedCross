@@ -11,7 +11,7 @@ namespace Distributed.Cross.Common.Actors
 {
     public class EnvironmentActor : ReceiveActor
     {
-
+        private int _exampleToSelect;
         public EnvironmentActor()
         {
             Receive<ElectionStart>(message =>
@@ -52,7 +52,9 @@ namespace Distributed.Cross.Common.Actors
                     }
                 }
 
-                //EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
+                EnvironmentViewModel.Instance.SelectedExample = _exampleToSelect % 2;
+                EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
+                _exampleToSelect++;
             });
         }
         

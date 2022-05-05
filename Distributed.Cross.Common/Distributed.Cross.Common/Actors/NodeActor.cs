@@ -53,8 +53,6 @@ namespace Distributed.Cross.Common.Actors
         public void EntryBehaviour()
         {
 
-            Stash.UnstashAll();
-
             Receive<LeaderElectionRequest>(message =>
             {
                 if (Vehicle is not null)
@@ -145,6 +143,14 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
+            Receive<VehicleExitNotification>(message =>
+            {
+                if (Vehicle is not null)
+                {
+                    Vehicle.VehicleExit(message.Identifier);
+                }
+            });
+
 
             BaseBehaviour();
         }
@@ -163,6 +169,7 @@ namespace Distributed.Cross.Common.Actors
                     _logger.LogInformation("An election is already started...");
                 }
             });
+
 
             Receive<LeaderElectionRequest>(message =>
             {
@@ -221,6 +228,12 @@ namespace Distributed.Cross.Common.Actors
                 Stash.Stash();
             });
 
+            Receive<VehicleExitNotification>(message =>
+            {
+                _logger.LogInformation($"Message exit is stashed");
+                Stash.Stash();
+            });
+
             BaseBehaviour();
         }
 
@@ -273,7 +286,13 @@ namespace Distributed.Cross.Common.Actors
                 Become(IdleBehaviour);
             });
 
-
+            Receive<VehicleExitNotification>(message =>
+            {
+                if (Vehicle is not null)
+                {
+                    Vehicle.VehicleExit(message.Identifier);
+                }
+            });
 
             BaseBehaviour();
         }
@@ -326,6 +345,13 @@ namespace Distributed.Cross.Common.Actors
                 Become(IdleBehaviour);
             });
 
+            Receive<VehicleExitNotification>(message =>
+            {
+                if (Vehicle is not null)
+                {
+                    Vehicle.VehicleExit(message.Identifier);
+                }
+            });
 
             BaseBehaviour();
 
@@ -339,13 +365,7 @@ namespace Distributed.Cross.Common.Actors
         private void BaseBehaviour()
         {
           
-            Receive<VehicleExitNotification>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    Vehicle.VehicleExit(message.Identifier);
-                }
-            });
+            
 
             Receive<InformationVehicleRequest>(messsage =>
             {
@@ -360,6 +380,8 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<ElectionResult>(message =>
             {
+                Stash.UnstashAll();
+
                 if (message.IsFailed)
                 {
                     _logger.LogInformation("An election is failed");

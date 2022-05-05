@@ -150,15 +150,28 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             new RelayCommand(_ => Vehicle4Destination = 8);
 
         private Dictionary<int, IActorRef> _actors = new Dictionary<int, IActorRef>();
-        
+
+
+        private int _selectedExample;
+        public int SelectedExample
+        {
+            get => _selectedExample;
+            set
+            {
+                _selectedExample = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public RelayCommand StartEnvironmentCommand
             => new RelayCommand(_ =>
             {
                 
 
-
-                Example1(_actors);
-                //Example2(_actors);
+                if(SelectedExample == 0)
+                    Example0(_actors);
+                else
+                    Example1(_actors);
 
             });
 
@@ -166,7 +179,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         /// In this example there are 3 vehicle and 3 round
         /// </summary>
         /// <param name="actors"></param>
-        public void Example1(Dictionary<int,IActorRef> actors)
+        public void Example0(Dictionary<int,IActorRef> actors)
         {
             var actor1 = actors[1];
             var actor2 = actors[2];
@@ -204,7 +217,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         /// <summary>
         /// For vehicle and 1 round
         /// </summary>
-        public void Example2(Dictionary<int, IActorRef> actors)
+        public void Example1(Dictionary<int, IActorRef> actors)
         {
             var actor1 = actors[1];
             var actor2 = actors[2];
