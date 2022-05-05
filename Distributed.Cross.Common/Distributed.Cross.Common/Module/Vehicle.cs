@@ -233,7 +233,7 @@ namespace Distributed.Cross.Common.Module
 
                 destinationActor.Tell(new VehicleMoveNotification
                 {
-                    Vehicle = Data,
+                    Vehicle = Data.Clone(),
                     LeaderIdentifier = _leaderIdentifier,
                     AllVehicles = coordinationRequest.VehiclesDetail,
                     VehiclesRunning = allRunner
@@ -268,14 +268,14 @@ namespace Distributed.Cross.Common.Module
                 return new LeaderNotificationResponse
                 {
                     Acknowledge = true,
-                    VehicleDetail = Data
+                    VehicleDetail = Data.Clone()
                 };
             }
             
             return new LeaderNotificationResponse
             {
                 Acknowledge = false,
-                VehicleDetail = Data
+                VehicleDetail = Data.Clone()
             };
 
         }
@@ -305,7 +305,7 @@ namespace Distributed.Cross.Common.Module
                 var actorLane = _parentNode.ActorsMap[inputLane];
                 actorLane.Tell(new ElectionStart
                 {
-                    LastRoundVehicleRunning = _vehicleRunner,
+                    LastRoundVehicleRunning = _vehicleRunner.ToList(),
 
                 });
             }
@@ -313,7 +313,7 @@ namespace Distributed.Cross.Common.Module
             var environmentActor = _parentNode.ActorsMap[-1];
             environmentActor.Tell(new ElectionStart
             {
-                LastRoundVehicleRunning = _vehicleRunner,
+                LastRoundVehicleRunning = _vehicleRunner.ToList(),
                 Vehicles = _map.Map.GetAllNodes().Where(x => x.Vehicle != null).Select(x => x.Vehicle).ToList()
             });
 
@@ -330,7 +330,7 @@ namespace Distributed.Cross.Common.Module
 
             Task.Run(() =>
             {
-                _logger.LogInformation($"I'm moving on destination lane {Data.DestinationLane}");
+                _logger.LogInformation($"I'm starting from {Data.StartLane} and moving on destination lane {Data.DestinationLane}");
                 Thread.Sleep(2500);
                 var self = parentNode.ActorsMap[Data.DestinationLane];
 

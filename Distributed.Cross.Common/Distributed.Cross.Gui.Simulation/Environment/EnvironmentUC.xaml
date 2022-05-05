@@ -180,7 +180,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 Q 120,120 120,50 V 0" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -193,7 +193,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 H 190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -206,7 +206,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 Q 70,120 70,140 V190" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -220,7 +220,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2"  >
+                Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 Q 110,100 50,70 H 0" />
                 </PointAnimationUsingPath.PathGeometry>

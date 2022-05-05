@@ -18,7 +18,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 foreach (var vehicle in message.LastRoundVehicleRunning)
                 {
-                    var findVehicle = message.Vehicles.FirstOrDefault(x => x.DestinationLane == vehicle);
+                    var findVehicle = message.Vehicles.Where(x => x.DestinationLane == vehicle).OrderByDescending(x => x.Priority).FirstOrDefault();
                     if(findVehicle is not null)
                     {
 
