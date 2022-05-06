@@ -109,31 +109,79 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             });
 
         public RelayCommand Destination1Lane5Command =>
-            new RelayCommand(_ => Vehicle1Destination = 5);
+            new RelayCommand(_ =>
+            {
+                Vehicle1Destination = 0;
+                Vehicle1Destination = 5;
+            });
         public RelayCommand Destination1Lane6Command =>
-            new RelayCommand(_ => Vehicle1Destination = 6);
+            new RelayCommand(_ =>
+            {
+                Vehicle1Destination = 0;
+                Vehicle1Destination = 6;
+            });
         public RelayCommand Destination1Lane7Command =>
-            new RelayCommand(_ => Vehicle1Destination = 7);
+             new RelayCommand(_ =>
+             {
+                 Vehicle1Destination = 0;
+                 Vehicle1Destination = 7;
+             });
         public RelayCommand Destination1Lane8Command =>
-            new RelayCommand(_ => Vehicle1Destination = 8);
+            new RelayCommand(_ =>
+            {
+                Vehicle1Destination = 0;
+                Vehicle1Destination = 8;
+            });
 
         public RelayCommand Destination2Lane5Command =>
-            new RelayCommand(_ => Vehicle2Destination = 5);
+            new RelayCommand(_ =>
+            {
+                Vehicle2Destination = 0;
+                Vehicle2Destination = 5;
+            });
         public RelayCommand Destination2Lane6Command =>
-            new RelayCommand(_ => Vehicle2Destination = 6);
+            new RelayCommand(_ =>
+            {
+                Vehicle2Destination = 0;
+                Vehicle2Destination = 6;
+            });
         public RelayCommand Destination2Lane7Command =>
-            new RelayCommand(_ => Vehicle2Destination = 7);
+            new RelayCommand(_ =>
+            {
+                Vehicle2Destination = 0;
+                Vehicle2Destination = 7;
+            });
         public RelayCommand Destination2Lane8Command =>
-            new RelayCommand(_ => Vehicle2Destination = 8);
+            new RelayCommand(_ =>
+            {
+                Vehicle2Destination = 0;
+                Vehicle2Destination = 8;
+            });
 
         public RelayCommand Destination3Lane5Command =>
-            new RelayCommand(_ => Vehicle3Destination = 5);
+            new RelayCommand(_ =>
+            {
+                Vehicle3Destination = 0;
+                Vehicle3Destination = 5;
+            });
         public RelayCommand Destination3Lane6Command =>
-            new RelayCommand(_ => Vehicle3Destination = 6);
+            new RelayCommand(_ =>
+            {
+                Vehicle3Destination = 0;
+                Vehicle3Destination = 6;
+            });
         public RelayCommand Destination3Lane7Command =>
-            new RelayCommand(_ => Vehicle3Destination = 7);
+            new RelayCommand(_ =>
+            {
+                Vehicle3Destination = 0;
+                Vehicle3Destination = 7;
+            });
         public RelayCommand Destination3Lane8Command =>
-            new RelayCommand(_ => Vehicle3Destination = 8);
+            new RelayCommand(_ =>
+            {
+                Vehicle3Destination = 0;
+                Vehicle3Destination = 8;
+            });
 
         public RelayCommand Destination4Lane5Command =>
             new RelayCommand(_ =>
@@ -143,11 +191,23 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
            );
         public RelayCommand Destination4Lane6Command =>
-            new RelayCommand(_ => Vehicle4Destination = 6);
+            new RelayCommand(_ =>
+            {
+                Vehicle4Destination = 0;
+                Vehicle4Destination = 6;
+            });
         public RelayCommand Destination4Lane7Command =>
-            new RelayCommand(_ => Vehicle4Destination = 7);
+            new RelayCommand(_ =>
+            {
+                Vehicle4Destination = 0;
+                Vehicle4Destination = 7;
+            });
         public RelayCommand Destination4Lane8Command =>
-            new RelayCommand(_ => Vehicle4Destination = 8);
+            new RelayCommand(_ =>
+            {
+                Vehicle4Destination = 0;
+                Vehicle4Destination = 8;
+            });
 
         private Dictionary<int, IActorRef> _actors = new Dictionary<int, IActorRef>();
 
@@ -166,12 +226,17 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         public RelayCommand StartEnvironmentCommand
             => new RelayCommand(_ =>
             {
-                
 
-                if(SelectedExample == 0)
-                    Example0(_actors);
-                else
-                    Example1(_actors);
+                Task.Run(() =>
+                {
+
+
+
+                //if(SelectedExample == 0)
+                //Example0(_actors);
+                //else
+                Example1(_actors);
+                });
 
             });
 
@@ -179,7 +244,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         /// In this example there are 3 vehicle and 3 round
         /// </summary>
         /// <param name="actors"></param>
-        public void Example0(Dictionary<int,IActorRef> actors)
+        public void Example0(Dictionary<int, IActorRef> actors)
         {
             var actor1 = actors[1];
             var actor2 = actors[2];
@@ -193,6 +258,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     DestinationLane = 6,
                 }
             });
+
 
             actor2.Tell(new VehicleOnNodeNotification
             {
@@ -233,6 +299,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 }
             });
 
+            Thread.Sleep(500);
+
             actor2.Tell(new VehicleOnNodeNotification
             {
                 Vehicle = new Common.Data.VehicleDto
@@ -242,6 +310,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 }
             });
 
+            Thread.Sleep(500);
+
             actor3.Tell(new VehicleOnNodeNotification
             {
                 Vehicle = new Common.Data.VehicleDto
@@ -250,6 +320,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     DestinationLane = 6,
                 }
             });
+
+            Thread.Sleep(3000);
 
             actor4.Tell(new VehicleOnNodeNotification
             {

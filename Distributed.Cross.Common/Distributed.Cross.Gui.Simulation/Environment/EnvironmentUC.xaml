@@ -17,7 +17,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 70,40 V 50 Q 100,120 120,50 V 0" />
+                    <PathGeometry Figures="M 70,40 V 50 Q 100,120 120,50 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -30,7 +30,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 70,40 Q 70,120 140,120 H190" />
+                    <PathGeometry Figures="M 70,40 Q 70,120 140,120 H180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -43,7 +43,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 70,40 V 50 V190" />
+                    <PathGeometry Figures="M 70,40 V 50 V180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -57,7 +57,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 70,40 V 50 Q 70,70 50,70 H 0" />
+                    <PathGeometry Figures="M 70,40 V 50 Q 70,70 50,70 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -71,7 +71,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,70 H 140 Q 120,70 120,50 V 0" />
+                    <PathGeometry Figures="M 150,70 H 140 Q 120,70 120,50 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -84,7 +84,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,70 H 140 Q 70,100 140,120 H190" />
+                    <PathGeometry Figures="M 150,70 H 140 Q 70,100 140,120 H180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -97,7 +97,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,70 H 140 Q 70,70 70,140 V190" />
+                    <PathGeometry Figures="M 150,70 H 140 Q 70,70 70,140 V180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -111,7 +111,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,70 H 140 H0" />
+                    <PathGeometry Figures="M 150,70 H 140 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -126,7 +126,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 120,150 V 0" />
+                    <PathGeometry Figures="M 120,150 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -139,7 +139,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 120,150 V 140 Q 120,120 140,120 H 190" />
+                    <PathGeometry Figures="M 120,150 V 140 Q 120,120 140,120 H 180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -152,7 +152,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 120,150 V 140 Q 100,80 70,140 V 190" />
+                    <PathGeometry Figures="M 120,150 V 140 Q 100,80 70,140 V 180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -166,7 +166,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 120,150 V 140 Q 120,70 50,70 H 0" />
+                    <PathGeometry Figures="M 120,150 V 140 Q 120,70 50,70 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -182,7 +182,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 40,120 H 50 Q 120,120 120,50 V 0" />
+                    <PathGeometry Figures="M 40,120 H 50 Q 120,120 120,50 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -195,7 +195,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 40,120 H 50 H 190" />
+                    <PathGeometry Figures="M 40,120 H 50 H 180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -208,7 +208,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 40,120 H 50 Q 70,120 70,140 V190" />
+                    <PathGeometry Figures="M 40,120 H 50 Q 70,120 70,140 V180" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -222,7 +222,7 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:1"  >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 40,120 H 50 Q 110,100 50,70 H 0" />
+                    <PathGeometry Figures="M 40,120 H 50 Q 110,100 50,70 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>
@@ -231,9 +231,6 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Viewbox Grid.Column="0" MaxHeight="700">
@@ -246,100 +243,136 @@
         Stretch="None" />-->
 
 
-                <Path Name="From1To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+
+                <!--<Path Name="From1To5" VerticalAlignment="Top" 
         Data="M 70,40 V 50 Q 100,120 120,50 V 0"
         Stroke="Green" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From1To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From1To6" VerticalAlignment="Top"
         Data="M 70,40 Q 70,120 140,120 H190"
         Stroke="Green" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From1To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From1To7" VerticalAlignment="Top"
         Data="M 70,40 V 50 V190"
         Stroke="Green" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From1To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From1To8" VerticalAlignment="Top"  
         Data="M 70,40 V 50 Q 70,70 50,70 H 0"
         Stroke="Green" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From2To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From2To5" VerticalAlignment="Top" 
         Data="M 150,70 H 140 Q 120,70 120,50 V 0"
         Stroke="DarkOrange" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From2To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From2To6" VerticalAlignment="Top" 
         Data="M 150,70 H 140 Q 70,100 140,120 H190"
         Stroke="DarkOrange" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From2To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From2To7" VerticalAlignment="Top"  
         Data="M 150,70 H 140 Q 70,70 70,140 V190"
         Stroke="DarkOrange" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From2To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From2To8" VerticalAlignment="Top" 
         Data="M 150,70 H 140 H0"
         Stroke="DarkOrange" StrokeThickness="2"
         Stretch="None" />
 
 
-                <Path Name="From3To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From3To5" VerticalAlignment="Top" 
         Data="M 120,150 V 0"
         Stroke="Blue" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From3To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From3To6" VerticalAlignment="Top" 
         Data="M 120,150 V 140 Q 120,120 140,120 H 190"
         Stroke="Blue" StrokeThickness="2"
         Stretch="None" />
 
 
-                <Path Name="From3To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From3To7" VerticalAlignment="Top"  
         Data="M 120,150 V 140 Q 100,80 70,140 V 190"
         Stroke="Blue" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From3To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From3To8" VerticalAlignment="Top" 
         Data="M 120,150 V 140 Q 120,70 50,70 H 0"
         Stroke="Blue" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From4To5" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From4To5" VerticalAlignment="Top" 
         Data="M 40,120 H 50 Q 120,120 120,50 V 0"
         Stroke="Red" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From4To6" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From4To6" VerticalAlignment="Top" 
         Data="M 40,120 H 50 H 190"
         Stroke="Red" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From4To7" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From4To7" VerticalAlignment="Top"
         Data="M 40,120 H 50 Q 70,120 70,140 V190"
         Stroke="Red" StrokeThickness="2"
         Stretch="None" />
 
-                <Path Name="From4To8" VerticalAlignment="Top" Margin="15,15,15,15" 
+                <Path Name="From4To8" VerticalAlignment="Top"  
         Data="M 40,120 H 50 Q 110,100 50,70 H 0"
         Stroke="Red" StrokeThickness="2"
+        Stretch="None" />-->
+
+
+
+                <!-- Describes the road. -->
+                <Path VerticalAlignment="Top"    
+        Data="M 0,50 H 50 V 0"
+        Stroke="black" StrokeThickness="1"
         Stretch="None" />
 
+                <Path VerticalAlignment="Top"    
+        Data="M 140,0 V 50 H 190"
+        Stroke="black" StrokeThickness="1"
+        Stretch="None" />
 
-                <Path Fill="Green" Margin="15,15,15,15">
+                <Path VerticalAlignment="Top"    
+        Data="M 0,140 H 50 V 190"
+        Stroke="black" StrokeThickness="1"
+        Stretch="None" />
+
+                <Path VerticalAlignment="Top"    
+        Data="M 140,190 V 140 H 190"
+        Stroke="black" StrokeThickness="1"
+        Stretch="None" />
+
+                <!--<Path VerticalAlignment="Top"    
+        Data="M 60,0 H 80 V 20 H 60 Z"
+        Stroke="Green" StrokeThickness="2"
+        Stretch="None" />
+                <Label ></Label>-->
+
+                <Label Foreground="Green" Margin="60,0,0,0">1</Label>
+                <Label Foreground="Black" Margin="110,20,0,0">5</Label>
+
+                <Path Fill="Green"  Panel.ZIndex="90">
                     <Path.Data>
 
                         <!-- Describes an ellipse. -->
                         <EllipseGeometry x:Name="Vehicle1"
             Center="70,40" RadiusX="10" RadiusY="10" >
+                           
                         </EllipseGeometry>
                     </Path.Data>
                 </Path>
 
-                <Path Fill="Orange" Margin="15,15,15,15">
+                <Label  Foreground="Orange" Margin="170,55,0,0">2</Label>
+                <Label Foreground="Black" Margin="150,105,0,0">6</Label>
+
+                <Path Fill="Orange"  Panel.ZIndex="90">
                     <Path.Data>
 
                         <!-- Describes an ellipse. -->
@@ -349,8 +382,10 @@
                     </Path.Data>
                 </Path>
 
+                <Label Foreground="Blue" Margin="110,160,0,0">3</Label>
+                <Label Foreground="Black" Margin="60,140,0,0">7</Label>
 
-                <Path Fill="Blue" Margin="15,15,15,15">
+                <Path Fill="Blue"  Panel.ZIndex="90">
                 <Path.Data>
 
                     <!-- Describes an ellipse. -->
@@ -359,18 +394,24 @@
                     </EllipseGeometry>
                 </Path.Data>
             </Path>
+            
 
-                <Path Fill="Red" Margin="15,15,15,15">
+
+                <Label Foreground="Red" Margin="0,105,0,0">4</Label>
+                <Label Foreground="Black" Margin="25,55,0,0">8</Label>
+
+                <Path Fill="Red" Panel.ZIndex="90" >
                     <Path.Data>
-
                         <!-- Describes an ellipse. -->
                         <EllipseGeometry x:Name="Vehicle4"
             Center="40,120" RadiusX="10" RadiusY="10" >
                         </EllipseGeometry>
                     </Path.Data>
                 </Path>
-            
-            
+
+
+                
+
 
                 <Canvas.Style>
                 <Style TargetType="Canvas">
@@ -528,162 +569,175 @@
         </Canvas>
 
         </Viewbox>
-        <StackPanel Grid.Column="1">
-            
-        <Button 
+
+        <TabControl Grid.Column="1">
+
+            <TabItem Header="Simulation control">
+                <Grid>
+                    <StackPanel>
+
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Create!" 
             Command="{Binding StartEnvironmentCommand}">
-            </Button>
-            <Button 
+                        </Button>
+
+                        <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Information!" 
+            Command="{Binding RequestInformationVehicle}">
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Control lane check">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    
+                <StackPanel Grid.Column="0">
+
+                    
+                    <Button 
                 x:Name="DestinstionLane4Button"
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 5" 
             Command="{Binding Destination1Lane5Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 6" 
             Command="{Binding Destination1Lane6Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 7" 
             Command="{Binding Destination1Lane7Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 8" 
             Command="{Binding Destination1Lane8Command}">
-            </Button>
-        </StackPanel>
+                    </Button>
+                </StackPanel>
 
-        <StackPanel Grid.Column="2">
+                <StackPanel Grid.Column="1">
 
-            <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Information!" 
-            Command="{Binding RequestInformationVehicle}">
-            </Button>
-            <Button 
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 5" 
             Command="{Binding Destination2Lane5Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 6" 
             Command="{Binding Destination2Lane6Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 7" 
             Command="{Binding Destination2Lane7Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 8" 
             Command="{Binding Destination2Lane8Command}">
-            </Button>
-        </StackPanel>
+                    </Button>
+                </StackPanel>
 
-        <StackPanel Grid.Column="3">
+                <StackPanel Grid.Column="2">
 
-            <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Create!" 
-            Command="{Binding StartEnvironmentCommand}">
-            </Button>
-            <Button 
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 5" 
             Command="{Binding Destination3Lane5Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 6" 
             Command="{Binding Destination3Lane6Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 7" 
             Command="{Binding Destination3Lane7Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 8" 
             Command="{Binding Destination3Lane8Command}">
-            </Button>
-        </StackPanel>
+                    </Button>
+                </StackPanel>
 
-        <StackPanel Grid.Column="4">
+                <StackPanel Grid.Column="3">
 
-            <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Create!" 
-            Command="{Binding StartEnvironmentCommand}">
-            </Button>
-            <Button 
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 5" 
             Command="{Binding Destination4Lane5Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 6" 
             Command="{Binding Destination4Lane6Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 7" 
             Command="{Binding Destination4Lane7Command}">
-            </Button>
-            <Button 
+                    </Button>
+                    <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 8" 
             Command="{Binding Destination4Lane8Command}">
-            </Button>
-        </StackPanel>
+                    </Button>
+                </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
 
     </Grid>
 </UserControl>
