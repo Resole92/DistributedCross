@@ -114,7 +114,6 @@
     <Compile Include="Environment\EnvironmentUC.xaml.cs">
       <DependentUpon>EnvironmentUC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Environment\EnvironmentViewModel.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Page Include="AlgorithmSimulation\AlgorithmUC.xaml">
       <SubType>Designer</SubType>

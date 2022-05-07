@@ -583,6 +583,14 @@
             Content="Create!" 
             Command="{Binding StartEnvironmentCommand}">
                         </Button>
+                        <Button 
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Add random!" 
+            Command="{Binding AddRandomVehicleCommand}">
+                        </Button>
+                        
 
                         <Button 
             Margin="3"
