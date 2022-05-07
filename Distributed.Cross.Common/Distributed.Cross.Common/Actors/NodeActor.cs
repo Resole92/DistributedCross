@@ -115,20 +115,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<VehicleRemoveNotification>(message =>
-            {
-                if (Vehicle is null) return;
-                Vehicle.RemoveParentNode();
-                Vehicle = null;
-
-                var exitMessage = new VehicleExitNotification
-                {
-                    Identifier = Identifier
-                };
-                SendBroadcastMessage(exitMessage);
-
-                Become(IdleBehaviour);
-            });
+            Receive<VehicleRemoveNotification>(RemoveVehicle);
 
             Receive<CoordinationNotificationRequest>(message =>
             {
@@ -282,21 +269,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<VehicleRemoveNotification>(message =>
-            {
-                if (Vehicle is null) return;
-                _logger.LogInformation($"Vehicle is removed");
-                Vehicle.RemoveParentNode();
-                Vehicle = null;
-
-                var exitMessage = new VehicleExitNotification
-                {
-                    Identifier = Identifier
-                };
-                SendBroadcastMessage(exitMessage);
-
-                Become(IdleBehaviour);
-            });
+            Receive<VehicleRemoveNotification>(RemoveVehicle);
 
             Receive<VehicleExitNotification>(message =>
             {
@@ -346,23 +319,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-
-            Receive<VehicleRemoveNotification>(message =>
-            {
-                if (Vehicle is null) return;
-                _logger.LogInformation($"Vehicle is removed");
-                Vehicle.RemoveParentNode();
-                Vehicle = null;
-
-                var exitMessage = new VehicleExitNotification
-                {
-                    Identifier = Identifier
-                };
-                SendBroadcastMessage(exitMessage);
-
-
-                Become(IdleBehaviour);
-            });
+            Receive<VehicleRemoveNotification>(RemoveVehicle);
 
             Receive<VehicleExitNotification>(message =>
             {
@@ -384,8 +341,6 @@ namespace Distributed.Cross.Common.Actors
         private void BaseBehaviour()
         {
           
-            
-
             Receive<InformationVehicleRequest>(messsage =>
             {
                 if (Vehicle is not null)
@@ -449,6 +404,25 @@ namespace Distributed.Cross.Common.Actors
         }
 
         #endregion
+
+        public void RemoveVehicle(VehicleRemoveNotification message)
+        {
+            if (Vehicle is null) return;
+
+            var startLane = Vehicle.Data.StartLane;
+            _logger.LogInformation($"Vehicle is removed");
+            Vehicle.RemoveParentNode();
+            Vehicle = null;
+
+            var exitMessage = new VehicleExitNotification
+            {
+                StartLane = startLane,
+                Identifier = Identifier
+            };
+            SendBroadcastMessage(exitMessage);
+
+            Become(IdleBehaviour);
+        }
 
         public void SendBroadcastMessage(object message )
         {

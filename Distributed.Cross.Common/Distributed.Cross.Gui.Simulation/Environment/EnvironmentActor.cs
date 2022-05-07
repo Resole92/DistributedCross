@@ -25,41 +25,14 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<ElectionStart>(message =>
             {
-                foreach (var vehicle in message.LastRoundVehicleRunning)
-                {
-                    var findVehicle = message.Vehicles.Where(x => x.DestinationLane == vehicle).OrderByDescending(x => x.Priority).FirstOrDefault();
-                    if (findVehicle is not null)
-                    {
-
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            if (findVehicle.StartLane == 1)
-                            {
-                                EnvironmentViewModel.Instance.Vehicle1Destination = 0;
-                                EnvironmentViewModel.Instance.Vehicle1Destination = findVehicle.DestinationLane;
-                            }
-
-                            if (findVehicle.StartLane == 2)
-                            {
-                                EnvironmentViewModel.Instance.Vehicle2Destination = 0;
-                                EnvironmentViewModel.Instance.Vehicle2Destination = findVehicle.DestinationLane;
-                            }
-
-                            if (findVehicle.StartLane == 3)
-                            {
-                                EnvironmentViewModel.Instance.Vehicle3Destination = 0;
-                                EnvironmentViewModel.Instance.Vehicle3Destination = findVehicle.DestinationLane;
-                            }
-
-                            if (findVehicle.StartLane == 4)
-                            {
-                                EnvironmentViewModel.Instance.Vehicle4Destination = 0;
-                                EnvironmentViewModel.Instance.Vehicle4Destination = findVehicle.DestinationLane;
-                            }
-                        });
-
-                    }
-                }
+                //foreach (var vehicle in message.LastRoundVehicleRunning)
+                //{
+                //    var findVehicle = message.Vehicles.Where(x => x.DestinationLane == vehicle).OrderByDescending(x => x.Priority).FirstOrDefault();
+                //    if (findVehicle is not null)
+                //    {
+                //        ExitVehicleNotification(findVehicle.StartLane, findVehicle.DestinationLane);
+                //    }
+                //}
 
                 EnvironmentViewModel.Instance.SelectedExample = _exampleToSelect % 2;
                 EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
@@ -68,7 +41,16 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleExitNotification>(message =>
             {
-                _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross");
+                if(message.StartLane != message.Identifier)
+                {
+                    ExitVehicleNotification(message.StartLane, message.Identifier);
+                    _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross");
+                }
+                else
+                {
+                    _logger.LogInformation($"Vehicle with ID {message.Identifier} move in crossing zone");
+                }
+                   
             });
 
             Receive<EnqueueNewVehicle>(message =>
@@ -95,6 +77,36 @@ namespace Distributed.Cross.Common.Actors
                         _dictionaryQueue.Add(message.StartLane, queue);
                     }
 
+                }
+            });
+        }
+
+        private void ExitVehicleNotification(int startLane, int exitLane)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (startLane == 1)
+                {
+                    EnvironmentViewModel.Instance.Vehicle1Destination = 0;
+                    EnvironmentViewModel.Instance.Vehicle1Destination = exitLane;
+                }
+
+                if (startLane == 2)
+                {
+                    EnvironmentViewModel.Instance.Vehicle2Destination = 0;
+                    EnvironmentViewModel.Instance.Vehicle2Destination = exitLane;
+                }
+
+                if (startLane == 3)
+                {
+                    EnvironmentViewModel.Instance.Vehicle3Destination = 0;
+                    EnvironmentViewModel.Instance.Vehicle3Destination = exitLane;
+                }
+
+                if (startLane == 4)
+                {
+                    EnvironmentViewModel.Instance.Vehicle4Destination = 0;
+                    EnvironmentViewModel.Instance.Vehicle4Destination = exitLane;
                 }
             });
         }

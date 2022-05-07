@@ -235,7 +235,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 //if(SelectedExample == 0)
                 //Example0(_actors);
                 //else
-                Example1(_actors);
+                Example0(_actors);
                 });
 
             });

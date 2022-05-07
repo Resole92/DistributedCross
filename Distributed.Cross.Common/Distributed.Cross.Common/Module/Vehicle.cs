@@ -291,15 +291,6 @@ namespace Distributed.Cross.Common.Module
 
             _logger.LogInformation("All vehicle left the cross. ROUND IS FINISH"!);
 
-            var leaderPresentOnCrossing = _vehicleRunner.Any(x => x == _parentNode.Identifier);
-            if (leaderPresentOnCrossing)
-            {
-                _logger.LogInformation($"I'm LEADER and I left the cross! Bye bye");
-                var self = _parentNode.ActorsMap[Data.DestinationLane];
-                self.Tell(new VehicleRemoveNotification());
-            }
-
-
             var inputLanes = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input).Select(x => x.Identifier);
             foreach (var inputLane in inputLanes)
             {
@@ -318,7 +309,16 @@ namespace Distributed.Cross.Common.Module
                 Vehicles = _map.Map.GetAllNodes().Where(x => x.Vehicle != null).Select(x => x.Vehicle).ToList()
             });
 
-           
+
+            var leaderPresentOnCrossing = _vehicleRunner.Any(x => x == _parentNode.Identifier);
+            if (leaderPresentOnCrossing)
+            {
+                _logger.LogInformation($"I'm LEADER and I left the cross! Bye bye");
+                var self = _parentNode.ActorsMap[Data.DestinationLane];
+                self.Tell(new VehicleRemoveNotification());
+            }
+
+
 
         }
 
