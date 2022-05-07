@@ -121,6 +121,12 @@ namespace Distributed.Cross.Common.Actors
                 Vehicle.RemoveParentNode();
                 Vehicle = null;
 
+                var exitMessage = new VehicleExitNotification
+                {
+                    Identifier = Identifier
+                };
+                SendBroadcastMessage(exitMessage);
+
                 Become(IdleBehaviour);
             });
 
@@ -147,7 +153,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    Vehicle.VehicleExit(message.Identifier);
+                    Vehicle.CheckEndRound(message.Identifier);
                 }
             });
 
@@ -283,6 +289,12 @@ namespace Distributed.Cross.Common.Actors
                 Vehicle.RemoveParentNode();
                 Vehicle = null;
 
+                var exitMessage = new VehicleExitNotification
+                {
+                    Identifier = Identifier
+                };
+                SendBroadcastMessage(exitMessage);
+
                 Become(IdleBehaviour);
             });
 
@@ -290,7 +302,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    Vehicle.VehicleExit(message.Identifier);
+                    Vehicle.CheckEndRound(message.Identifier);
                 }
             });
 
@@ -342,6 +354,13 @@ namespace Distributed.Cross.Common.Actors
                 Vehicle.RemoveParentNode();
                 Vehicle = null;
 
+                var exitMessage = new VehicleExitNotification
+                {
+                    Identifier = Identifier
+                };
+                SendBroadcastMessage(exitMessage);
+
+
                 Become(IdleBehaviour);
             });
 
@@ -349,7 +368,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if (Vehicle is not null)
                 {
-                    Vehicle.VehicleExit(message.Identifier);
+                    Vehicle.CheckEndRound(message.Identifier);
                 }
             });
 
@@ -394,6 +413,12 @@ namespace Distributed.Cross.Common.Actors
 
             });
 
+            Receive<VehicleOnNodeRequest>(message =>
+            {
+                _logger.LogInformation("Not possible add another vehicle because already one is in this node");
+                Sender.Tell(new VehicleOnNodeResponse { IsAdded = false });
+            });
+
         }
 
         #endregion
@@ -402,12 +427,14 @@ namespace Distributed.Cross.Common.Actors
 
         public void IdleBehaviour()
         {
-            Receive<VehicleOnNodeNotification>(message =>
+            Receive<VehicleOnNodeRequest>(message =>
             {
                 _logger.LogInformation($"A new vehicle enter on cross");
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Self.Tell(new ElectionStart());
+                Sender.Tell(new VehicleOnNodeResponse { IsAdded = true });
                 Become(EntryBehaviour);
+
             });
 
             Receive<VehicleMoveNotification>(message =>
@@ -422,6 +449,12 @@ namespace Distributed.Cross.Common.Actors
         }
 
         #endregion
+
+        public void SendBroadcastMessage(object message )
+        {
+            var selection = Context.ActorSelection("akka://MySystem/user/*");
+            selection.Tell(message, Self);
+        }
 
         public static Props Props(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {

@@ -250,7 +250,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             var actor2 = actors[2];
             var actor3 = actors[3];
 
-            actor1.Tell(new VehicleOnNodeNotification
+            actor1.Tell(new VehicleOnNodeRequest
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
@@ -260,7 +260,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             });
 
 
-            actor2.Tell(new VehicleOnNodeNotification
+            actor2.Tell(new VehicleOnNodeRequest
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
@@ -269,7 +269,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 }
             });
 
-            actor3.Tell(new VehicleOnNodeNotification
+            actor3.Tell(new VehicleOnNodeRequest
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
@@ -290,7 +290,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             var actor3 = actors[3];
             var actor4 = actors[4];
 
-            actor1.Tell(new VehicleOnNodeNotification
+            actor1.Tell(new VehicleOnNodeRequest
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
@@ -301,7 +301,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
             Thread.Sleep(500);
 
-            actor2.Tell(new VehicleOnNodeNotification
+            actor2.Tell(new VehicleOnNodeRequest
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
@@ -312,7 +312,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
             Thread.Sleep(500);
 
-            actor3.Tell(new VehicleOnNodeNotification
+            actor3.Tell(new VehicleOnNodeRequest
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
@@ -323,7 +323,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
             Thread.Sleep(3000);
 
-            actor4.Tell(new VehicleOnNodeNotification
+            actor4.Tell(new VehicleOnNodeRequest
             {
                 Vehicle = new Common.Data.VehicleDto
                 {

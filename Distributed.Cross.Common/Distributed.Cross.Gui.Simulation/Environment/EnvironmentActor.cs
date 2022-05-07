@@ -1,5 +1,7 @@
 ﻿using Akka.Actor;
+using Distributed.Cross.Common.Communication.Environment;
 using Distributed.Cross.Common.Communication.Messages;
+using Distributed.Cross.Common.Module;
 using Distributed.Cross.Gui.Simulation.Environment;
 using System;
 using System.Collections.Generic;
@@ -11,15 +13,22 @@ namespace Distributed.Cross.Common.Actors
 {
     public class EnvironmentActor : ReceiveActor
     {
+        public Dictionary<int, IActorRef> ActorsMap { get; private set; }
+
         private int _exampleToSelect;
+        private Dictionary<int, Queue<EnqueueNewVehicle>> _dictionaryQueue = new();
+        private Logger _logger;
+
         public EnvironmentActor()
         {
+            _logger = new Logger("Environment");
+
             Receive<ElectionStart>(message =>
             {
                 foreach (var vehicle in message.LastRoundVehicleRunning)
                 {
                     var findVehicle = message.Vehicles.Where(x => x.DestinationLane == vehicle).OrderByDescending(x => x.Priority).FirstOrDefault();
-                    if(findVehicle is not null)
+                    if (findVehicle is not null)
                     {
 
                         Application.Current.Dispatcher.Invoke(() =>
@@ -48,7 +57,7 @@ namespace Distributed.Cross.Common.Actors
                                 EnvironmentViewModel.Instance.Vehicle4Destination = findVehicle.DestinationLane;
                             }
                         });
-                       
+
                     }
                 }
 
@@ -56,7 +65,39 @@ namespace Distributed.Cross.Common.Actors
                 EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
                 _exampleToSelect++;
             });
+
+            Receive<VehicleExitNotification>(message =>
+            {
+                _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross");
+            });
+
+            Receive<EnqueueNewVehicle>(message =>
+            {
+                var response = ActorsMap[message.StartLane].Ask<VehicleOnNodeResponse>(new VehicleOnNodeRequest
+                {
+                    Vehicle = new Data.VehicleDto
+                    {
+                        StartLane = message.StartLane,
+                        DestinationLane = message.DestinationLane
+                    }
+                }, TimeSpan.FromSeconds(2));
+
+                if (!response.Result.IsAdded)
+                {
+                    if (_dictionaryQueue.ContainsKey(message.StartLane))
+                    {
+                        _dictionaryQueue[message.StartLane].Enqueue(message);
+                    }
+                    else
+                    {
+                        var queue = new Queue<EnqueueNewVehicle>();
+                        queue.Enqueue(message);
+                        _dictionaryQueue.Add(message.StartLane, queue);
+                    }
+
+                }
+            });
         }
-        
+
     }
 }

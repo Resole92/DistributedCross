@@ -260,7 +260,7 @@ namespace Distributed.Cross.Common.Module
             _vehicleRunner = _vehicleRunnerLeft.ToList();
         }
 
-        public LeaderNotificationResponse  LeaderElected(LeaderNotificationRequest request)
+        public LeaderNotificationResponse LeaderElected(LeaderNotificationRequest request)
         {
             if(request.Identifier > _parentNode.Identifier)
             {
@@ -281,12 +281,13 @@ namespace Distributed.Cross.Common.Module
         }
 
         //Return true if round must be terminate
-        public bool VehicleExit(int identifier)
+        public void CheckEndRound(int identifier)
         {
+            if (_parentNode.Identifier != _leaderIdentifier) return;
 
             _vehicleRunnerLeft.Remove(identifier);
             _logger.LogInformation($"Leader is notified about an exit vehicle with ID {identifier}");
-            if (_vehicleRunnerLeft.Any()) return false;
+            if (_vehicleRunnerLeft.Any()) return;
 
             _logger.LogInformation("All vehicle left the cross. ROUND IS FINISH"!);
 
@@ -318,7 +319,6 @@ namespace Distributed.Cross.Common.Module
             });
 
            
-            return true;
 
         }
 
@@ -341,11 +341,10 @@ namespace Distributed.Cross.Common.Module
                     _logger.LogInformation($"I have cross!");
                     self.Tell(new VehicleRemoveNotification());
                 }
-
-                leaderActor.Tell(new VehicleExitNotification
+                else
                 {
-                    Identifier = parentNode.Identifier
-                });
+                    CheckEndRound(_leaderIdentifier);
+                }
 
             });
         }
