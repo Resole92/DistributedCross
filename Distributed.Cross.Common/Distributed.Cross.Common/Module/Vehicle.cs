@@ -52,13 +52,8 @@ namespace Distributed.Cross.Common.Module
             _parentNode = null;
         }
 
-       
-
         public ElectionResult LeaderRequestAsk(CancellationToken token)
         {
-
-          
-
             _logger.LogInformation($"A leader election algorithm is started");
 
             var totalInputLane = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input).Count();
@@ -133,11 +128,8 @@ namespace Distributed.Cross.Common.Module
                     Identifier = _parentNode.Identifier
                 }, TimeSpan.FromSeconds(1.5));
 
-
-
                 requestsSubmitted.Add(requestSubmitted);
             }
-
 
             _map.EraseMapFromVehicles();
             _map.AddVehicle(Data);
@@ -251,7 +243,6 @@ namespace Distributed.Cross.Common.Module
             return amIrunner;
         }
 
-
         public void UpdateCrossingStatus(VehicleMoveNotification notification)
         {
             notification.AllVehicles.ForEach(_map.AddVehicle);
@@ -277,7 +268,6 @@ namespace Distributed.Cross.Common.Module
                 Acknowledge = false,
                 VehicleDetail = Data.Clone()
             };
-
         }
 
         //Return true if round must be terminate
@@ -287,38 +277,33 @@ namespace Distributed.Cross.Common.Module
 
             _vehicleRunnerLeft.Remove(identifier);
             _logger.LogInformation($"Leader is notified about an exit vehicle with ID {identifier}");
-            if (_vehicleRunnerLeft.Any()) return;
 
+            if (_vehicleRunnerLeft.Any()) return;
             _logger.LogInformation("All vehicle left the cross. ROUND IS FINISH"!);
 
-            var inputLanes = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input).Select(x => x.Identifier);
-            foreach (var inputLane in inputLanes)
-            {
-                var actorLane = _parentNode.ActorsMap[inputLane];
-                actorLane.Tell(new ElectionStart
-                {
-                    LastRoundVehicleRunning = _vehicleRunner.ToList(),
+            var self = _parentNode.ActorsMap[_leaderIdentifier];
+            self.Tell(new RoundEndNotification());
+          
+        }
 
-                });
-            }
+        public void EndRound(RoundEndNotification endRoundNotification)
+        {
 
-            var environmentActor = _parentNode.ActorsMap[-1];
-            environmentActor.Tell(new ElectionStart
-            {
-                LastRoundVehicleRunning = _vehicleRunner.ToList(),
-                Vehicles = _map.Map.GetAllNodes().Where(x => x.Vehicle != null).Select(x => x.Vehicle).ToList()
-            });
-
+            var self = _parentNode.ActorsMap[Data.DestinationLane];
 
             var leaderPresentOnCrossing = _vehicleRunner.Any(x => x == _parentNode.Identifier);
             if (leaderPresentOnCrossing)
             {
                 _logger.LogInformation($"I'm LEADER and I left the cross! Bye bye");
-                var self = _parentNode.ActorsMap[Data.DestinationLane];
+
                 self.Tell(new VehicleRemoveNotification());
             }
 
-
+            //Remove must be done before, otherwise new node can send a message of request acutal busy node before removing.
+            _parentNode.SendBroadcastMessage(new ElectionStart
+            {
+                LastRoundVehicleRunning = _vehicleRunner.ToList(),
+            });
 
         }
 
@@ -345,7 +330,6 @@ namespace Distributed.Cross.Common.Module
                 {
                     CheckEndRound(_leaderIdentifier);
                 }
-
             });
         }
 

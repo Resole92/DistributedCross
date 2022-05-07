@@ -25,15 +25,6 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<ElectionStart>(message =>
             {
-                //foreach (var vehicle in message.LastRoundVehicleRunning)
-                //{
-                //    var findVehicle = message.Vehicles.Where(x => x.DestinationLane == vehicle).OrderByDescending(x => x.Priority).FirstOrDefault();
-                //    if (findVehicle is not null)
-                //    {
-                //        ExitVehicleNotification(findVehicle.StartLane, findVehicle.DestinationLane);
-                //    }
-                //}
-
                 EnvironmentViewModel.Instance.SelectedExample = _exampleToSelect % 2;
                 EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
                 _exampleToSelect++;

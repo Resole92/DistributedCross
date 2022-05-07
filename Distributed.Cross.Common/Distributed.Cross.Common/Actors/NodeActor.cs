@@ -116,6 +116,7 @@ namespace Distributed.Cross.Common.Actors
             });
 
             Receive<VehicleRemoveNotification>(RemoveVehicle);
+            Receive<RoundEndNotification>(Vehicle.EndRound);
 
             Receive<CoordinationNotificationRequest>(message =>
             {
@@ -221,6 +222,12 @@ namespace Distributed.Cross.Common.Actors
                 Stash.Stash();
             });
 
+            Receive<RoundEndNotification>(message =>
+            {
+                _logger.LogInformation($"Message end is stashed");
+                Stash.Stash();
+            });
+
             Receive<VehicleExitNotification>(message =>
             {
                 _logger.LogInformation($"Message exit is stashed");
@@ -270,6 +277,7 @@ namespace Distributed.Cross.Common.Actors
             });
 
             Receive<VehicleRemoveNotification>(RemoveVehicle);
+            Receive<RoundEndNotification>(Vehicle.EndRound);
 
             Receive<VehicleExitNotification>(message =>
             {
@@ -320,6 +328,7 @@ namespace Distributed.Cross.Common.Actors
             });
 
             Receive<VehicleRemoveNotification>(RemoveVehicle);
+            Receive<RoundEndNotification>(Vehicle.EndRound);
 
             Receive<VehicleExitNotification>(message =>
             {
@@ -364,6 +373,7 @@ namespace Distributed.Cross.Common.Actors
                 else
                 {
                     _logger.LogInformation("An election is conclude successfully");
+                    Become(EntryBehaviour);
                 }
 
             });
@@ -404,6 +414,7 @@ namespace Distributed.Cross.Common.Actors
         }
 
         #endregion
+
 
         public void RemoveVehicle(VehicleRemoveNotification message)
         {
