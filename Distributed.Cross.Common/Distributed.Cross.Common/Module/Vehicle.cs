@@ -60,7 +60,7 @@ namespace Distributed.Cross.Common.Module
 
 
             var totalElectionRequests = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input || x.Type == CrossNodeType.Output).Count();
-            var requests = new List<Task<LeaderElectionResponse>>();
+            var requests = new List<(int, Task<LeaderElectionResponse>)>();
 
             var self = _parentNode.ActorsMap[_parentNode.Identifier];
 
@@ -72,7 +72,7 @@ namespace Distributed.Cross.Common.Module
                 {
                     Identifier = _parentNode.Identifier
                 }, TimeSpan.FromSeconds(1.5));
-                requests.Add(request);
+                requests.Add((vehicleId,request));
             }
 
             _logger.LogInformation($"Start check responses");
@@ -83,7 +83,7 @@ namespace Distributed.Cross.Common.Module
             {
                 try
                 {
-                    var result = request.Result;
+                    var result = request.Item2.Result;
                     if (result.Acknowledge)
                     {
 
@@ -92,32 +92,33 @@ namespace Distributed.Cross.Common.Module
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Failed to request bully presence" + ex.Message);
+                    _logger.LogError($"Failed to request bully presence to identifier {request.Item1}\n" + ex.Message);
                 }
             }
 
-            if (token.IsCancellationRequested) return new ElectionResult();
+            if (token.IsCancellationRequested) return new ElectionResult(ElectionResultType.Cancelled);
 
             var isSomeoneCrossing = someoneBetter.Any(x => x > totalInputLane);
 
             if(isSomeoneCrossing)
             {
-                return new ElectionResult
-                {
-                    IsFailed = true
-                };
+                var crossings = someoneBetter.Where(x => x > totalInputLane);
+
+                _logger.LogInformation($"Find some one that is crossing that are {string.Join(",", crossings)}");
+                return new ElectionResult(ElectionResultType.Crossing);
             }
 
             var isSomeoneResponse = someoneBetter.Any();
             if(isSomeoneResponse)
             {
-                return new ElectionResult();
+                _logger.LogInformation($"Find some one better that are {string.Join(",", someoneBetter)}");
+                return new ElectionResult(ElectionResultType.Bully);
             }
 
 
             _logger.LogInformation($"I'm LEADER! Try to notify!");
 
-            var requestsSubmitted = new List<Task<LeaderNotificationResponse>>();
+            var requestsSubmitted = new List<(int,Task<LeaderNotificationResponse>)>();
 
             for (int vehicle = 1; vehicle <= totalInputLane; vehicle++)
             {
@@ -128,7 +129,7 @@ namespace Distributed.Cross.Common.Module
                     Identifier = _parentNode.Identifier
                 }, TimeSpan.FromSeconds(1.5));
 
-                requestsSubmitted.Add(requestSubmitted);
+                requestsSubmitted.Add((vehicle,requestSubmitted));
             }
 
             _map.EraseMapFromVehicles();
@@ -140,14 +141,11 @@ namespace Distributed.Cross.Common.Module
             {
                 try
                 {
-                    var result = requestSubmitted.Result;
+                    var result = requestSubmitted.Item2.Result;
                     if (!result.Acknowledge)
                     {
                         _logger.LogInformation($"Some leader is already present for node {result.VehicleDetail.StartLane}");
-                        return new ElectionResult
-                        {
-                            IsFailed = true
-                        };
+                        return new ElectionResult(ElectionResultType.LeaderAlreadyPresent);
                     }
                     var data = result.VehicleDetail;
                     _map.AddVehicle(data);
@@ -156,7 +154,7 @@ namespace Distributed.Cross.Common.Module
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Failed to request vehicle details" + ex.Message);
+                    _logger.LogError($"Failed to request vehicle details for vehicle {requestSubmitted.Item1}\n" + ex.Message);
                 }
             }
 
@@ -178,7 +176,7 @@ namespace Distributed.Cross.Common.Module
 
             _parentNode.ActorsMap[Data.StartLane].Tell(coordinationDetail);
 
-            return new ElectionResult();
+            return new ElectionResult(ElectionResultType.Elected);
 
         }
 
@@ -192,12 +190,11 @@ namespace Distributed.Cross.Common.Module
         {
             _map.EraseMapFromVehicles();
 
-            _logger.LogInformation("Log coordination vehicle detail");
-
-            foreach (var vehicle in coordinationRequest.VehiclesDetail)
-            {
-                _logger.LogInformation($"{vehicle}");
-            }
+            //_logger.LogInformation("Log coordination vehicle detail");
+            //foreach (var vehicle in coordinationRequest.VehiclesDetail)
+            //{
+            //    _logger.LogInformation($"{vehicle}");
+            //}
 
             coordinationRequest.VehiclesDetail.ForEach(_map.AddVehicle);
             var collisionAlgorithm = new CollisionAlgorithm(_map);

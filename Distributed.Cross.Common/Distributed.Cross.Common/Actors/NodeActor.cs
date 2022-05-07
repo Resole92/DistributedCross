@@ -73,11 +73,8 @@ namespace Distributed.Cross.Common.Actors
                         , _tokenAsk.Token)
                     .ContinueWith(x =>
                     {
-                        if (x.IsCanceled || x.IsFaulted)
-                            return new ElectionResult
-                            {
-                                IsFailed = false,
-                            };
+                        if (x.IsCanceled) return new ElectionResult(ElectionResultType.Cancelled);
+                        if (x.IsFaulted) return new ElectionResult(ElectionResultType.NotHandled);
 
                         return x.Result;
                       
@@ -365,15 +362,42 @@ namespace Distributed.Cross.Common.Actors
             {
                 Stash.UnstashAll();
 
-                if (message.IsFailed)
+                switch(message.Result)
                 {
-                    _logger.LogInformation("An election is failed");
-                    Become(EntryBehaviour);
-                }
-                else
-                {
-                    _logger.LogInformation("An election is conclude successfully");
-                    Become(EntryBehaviour);
+                    case ElectionResultType.Cancelled:
+                        {
+                            _logger.LogInformation("An election is cancelled");
+                            break;
+                        }
+                    case ElectionResultType.Bully:
+                        {
+                            _logger.LogInformation("I'm bullied from another vehicle");
+                            Become(EntryBehaviour);
+                            break;
+                        }
+                    case ElectionResultType.Crossing:
+                        {
+                            _logger.LogInformation("Other vehicle are crossing...");
+                            Become(EntryBehaviour);
+                            break;
+                        }
+                    case ElectionResultType.NotHandled:
+                        {
+                            _logger.LogInformation("Some error is not handled during leader process");
+                            Become(EntryBehaviour);
+                            break;
+                        }
+                    case ElectionResultType.LeaderAlreadyPresent:
+                        {
+                            _logger.LogInformation("Another leader is present");
+                            Become(EntryBehaviour);
+                            break;
+                        }
+                    case ElectionResultType.Elected:
+                        {
+                            _logger.LogInformation("An election is conclude successfully. I'm elected"); 
+                            break;
+                        }
                 }
 
             });

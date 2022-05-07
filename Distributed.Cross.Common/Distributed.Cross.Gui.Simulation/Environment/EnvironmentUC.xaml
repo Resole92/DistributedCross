@@ -583,6 +583,8 @@
             Content="Create!" 
             Command="{Binding StartEnvironmentCommand}">
                         </Button>
+                        <StackPanel Orientation="Horizontal">
+                            
                         <Button 
             Margin="3"
             Height="30"
@@ -590,7 +592,8 @@
             Content="Add random!" 
             Command="{Binding AddRandomVehicleCommand}">
                         </Button>
-                        
+                            <TextBox Text="{Binding Path=NumberRandomVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        </StackPanel>
 
                         <Button 
             Margin="3"

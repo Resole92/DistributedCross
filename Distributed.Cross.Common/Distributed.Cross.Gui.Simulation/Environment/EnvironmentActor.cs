@@ -16,6 +16,8 @@ namespace Distributed.Cross.Common.Actors
     {
         public Dictionary<int, IActorRef> ActorsMap { get; private set; }
 
+        private int _actualRound = 1;
+
         private int _exampleToSelect;
         private Dictionary<int, Queue<EnqueueNewVehicle>> _dictionaryQueue = new();
         private Logger _logger;
@@ -30,6 +32,7 @@ namespace Distributed.Cross.Common.Actors
                 //EnvironmentViewModel.Instance.SelectedExample = _exampleToSelect % 2;
                 //EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
                 //_exampleToSelect++;
+                _actualRound++;
             });
 
             Receive<VehicleExitNotification>(message =>

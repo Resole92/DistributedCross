@@ -91,6 +91,18 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
+        private int _actualRound = 0;
+        public int ActualRound
+        {
+            get => _actualRound;
+            set
+            {
+                _actualRound = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
 
         private int _selectedVehicle = 8;
         public int SelectedVehicle
@@ -102,6 +114,18 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 NotifyPropertyChanged();
             }
         }
+
+        private int _numberRandomVehicle = 1;
+        public int NumberRandomVehicle
+        {
+            get => _numberRandomVehicle;
+            set
+            {
+                _numberRandomVehicle = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         private void EnvironmentInitialization()
         {
@@ -248,18 +272,25 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         public RelayCommand AddRandomVehicleCommand =>
             new RelayCommand(_ =>
             {
-                var environemt = _actors[-1];
-                Random randInput = new Random(Guid.NewGuid().GetHashCode());
-
-                var entryLane = randInput.Next(1, 5);
-                var exitLane = randInput.Next(5, 9);
-
-                environemt.Tell(new EnqueueNewVehicle
+                Task.Run(() =>
                 {
-                    DestinationLane = exitLane,
-                    StartLane = entryLane
-                });
 
+                    var environemt = _actors[-1];
+                    Random randInput = new Random(Guid.NewGuid().GetHashCode());
+
+                    for (var i = 0; i < _numberRandomVehicle; i++)
+                    {
+
+                        var entryLane = randInput.Next(1, 5);
+                        var exitLane = randInput.Next(5, 9);
+
+                        environemt.Tell(new EnqueueNewVehicle
+                        {
+                            DestinationLane = exitLane,
+                            StartLane = entryLane
+                        });
+                    }
+                });
             });
 
         public RelayCommand StartEnvironmentCommand

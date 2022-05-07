@@ -4,8 +4,25 @@ using System.Text;
 
 namespace Distributed.Cross.Common.Communication.Messages
 {
+
+
     public class ElectionResult
     {
-        public bool IsFailed { get; set; }
+        public ElectionResultType Result { get; set; }
+        public ElectionResult(ElectionResultType result)
+        {
+            Result = result;
+        }
+    }
+
+    public enum ElectionResultType
+    {
+        
+        Cancelled,
+        Crossing,
+        Bully,
+        LeaderAlreadyPresent,
+        Elected,
+        NotHandled
     }
 }
