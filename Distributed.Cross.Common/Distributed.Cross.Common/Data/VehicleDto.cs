@@ -7,21 +7,21 @@ namespace Distributed.Cross.Common.Data
     public class VehicleDto
     {
         public int Priority { get; set; } = 1;
-        public int StartLane { get; set; }
-        public int DestinationLane { get; set; }
+        public int InputLane { get; set; }
+        public int OutputLane { get; set; }
 
 
         public VehicleDto Clone()
         => new VehicleDto
         {
             Priority = Priority,
-            StartLane = StartLane,
-            DestinationLane = DestinationLane
+            InputLane = InputLane,
+            OutputLane = OutputLane
         };
 
         public override string ToString()
         {
-            return $"Vehicle start from lane {StartLane} to lane {DestinationLane} with priority {Priority}";
+            return $"Vehicle start from lane {InputLane} to lane {OutputLane} with priority {Priority}";
         }
 
     }

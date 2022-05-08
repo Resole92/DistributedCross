@@ -55,6 +55,28 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
+        private ObservableCollection<VehicleGui> _outputVehicles = new();
+        public ObservableCollection<VehicleGui> OutputVehicles
+        {
+            get => _outputVehicles;
+            set
+            {
+                _outputVehicles = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<VehicleGui> _inputVehicles = new();
+        public ObservableCollection<VehicleGui> InputVehicles
+        {
+            get => _inputVehicles;
+            set
+            {
+                _inputVehicles = value;
+                OnPropertyChanged();
+            }
+        }
+
         public void AddNewLaneItem(int lane, QueueItem item)
         {
             Application.Current.Dispatcher.Invoke(() =>
@@ -84,6 +106,11 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         EnvironmentViewModel()
         {
             EnvironmentInitialization();
+            for(var i = 0; i < 4; i++)
+            {
+                InputVehicles.Add(null);
+                OutputVehicles.Add(null);
+            }
         }
 
         private int _vehicle1Destination = 0;
@@ -359,31 +386,31 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             var actor2 = actors[2];
             var actor3 = actors[3];
 
-            actor1.Tell(new VehicleOnNodeRequest
+            actor1.Tell(new VehicleOnNodeCommand
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
-                    StartLane = 1,
-                    DestinationLane = 6,
+                    InputLane = 1,
+                    OutputLane = 6,
                 }
             });
 
 
-            actor2.Tell(new VehicleOnNodeRequest
+            actor2.Tell(new VehicleOnNodeCommand
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
-                    StartLane = 2,
-                    DestinationLane = 7,
+                    InputLane = 2,
+                    OutputLane = 7,
                 }
             });
 
-            actor3.Tell(new VehicleOnNodeRequest
+            actor3.Tell(new VehicleOnNodeCommand
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
-                    StartLane = 3,
-                    DestinationLane = 5,
+                    InputLane = 3,
+                    OutputLane = 5,
                 }
             });
 
@@ -399,45 +426,45 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             var actor3 = actors[3];
             var actor4 = actors[4];
 
-            actor1.Tell(new VehicleOnNodeRequest
+            actor1.Tell(new VehicleOnNodeCommand
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
-                    StartLane = 1,
-                    DestinationLane = 8,
+                    InputLane = 1,
+                    OutputLane = 8,
                 }
             });
 
             Thread.Sleep(500);
 
-            actor2.Tell(new VehicleOnNodeRequest
+            actor2.Tell(new VehicleOnNodeCommand
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
-                    StartLane = 2,
-                    DestinationLane = 5,
+                    InputLane = 2,
+                    OutputLane = 5,
                 }
             });
 
             Thread.Sleep(500);
 
-            actor3.Tell(new VehicleOnNodeRequest
+            actor3.Tell(new VehicleOnNodeCommand
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
-                    StartLane = 3,
-                    DestinationLane = 6,
+                    InputLane = 3,
+                    OutputLane = 6,
                 }
             });
 
             Thread.Sleep(3000);
 
-            actor4.Tell(new VehicleOnNodeRequest
+            actor4.Tell(new VehicleOnNodeCommand
             {
                 Vehicle = new Common.Data.VehicleDto
                 {
-                    StartLane = 4,
-                    DestinationLane = 7,
+                    InputLane = 4,
+                    OutputLane = 7,
                 }
             });
         }

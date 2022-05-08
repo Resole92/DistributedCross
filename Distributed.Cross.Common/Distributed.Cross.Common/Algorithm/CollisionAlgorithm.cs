@@ -37,7 +37,7 @@ namespace Distributed.Cross.Common.Algorithm
                 var layer = new CollisionLayer
                 {
                     Priority = inputGroup.Key,
-                    Vehicles = inputGroup.Select(x => x.StartLane).ToList(),
+                    Vehicles = inputGroup.Select(x => x.InputLane).ToList(),
                 };
 
                 layers.Add(layer);
@@ -185,7 +185,7 @@ namespace Distributed.Cross.Common.Algorithm
             var inputVehicles = inputNodeVehicles.Select(node => node.Vehicle);
             foreach(var inputVehicle in inputVehicles)
             {
-                if (!AmIRunner(inputVehicle.StartLane))
+                if (!AmIRunner(inputVehicle.InputLane))
                 {
                     inputVehicle.Priority++;
                 }

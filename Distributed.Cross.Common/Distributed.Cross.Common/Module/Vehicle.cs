@@ -144,13 +144,13 @@ namespace Distributed.Cross.Common.Module
                     var result = requestSubmitted.Item2.Result;
                     if (!result.Acknowledge)
                     {
-                        _logger.LogInformation($"Some leader is already present for node {result.VehicleDetail.StartLane}");
+                        _logger.LogInformation($"Some leader is already present for node {result.VehicleDetail.InputLane}");
                         return new ElectionResult(ElectionResultType.LeaderAlreadyPresent);
                     }
                     var data = result.VehicleDetail;
                     _map.AddVehicle(data);
                     vehiclesThatHaveResponse.Add(data);
-                    _logger.LogInformation($"Vehicle {result.VehicleDetail.StartLane} response for coordination");
+                    _logger.LogInformation($"Vehicle {result.VehicleDetail.InputLane} response for coordination");
                 }
                 catch (Exception ex)
                 {
@@ -170,11 +170,11 @@ namespace Distributed.Cross.Common.Module
 
             foreach (var vehicleThatHaveResponse in vehiclesThatHaveResponse)
             {
-                var targetActor = _parentNode.ActorsMap[vehicleThatHaveResponse.StartLane];
+                var targetActor = _parentNode.ActorsMap[vehicleThatHaveResponse.InputLane];
                 targetActor.Tell(coordinationDetail);
             };
 
-            _parentNode.ActorsMap[Data.StartLane].Tell(coordinationDetail);
+            _parentNode.ActorsMap[Data.InputLane].Tell(coordinationDetail);
 
             return new ElectionResult(ElectionResultType.Elected);
 
@@ -199,28 +199,28 @@ namespace Distributed.Cross.Common.Module
             coordinationRequest.VehiclesDetail.ForEach(_map.AddVehicle);
             var collisionAlgorithm = new CollisionAlgorithm(_map);
             collisionAlgorithm.Calculate();
-            var amIrunner = collisionAlgorithm.AmIRunner(Data.StartLane);
+            var amIrunner = collisionAlgorithm.AmIRunner(Data.InputLane);
 
             var allRunner = new List<int>();
 
             foreach (var vehicle in coordinationRequest.VehiclesDetail)
             {
-                if (collisionAlgorithm.AmIRunner(vehicle.StartLane)) allRunner.Add(vehicle.DestinationLane);
+                if (collisionAlgorithm.AmIRunner(vehicle.InputLane)) allRunner.Add(vehicle.OutputLane);
             }
 
             _vehicleRunnerLeft = allRunner;
             _vehicleRunner = _vehicleRunnerLeft.ToList();
 
             var isLeaderRunner = collisionAlgorithm.AmIRunner(_leaderIdentifier);
-            if (isLeaderRunner) _leaderIdentifier = coordinationRequest.VehiclesDetail.First(x => x.StartLane == _leaderIdentifier).DestinationLane;
+            if (isLeaderRunner) _leaderIdentifier = coordinationRequest.VehiclesDetail.First(x => x.InputLane == _leaderIdentifier).OutputLane;
 
             if (amIrunner)
             {
-                var destinationActor = _parentNode.ActorsMap[Data.DestinationLane];
-                var startActor = _parentNode.ActorsMap[Data.StartLane];
-                startActor.Tell(new VehicleRemoveNotification());
+                var destinationActor = _parentNode.ActorsMap[Data.OutputLane];
+                var startActor = _parentNode.ActorsMap[Data.InputLane];
+                startActor.Tell(new VehicleRemoveCommand());
 
-                destinationActor.Tell(new VehicleMoveNotification
+                destinationActor.Tell(new VehicleMoveCommand
                 {
                     Vehicle = Data.Clone(),
                     LeaderIdentifier = _leaderIdentifier,
@@ -228,19 +228,19 @@ namespace Distributed.Cross.Common.Module
                     VehiclesRunning = allRunner
                 });
 
-                _logger.LogInformation($"Vehicle is crossing now from lane {Data.StartLane} to lane {Data.DestinationLane}");
+                _logger.LogInformation($"Vehicle is crossing now from lane {Data.InputLane} to lane {Data.OutputLane}");
 
             }
             else
             {
-                _logger.LogInformation($"Vehicle NOT CROSSING from lane {Data.StartLane} to lane {Data.DestinationLane}...");
+                _logger.LogInformation($"Vehicle NOT CROSSING from lane {Data.InputLane} to lane {Data.OutputLane}...");
                 Data.Priority++;
             }
 
             return amIrunner;
         }
 
-        public void UpdateCrossingStatus(VehicleMoveNotification notification)
+        public void UpdateCrossingStatus(VehicleMoveCommand notification)
         {
             notification.AllVehicles.ForEach(_map.AddVehicle);
             _leaderIdentifier = notification.LeaderIdentifier;
@@ -286,14 +286,14 @@ namespace Distributed.Cross.Common.Module
         public void EndRound(RoundEndNotification endRoundNotification)
         {
 
-            var self = _parentNode.ActorsMap[Data.DestinationLane];
+            var self = _parentNode.ActorsMap[Data.OutputLane];
 
             var leaderPresentOnCrossing = _vehicleRunner.Any(x => x == _parentNode.Identifier);
             if (leaderPresentOnCrossing)
             {
                 _logger.LogInformation($"I'm LEADER and I left the cross! Bye bye");
 
-                self.Tell(new VehicleRemoveNotification());
+                self.Tell(new VehicleRemoveCommand());
             }
 
             //Remove must be done before, otherwise new node can send a message of request acutal busy node before removing.
@@ -312,16 +312,16 @@ namespace Distributed.Cross.Common.Module
 
             Task.Run(() =>
             {
-                _logger.LogInformation($"I'm starting from {Data.StartLane} and moving on destination lane {Data.DestinationLane}");
-                Thread.Sleep(2500);
-                var self = parentNode.ActorsMap[Data.DestinationLane];
+                _logger.LogInformation($"I'm starting from {Data.InputLane} and moving on destination lane {Data.OutputLane}");
+                Thread.Sleep(3500);
+                var self = parentNode.ActorsMap[Data.OutputLane];
 
                 var leaderActor = parentNode.ActorsMap[_leaderIdentifier];
                
                 if (parentNode.Identifier != _leaderIdentifier)
                 {
                     _logger.LogInformation($"I have cross!");
-                    self.Tell(new VehicleRemoveNotification());
+                    self.Tell(new VehicleRemoveCommand());
                 }
                 else
                 {

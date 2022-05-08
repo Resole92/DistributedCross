@@ -6,14 +6,15 @@ using System.Text;
 
 namespace Distributed.Cross.Common.Communication.Messages
 {
-    public class VehicleOnNodeRequest
+    public class VehicleOnNodeCommand
     {
         public VehicleDto Vehicle { get; set; }
       
     }
 
-    public class VehicleOnNodeResponse
+    public class VehicleOnNodeNotification
     {
+        public int Identifier { get; set; }
         public bool IsAdded { get; set; }
     }
 }

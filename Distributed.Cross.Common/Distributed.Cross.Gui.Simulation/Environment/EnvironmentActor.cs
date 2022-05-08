@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Distributed.Cross.Common.Actors
@@ -38,7 +40,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleExitNotification>(message =>
             {
-                if(message.StartLane != message.Identifier)
+                if (message.StartLane != message.Identifier)
                 {
                     ExitVehicleNotification(message.StartLane, message.Identifier);
                     _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross");
@@ -46,22 +48,80 @@ namespace Distributed.Cross.Common.Actors
                 else
                 {
                     _logger.LogInformation($"Vehicle with ID {message.Identifier} move in crossing zone");
-                    if(_dictionaryQueue.ContainsKey(message.StartLane))
+                    if (_dictionaryQueue.ContainsKey(message.StartLane))
                     {
                         var queue = _dictionaryQueue[message.StartLane];
-                        if(queue.Count > 0)
+                        if (queue.Count > 0)
                         {
                             var newVehicle = queue.Dequeue();
                             AddNewVehicle(new VehicleDto
                             {
-                                StartLane = message.StartLane,                              
-                                DestinationLane = newVehicle.EndLane,
+                                InputLane = message.StartLane,
+                                OutputLane = newVehicle.EndLane,
                             });
 
+
+
                             EnvironmentViewModel.Instance.RemoveLaneItem(newVehicle);
+                            Task.Run(async () =>
+                            {
+                                EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = null;
+                                await Task.Delay(500);
+                                EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = new VehicleGui
+                                {
+                                    Priority = 1,
+                                    StartLane = message.StartLane,
+                                    EndLane = newVehicle.EndLane,
+                                };
+                            });
+
+                        }
+                        else
+                        {
+
+                            EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = null;
                         }
                     }
+
                 }
+            });
+
+            Receive<VehicleMoveNotification>(message =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                    {
+
+                        EnvironmentViewModel.Instance.OutputVehicles[message.InputLane - 1] = new VehicleGui
+                        {
+                            StartLane = message.InputLane,
+                            EndLane = message.OutputLane
+                        };
+
+                        if (message.InputLane == 1)
+                        {
+                            EnvironmentViewModel.Instance.Vehicle1Destination = 0;
+                            EnvironmentViewModel.Instance.Vehicle1Destination = message.OutputLane;
+                        }
+
+                        if (message.InputLane == 2)
+                        {
+                            EnvironmentViewModel.Instance.Vehicle2Destination = 0;
+                            EnvironmentViewModel.Instance.Vehicle2Destination = message.OutputLane;
+                        }
+
+                        if (message.InputLane == 3)
+                        {
+                            EnvironmentViewModel.Instance.Vehicle3Destination = 0;
+                            EnvironmentViewModel.Instance.Vehicle3Destination = message.OutputLane;
+                        }
+
+                        if (message.InputLane == 4)
+                        {
+                            EnvironmentViewModel.Instance.Vehicle4Destination = 0;
+                            EnvironmentViewModel.Instance.Vehicle4Destination = message.OutputLane;
+                        }
+                    });
+
             });
 
             Receive<EnqueueNewVehicle>(message =>
@@ -70,8 +130,8 @@ namespace Distributed.Cross.Common.Actors
 
                 var isAdded = AddNewVehicle(new VehicleDto
                 {
-                    StartLane = message.StartLane,
-                    DestinationLane = message.DestinationLane
+                    InputLane = message.StartLane,
+                    OutputLane = message.DestinationLane
                 });
 
                 if (!isAdded)
@@ -94,6 +154,14 @@ namespace Distributed.Cross.Common.Actors
 
                     EnvironmentViewModel.Instance.AddNewLaneItem(message.StartLane, newItem);
 
+
+                    EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = new VehicleGui
+                    {
+                        Priority = 1,
+                        StartLane = message.StartLane,
+                        EndLane = message.DestinationLane,
+                    };
+
                 }
 
             });
@@ -101,7 +169,7 @@ namespace Distributed.Cross.Common.Actors
 
         private bool AddNewVehicle(VehicleDto vehicle)
         {
-            var response = ActorsMap[vehicle.StartLane].Ask<VehicleOnNodeResponse>(new VehicleOnNodeRequest
+            var response = ActorsMap[vehicle.InputLane].Ask<VehicleOnNodeNotification>(new VehicleOnNodeCommand
             {
                 Vehicle = vehicle
             }, TimeSpan.FromSeconds(1.5));
@@ -111,32 +179,7 @@ namespace Distributed.Cross.Common.Actors
 
         private void ExitVehicleNotification(int startLane, int exitLane)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (startLane == 1)
-                {
-                    EnvironmentViewModel.Instance.Vehicle1Destination = 0;
-                    EnvironmentViewModel.Instance.Vehicle1Destination = exitLane;
-                }
-
-                if (startLane == 2)
-                {
-                    EnvironmentViewModel.Instance.Vehicle2Destination = 0;
-                    EnvironmentViewModel.Instance.Vehicle2Destination = exitLane;
-                }
-
-                if (startLane == 3)
-                {
-                    EnvironmentViewModel.Instance.Vehicle3Destination = 0;
-                    EnvironmentViewModel.Instance.Vehicle3Destination = exitLane;
-                }
-
-                if (startLane == 4)
-                {
-                    EnvironmentViewModel.Instance.Vehicle4Destination = 0;
-                    EnvironmentViewModel.Instance.Vehicle4Destination = exitLane;
-                }
-            });
+            EnvironmentViewModel.Instance.OutputVehicles[startLane - 1] = null;
         }
 
         public static Props Props(Dictionary<int, IActorRef> actorsMap)

@@ -112,7 +112,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<VehicleRemoveNotification>(RemoveVehicle);
+            Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
 
             Receive<CoordinationNotificationRequest>(message =>
@@ -213,7 +213,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<VehicleRemoveNotification>(message =>
+            Receive<VehicleRemoveCommand>(message =>
             {
                 _logger.LogInformation($"Message removing is stashed");
                 Stash.Stash();
@@ -273,7 +273,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<VehicleRemoveNotification>(RemoveVehicle);
+            Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
 
             Receive<VehicleExitNotification>(message =>
@@ -324,7 +324,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<VehicleRemoveNotification>(RemoveVehicle);
+            Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
 
             Receive<VehicleExitNotification>(message =>
@@ -402,10 +402,10 @@ namespace Distributed.Cross.Common.Actors
 
             });
 
-            Receive<VehicleOnNodeRequest>(message =>
+            Receive<VehicleOnNodeCommand>(message =>
             {
                 _logger.LogInformation("Not possible add another vehicle because already one is in this node");
-                Sender.Tell(new VehicleOnNodeResponse { IsAdded = false });
+                Sender.Tell(new VehicleOnNodeNotification { IsAdded = false });
             });
 
         }
@@ -416,22 +416,34 @@ namespace Distributed.Cross.Common.Actors
 
         public void IdleBehaviour()
         {
-            Receive<VehicleOnNodeRequest>(message =>
+            Receive<VehicleOnNodeCommand>(message =>
             {
                 _logger.LogInformation($"A new vehicle enter on cross");
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Self.Tell(new ElectionStart());
-                Sender.Tell(new VehicleOnNodeResponse { IsAdded = true });
+                var notification = new VehicleOnNodeNotification
+                {
+                    Identifier = Identifier,
+                    IsAdded = true 
+                };
+                Sender.Tell(notification);
+
                 Become(EntryBehaviour);
 
             });
 
-            Receive<VehicleMoveNotification>(message =>
+            Receive<VehicleMoveCommand>(message =>
             {
                 _logger.LogInformation($"A new vehicle is crossing into this lane");
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Vehicle.UpdateCrossingStatus(message);
                 Vehicle.StartCrossing();
+                SendBroadcastMessage(new VehicleMoveNotification
+                {
+                    InputLane = Vehicle.Data.InputLane,
+                    OutputLane = Vehicle.Data.OutputLane,
+                });
+
                 Become(CrossingBehaviour);
             });
 
@@ -440,11 +452,11 @@ namespace Distributed.Cross.Common.Actors
         #endregion
 
 
-        public void RemoveVehicle(VehicleRemoveNotification message)
+        public void RemoveVehicle(VehicleRemoveCommand message)
         {
             if (Vehicle is null) return;
 
-            var startLane = Vehicle.Data.StartLane;
+            var startLane = Vehicle.Data.InputLane;
             _logger.LogInformation($"Vehicle is removed");
             Vehicle.RemoveParentNode();
             Vehicle = null;

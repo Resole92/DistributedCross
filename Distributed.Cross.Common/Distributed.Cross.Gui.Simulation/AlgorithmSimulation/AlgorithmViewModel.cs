@@ -77,15 +77,15 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             {
                 crossMap.AddVehicle(new Common.Data.VehicleDto
                 {
-                    StartLane = 1,
-                    DestinationLane = 6,
+                    InputLane = 1,
+                    OutputLane = 6,
                 });
                 VehiclesCross.Add(1);
 
                 crossMap.AddVehicle(new Common.Data.VehicleDto
                 {
-                    StartLane = 2,
-                    DestinationLane = 5,
+                    InputLane = 2,
+                    OutputLane = 5,
                 });
                 VehiclesCross.Add(2);
             }
@@ -110,26 +110,26 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
 
             crossMap.AddVehicle(new Common.Data.VehicleDto
             {
-                StartLane = 1,
-                DestinationLane = 6,
+                InputLane = 1,
+                OutputLane = 6,
             });
 
             crossMap.AddVehicle(new Common.Data.VehicleDto
             {
-                StartLane = 2,
-                DestinationLane = 5,
+                InputLane = 2,
+                OutputLane = 5,
             });
 
             crossMap.AddVehicle(new Common.Data.VehicleDto
             {
-                StartLane = 3,
-                DestinationLane = 7,
+                InputLane = 3,
+                OutputLane = 7,
             });
 
             crossMap.AddVehicle(new Common.Data.VehicleDto
             {
-                StartLane = 4,
-                DestinationLane = 8,
+                InputLane = 4,
+                OutputLane = 8,
             });
 
 

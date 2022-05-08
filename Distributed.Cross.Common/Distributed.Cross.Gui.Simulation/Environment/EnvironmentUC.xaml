@@ -15,7 +15,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 V 50 Q 100,120 120,50 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -28,7 +28,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 Q 70,120 140,120 H180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -41,7 +41,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 V 50 V180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -55,7 +55,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1"  >
+                Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 V 50 Q 70,70 50,70 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -69,7 +69,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 Q 120,70 120,50 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -82,7 +82,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 Q 70,100 140,120 H180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -95,7 +95,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 Q 70,70 70,140 V180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -109,7 +109,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle2}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1"  >
+                Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 150,70 H 140 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -124,7 +124,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -137,7 +137,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 140 Q 120,120 140,120 H 180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -150,7 +150,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 140 Q 100,80 70,140 V 180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -164,7 +164,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle3}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1"  >
+                Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 120,150 V 140 Q 120,70 50,70 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -180,7 +180,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 Q 120,120 120,50 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -193,7 +193,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 H 180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -206,7 +206,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1" >
+                Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 Q 70,120 70,140 V180" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -220,7 +220,7 @@
             <PointAnimationUsingPath
                 Storyboard.Target="{Binding ElementName=Vehicle4}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:1"  >
+                Duration="0:0:2"  >
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 40,120 H 50 Q 110,100 50,70 H 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -358,7 +358,38 @@
                 <Label Foreground="Green" Margin="60,0,0,0">1</Label>
                 <Label Foreground="Black" Margin="110,20,0,0">5</Label>
 
+
                 <Path Fill="Green"  Panel.ZIndex="90">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding InputVehicles[0]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="70,40" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Green"  Panel.ZIndex="90">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding OutputVehicles[0]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
                     <Path.Data>
 
                         <!-- Describes an ellipse. -->
@@ -367,12 +398,43 @@
                            
                         </EllipseGeometry>
                     </Path.Data>
+                    
                 </Path>
 
                 <Label  Foreground="Orange" Margin="170,55,0,0">2</Label>
                 <Label Foreground="Black" Margin="150,105,0,0">6</Label>
 
                 <Path Fill="Orange"  Panel.ZIndex="90">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding InputVehicles[1]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="150,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Orange"  Panel.ZIndex="90">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding OutputVehicles[1]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
                     <Path.Data>
 
                         <!-- Describes an ellipse. -->
@@ -386,6 +448,36 @@
                 <Label Foreground="Black" Margin="60,140,0,0">7</Label>
 
                 <Path Fill="Blue"  Panel.ZIndex="90">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding InputVehicles[2]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="120,150" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Blue"  Panel.ZIndex="90">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding OutputVehicles[2]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
                 <Path.Data>
 
                     <!-- Describes an ellipse. -->
@@ -401,6 +493,35 @@
                 <Label Foreground="Black" Margin="25,55,0,0">8</Label>
 
                 <Path Fill="Red" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding InputVehicles[3]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="40,120" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Red" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding OutputVehicles[3]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
                     <Path.Data>
                         <!-- Describes an ellipse. -->
                         <EllipseGeometry x:Name="Vehicle4"
@@ -611,6 +732,9 @@
                             </StackPanel>
                         </Grid>
                     </TabItem>
+                    <TabItem Header="Start lane">
+                        
+                    </TabItem>
                     <TabItem Header="Queue">
                         <ListView ItemsSource="{Binding Queues}" ScrollViewer.CanContentScroll="False" VerticalContentAlignment="Top">
                             <ListView.ItemsPanel>
@@ -660,6 +784,7 @@
                     </TabItem>
                 </TabControl>
             </TabItem>
+           
 
             <TabItem Header="Control lane check">
 
