@@ -231,10 +231,10 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Viewbox Grid.Column="0" MaxHeight="700">
-        <Canvas HorizontalAlignment="Left" Width="340" Height="240" >
+        <Canvas HorizontalAlignment="Left" Width="200" Height="200" >
 
             <!-- This Path is only to show the path that the animated object will follow. -->
             <!--<Path VerticalAlignment="Top" Margin="15,15,15,15" 
@@ -572,39 +572,95 @@
 
         <TabControl Grid.Column="1">
 
-            <TabItem Header="Simulation control">
-                <Grid>
-                    <StackPanel>
+            <TabItem Header="Simulation">
 
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Create!" 
-            Command="{Binding StartEnvironmentCommand}">
-                        </Button>
-                        <StackPanel Orientation="Horizontal">
-                            
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Add random!" 
-            Command="{Binding AddRandomVehicleCommand}">
-                        </Button>
-                            <TextBox Text="{Binding Path=NumberRandomVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                        </StackPanel>
+                <TabControl>
+                    <TabItem Header="Control">
+                        <Grid>
+                            <StackPanel >
 
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Information!" 
-            Command="{Binding RequestInformationVehicle}">
-                        </Button>
-                    </StackPanel>
-                </Grid>
+                                <Button  
+                                    HorizontalAlignment="Left"
+                                    Margin="3"
+                                    Height="30"
+                                    Width="100"
+                                    Content="Create!" 
+                                    Command="{Binding StartEnvironmentCommand}">            
+                                </Button>
+                                <StackPanel Orientation="Horizontal">
+
+                                    <Button 
+                                        Margin="3"
+                                        Height="30"
+                                        Width="100"
+                                        Content="Add random!" 
+                                        Command="{Binding AddRandomVehicleCommand}">
+                                    </Button>
+                                    <TextBox Margin="5" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding Path=NumberRandomVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                    <Label Margin="0 10 0 10" >Number of vehicle</Label>
+                                </StackPanel>
+
+                                <Button 
+                                    HorizontalAlignment="Left"
+                                    Margin="3"
+                                    Height="30"
+                                    Width="100"
+                                    Content="Information!" 
+                                    Command="{Binding RequestInformationVehicle}">
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Queue">
+                        <ListView ItemsSource="{Binding Queues}" ScrollViewer.CanContentScroll="False" VerticalContentAlignment="Top">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel>
+                                        <Grid Margin="10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                            <Run Text="Lane number: "></Run>
+                                            <Run  Text="{Binding LaneNumber}"></Run>
+                                        </TextBlock>
+                                            <ListView  Grid.Row="1"   ItemsSource="{Binding Queue}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock>
+                                                        <Run Text="Destination lane:"></Run>
+                                                        <Run Text="{Binding EndLane}"></Run>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Grid>
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                <ContentPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </TabItem>
+                </TabControl>
             </TabItem>
+
             <TabItem Header="Control lane check">
 
                 <Grid>
@@ -615,136 +671,136 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    
-                <StackPanel Grid.Column="0">
 
-                    
-                    <Button 
+                    <StackPanel Grid.Column="0">
+
+
+                        <Button 
                 x:Name="DestinstionLane4Button"
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 5" 
             Command="{Binding Destination1Lane5Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 6" 
             Command="{Binding Destination1Lane6Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 7" 
             Command="{Binding Destination1Lane7Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 1 to 8" 
             Command="{Binding Destination1Lane8Command}">
-                    </Button>
-                </StackPanel>
+                        </Button>
+                    </StackPanel>
 
-                <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="1">
 
-                    <Button 
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 5" 
             Command="{Binding Destination2Lane5Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 6" 
             Command="{Binding Destination2Lane6Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 7" 
             Command="{Binding Destination2Lane7Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 2 to 8" 
             Command="{Binding Destination2Lane8Command}">
-                    </Button>
-                </StackPanel>
+                        </Button>
+                    </StackPanel>
 
-                <StackPanel Grid.Column="2">
+                    <StackPanel Grid.Column="2">
 
-                    <Button 
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 5" 
             Command="{Binding Destination3Lane5Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 6" 
             Command="{Binding Destination3Lane6Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 7" 
             Command="{Binding Destination3Lane7Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 3 to 8" 
             Command="{Binding Destination3Lane8Command}">
-                    </Button>
-                </StackPanel>
+                        </Button>
+                    </StackPanel>
 
-                <StackPanel Grid.Column="3">
+                    <StackPanel Grid.Column="3">
 
-                    <Button 
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 5" 
             Command="{Binding Destination4Lane5Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 6" 
             Command="{Binding Destination4Lane6Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 7" 
             Command="{Binding Destination4Lane7Command}">
-                    </Button>
-                    <Button 
+                        </Button>
+                        <Button 
             Margin="3"
             Height="30"
             Width="100"
             Content="Destination 4 to 8" 
             Command="{Binding Destination4Lane8Command}">
-                    </Button>
-                </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>

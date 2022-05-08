@@ -22,6 +22,8 @@ using Distributed.Cross.Gui.Simulation.Utilities;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Collections.ObjectModel;
+using Distributed.Cross.Gui.Simulation.Environment.Components;
 
 namespace Distributed.Cross.Gui.Simulation.Environment
 {
@@ -37,10 +39,47 @@ namespace Distributed.Cross.Gui.Simulation.Environment
     }
 
 
-    public class EnvironmentViewModel : INotifyPropertyChanged
+    public class EnvironmentViewModel : NotifyPropertyChanged
     {
         private static EnvironmentViewModel _instance;
         public static EnvironmentViewModel Instance => _instance ??= new EnvironmentViewModel();
+
+        private ObservableCollection<LaneQueue> _queues = new ObservableCollection<LaneQueue>();
+        public ObservableCollection<LaneQueue> Queues
+        {
+            get => _queues;
+            set
+            {
+                _queues = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void AddNewLaneItem(int lane, QueueItem item)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+
+                var targetQueue = _queues.FirstOrDefault(x => x.LaneNumber == lane);
+                if (targetQueue is null)
+                {
+                    targetQueue = new LaneQueue
+                    {
+                        LaneNumber = lane
+                    };
+                    Queues.Add(targetQueue);
+                    Queues = new ObservableCollection<LaneQueue>(Queues.OrderBy(x => x.LaneNumber));
+                }
+
+                targetQueue.Queue.Add(item);
+            });
+
+        }
+
+        public void RemoveLaneItem(QueueItem item)
+            => Application.Current.Dispatcher.Invoke(() => _queues.ToList().ForEach(x => x.Queue.Remove(item)));
+
+
 
         EnvironmentViewModel()
         {
@@ -54,7 +93,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _vehicle1Destination = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -65,7 +104,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _vehicle2Destination = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -76,7 +115,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _vehicle3Destination = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -87,7 +126,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _vehicle4Destination = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -98,7 +137,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _actualRound = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -111,7 +150,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _selectedVehicle = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -122,7 +161,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _numberRandomVehicle = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -265,7 +304,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _selectedExample = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -403,18 +442,5 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             });
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        // This method is called by the Set accessor of each property.
-        // The CallerMemberName attribute that is applied to the optional propertyName
-        // parameter causes the property name of the caller to be substituted as an argument.
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

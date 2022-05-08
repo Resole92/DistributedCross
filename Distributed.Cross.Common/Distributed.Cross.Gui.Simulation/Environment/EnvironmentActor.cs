@@ -4,6 +4,7 @@ using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Data;
 using Distributed.Cross.Common.Module;
 using Distributed.Cross.Gui.Simulation.Environment;
+using Distributed.Cross.Gui.Simulation.Environment.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Distributed.Cross.Common.Actors
         private int _actualRound = 1;
 
         private int _exampleToSelect;
-        private Dictionary<int, Queue<EnqueueNewVehicle>> _dictionaryQueue = new();
+        private Dictionary<int, Queue<QueueItem>> _dictionaryQueue = new();
         private Logger _logger;
 
         public EnvironmentActor(Dictionary<int, IActorRef> actorsMap)
@@ -53,9 +54,11 @@ namespace Distributed.Cross.Common.Actors
                             var newVehicle = queue.Dequeue();
                             AddNewVehicle(new VehicleDto
                             {
-                                DestinationLane = newVehicle.DestinationLane,
-                                StartLane = newVehicle.StartLane
+                                StartLane = message.StartLane,                              
+                                DestinationLane = newVehicle.EndLane,
                             });
+
+                            EnvironmentViewModel.Instance.RemoveLaneItem(newVehicle);
                         }
                     }
                 }
@@ -73,16 +76,24 @@ namespace Distributed.Cross.Common.Actors
 
                 if (!isAdded)
                 {
+                    var newItem = new QueueItem
+                    {
+                        EndLane = message.DestinationLane
+                    };
+
                     if (_dictionaryQueue.ContainsKey(message.StartLane))
                     {
-                        _dictionaryQueue[message.StartLane].Enqueue(message);
+                        _dictionaryQueue[message.StartLane].Enqueue(newItem);
                     }
                     else
                     {
-                        var queue = new Queue<EnqueueNewVehicle>();
-                        queue.Enqueue(message);
+                        var queue = new Queue<QueueItem>();
+                        queue.Enqueue(newItem);
                         _dictionaryQueue.Add(message.StartLane, queue);
                     }
+
+                    EnvironmentViewModel.Instance.AddNewLaneItem(message.StartLane, newItem);
+
                 }
 
             });

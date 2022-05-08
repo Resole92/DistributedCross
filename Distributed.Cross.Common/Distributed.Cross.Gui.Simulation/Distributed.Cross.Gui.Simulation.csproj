@@ -110,10 +110,12 @@
     <Compile Include="AlgorithmSimulation\AlgorithmUC.xaml.cs">
       <DependentUpon>AlgorithmUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Environment\Components\LaneQueue.cs" />
     <Compile Include="Environment\EnvironmentActor.cs" />
     <Compile Include="Environment\EnvironmentUC.xaml.cs">
       <DependentUpon>EnvironmentUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\NotifyPropertyChanged.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Page Include="AlgorithmSimulation\AlgorithmUC.xaml">
       <SubType>Designer</SubType>
