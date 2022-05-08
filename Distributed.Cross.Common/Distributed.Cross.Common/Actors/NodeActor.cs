@@ -155,10 +155,8 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<ElectionStart>(message =>
             {
-                if (Vehicle is not null)
-                {
-                    _logger.LogInformation("An election is already started...");
-                }
+                _logger.LogInformation($"Election is stashed");
+                Stash.Stash();
             });
 
 
