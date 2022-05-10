@@ -1,4 +1,5 @@
-﻿using Distributed.Cross.Gui.Simulation.Utilities;
+﻿using Distributed.Cross.Common.Data;
+using Distributed.Cross.Gui.Simulation.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
             }
         }
 
-        private int _priority;
+        private int _priority = 1;
         public int Priority
         {
             get => _priority;
@@ -42,15 +43,34 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
             }
         }
 
-        private double _velocity;
-        public double Velocity
+        private double _speed;
+        public double Speed
         {
-            get => _velocity;
+            get => _speed;
             set
             {
-                _velocity = value;
+                _speed = value;
                 OnPropertyChanged();
             }
+        }
+
+        private int _brokenNode;
+        public int BrokenNode
+        {
+            get => _brokenNode;
+            set
+            {
+                _brokenNode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public VehicleGui(VehicleDto vehicle)
+        {
+            InputLane = vehicle.InputLane;
+            OutputLane = vehicle.OutputLane;
+            Speed = vehicle.Speed;
+            BrokenNode = vehicle.BrokenNode;
         }
     }
 }

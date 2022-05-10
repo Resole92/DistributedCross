@@ -6,13 +6,10 @@ using System.Text;
 
 namespace Distributed.Cross.Common.Communication.Messages
 {
-    public class CoordinationNotificationRequest
+    public class CoordinationNotification
     {
         public List<VehicleDto> VehiclesDetail { get; set; }
+        public List<int> BrokenNodes { get; set; }
     }
 
-    public class CoordinationNotificationResponse
-    {
-
-    }
 }

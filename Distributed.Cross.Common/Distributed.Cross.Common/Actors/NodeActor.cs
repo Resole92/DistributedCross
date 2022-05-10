@@ -114,7 +114,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
-            Receive<CoordinationNotificationRequest>(CheckRunner);
+            Receive<CoordinationNotification>(CheckRunner);
 
             Receive<VehicleExitNotification>(message =>
             {
@@ -174,7 +174,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<CoordinationNotificationRequest>(CheckRunner);
+            Receive<CoordinationNotification>(CheckRunner);
 
             Receive<VehicleRemoveCommand>(message =>
             {
@@ -402,12 +402,7 @@ namespace Distributed.Cross.Common.Actors
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Vehicle.UpdateCrossingStatus(message);
                 Vehicle.StartCrossing();
-                SendBroadcastMessage(new VehicleMoveNotification
-                {
-                    InputLane = Vehicle.Data.InputLane,
-                    OutputLane = Vehicle.Data.OutputLane,
-                    Velocity = Vehicle.Data.Velocity,
-                });
+                SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle));
 
                 Become(CrossingBehaviour);
             });
@@ -416,7 +411,7 @@ namespace Distributed.Cross.Common.Actors
 
         #endregion
 
-        private void CheckRunner(CoordinationNotificationRequest message)
+        private void CheckRunner(CoordinationNotification message)
         {
             if (Vehicle is not null)
             {

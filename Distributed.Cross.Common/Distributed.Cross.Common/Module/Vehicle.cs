@@ -3,7 +3,6 @@ using Distributed.Cross.Common.Actors;
 using Distributed.Cross.Common.Algorithm;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Data;
-using Distributed.Cross.Common.Enums;
 using Distributed.Cross.Common.Utilities;
 using System;
 using System.Collections.Generic;
@@ -16,9 +15,8 @@ namespace Distributed.Cross.Common.Module
 {
     public class Vehicle
     {
-        private RoundState _roundState;
+       
         private int _leaderIdentifier;
-        private int _actualPosition;
         private Logger _logger;
         private CrossMap _map;
         private List<int> _vehicleRunnerLeft;
@@ -27,6 +25,8 @@ namespace Distributed.Cross.Common.Module
 
         public VehicleDto Data { get; private set; }
         private NodeActor _parentNode;
+
+        private List<int> _brokenNodes;
 
 
 
@@ -71,7 +71,7 @@ namespace Distributed.Cross.Common.Module
                 var request = targetActor.Ask<LeaderElectionResponse>(new LeaderElectionRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, TimeSpan.FromSeconds(1.5));
+                }, TimeSpan.FromSeconds(Const.MaxTimeout));
                 requests.Add((vehicleId,request));
             }
 
@@ -118,6 +118,11 @@ namespace Distributed.Cross.Common.Module
 
             _logger.LogInformation($"I'm LEADER! Try to notify!");
 
+
+
+
+            //Ask  also about broken nodes 
+
             var requestsSubmitted = new List<(int,Task<LeaderNotificationResponse>)>();
 
             for (int vehicle = 1; vehicle <= totalInputLane; vehicle++)
@@ -127,10 +132,15 @@ namespace Distributed.Cross.Common.Module
                 var requestSubmitted = targetActor.Ask<LeaderNotificationResponse>(new LeaderNotificationRequest
                 {
                     Identifier = _parentNode.Identifier
-                }, TimeSpan.FromSeconds(1.5));
+                }, TimeSpan.FromSeconds(Const.MaxTimeout));
 
                 requestsSubmitted.Add((vehicle,requestSubmitted));
             }
+
+           var requestBrokenNodes = _parentNode.ActorsMap[0].Ask<BrokenVehicleResponse>(new BrokenVehicleRequest
+           {
+               Identifier = _parentNode.Identifier
+           }, TimeSpan.FromSeconds(Const.MaxTimeout));
 
             _map.EraseMapFromVehicles();
             _map.AddVehicle(Data);
@@ -158,14 +168,29 @@ namespace Distributed.Cross.Common.Module
                 }
             }
 
+            var brokenNode = new List<int>();
+
+            try
+            {
+
+                var result = requestBrokenNodes.Result;
+                brokenNode = result.BrokenNodes;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"No leader of broken node present \n" + ex.Message);
+            }
+
             _logger.LogInformation($"OK I'm definitely the LEADER");
             _leaderIdentifier = _parentNode.Identifier;
 
             var vehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle != null && node.Type == CrossNodeType.Input).Select(x => x.Vehicle);
 
-            var coordinationDetail = new CoordinationNotificationRequest
+            var coordinationDetail = new CoordinationNotification
             {
-                VehiclesDetail = vehicles.Select(x => x.Clone()).ToList()
+                VehiclesDetail = vehicles.Select(x => x.Clone()).ToList(),
+                BrokenNodes = brokenNode
             };
 
             foreach (var vehicleThatHaveResponse in vehiclesThatHaveResponse)
@@ -186,7 +211,7 @@ namespace Distributed.Cross.Common.Module
         /// </summary>
         /// <param name="coordinationRequest"></param>
         /// <returns></returns>
-        public bool CoordinationInformationReceive(CoordinationNotificationRequest coordinationRequest)
+        public bool CoordinationInformationReceive(CoordinationNotification coordinationRequest)
         {
             _map.EraseMapFromVehicles();
 
@@ -313,7 +338,7 @@ namespace Distributed.Cross.Common.Module
             Task.Run(() =>
             {
                 _logger.LogInformation($"I'm starting from {Data.InputLane} and moving on destination lane {Data.OutputLane}");
-                Thread.Sleep((int)(Data.Velocity * 1000));
+                Thread.Sleep((int)(Data.Speed * 1000));
                 var self = parentNode.ActorsMap[Data.OutputLane];
 
                 var leaderActor = parentNode.ActorsMap[_leaderIdentifier];

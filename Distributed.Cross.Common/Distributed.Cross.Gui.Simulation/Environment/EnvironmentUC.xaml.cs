@@ -213,7 +213,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             var totalNode = map.Map.GetAllNodes().Count();
 
             var environmentActor = system.ActorOf(EnvironmentActor.Props(_actors), "Environment");
-            _actors.Add(-1, environmentActor);
+            _actors.Add(Const.EnvironmentIdentifier, environmentActor);
 
             for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
             {
@@ -353,7 +353,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 Task.Run(() =>
                 {
 
-                    var environemt = _actors[-1];
+                    var environemt = _actors[Const.EnvironmentIdentifier];
                     Random randInput = new Random(Guid.NewGuid().GetHashCode());
 
                     for (var i = 0; i < _numberRandomVehicle; i++)
@@ -362,12 +362,12 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                         var entryLane = randInput.Next(1, 5);
                         var exitLane = randInput.Next(5, 9);
 
-                        environemt.Tell(new EnqueueNewVehicle
+                        environemt.Tell(new EnqueueNewVehicle(new Common.Data.VehicleDto
                         {
                             OutputLane = exitLane,
                             InputLane = entryLane,
-                            Velocity = 3.5
-                        });
+                            Speed = 3.5,
+                        }));
                     }
                 });
             });
@@ -379,11 +379,6 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 Task.Run(() =>
                 {
 
-
-
-                    //if(SelectedExample == 0)
-                    //Example0(_actors);
-                    //else
                     Example0(_actors);
                 });
 
