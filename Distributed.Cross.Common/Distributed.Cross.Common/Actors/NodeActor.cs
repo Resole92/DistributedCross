@@ -27,7 +27,7 @@ namespace Distributed.Cross.Common.Actors
 
         public NodeActor(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {
-       
+
             Identifier = identifier;
             ActorsMap = actorsMap;
             _builder = builder;
@@ -35,10 +35,8 @@ namespace Distributed.Cross.Common.Actors
 
             BuildMap(builder);
 
-            if (Identifier == 0) return;
-
             IdleBehaviour();
-           
+
         }
 
         private void BuildMap(CrossBuilder builder)
@@ -55,74 +53,56 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<LeaderElectionRequest>(message =>
             {
-                if (Vehicle is not null)
+
+                Sender.Tell(new LeaderElectionResponse
                 {
-                    Sender.Tell(new LeaderElectionResponse
-                    {
-                        Identifier = Identifier
-                    }, Self);
-                    _tokenAsk = new CancellationTokenSource();
+                    Identifier = Identifier
+                }, Self);
+                _tokenAsk = new CancellationTokenSource();
 
-                    var self = Self;
-                    var vehicle = Vehicle;
+                var self = Self;
+                var vehicle = Vehicle;
 
-                    Become(ElectionBehaviour);
+                Become(ElectionBehaviour);
 
-                    Task.Run(() =>
-                        vehicle.LeaderRequestAsk(_tokenAsk.Token)
-                        , _tokenAsk.Token)
-                    .ContinueWith(x =>
-                    {
-                        if (x.IsCanceled) return new ElectionResult(ElectionResultType.Cancelled);
-                        if (x.IsFaulted) return new ElectionResult(ElectionResultType.NotHandled);
+                Task.Run(() =>
+                    vehicle.LeaderRequestAsk(_tokenAsk.Token)
+                    , _tokenAsk.Token)
+                .ContinueWith(x =>
+                {
+                    if (x.IsCanceled) return new ElectionResult(ElectionResultType.Cancelled);
+                    if (x.IsFaulted) return new ElectionResult(ElectionResultType.NotHandled);
 
-                        return x.Result;
-                      
-                    }, TaskContinuationOptions.ExecuteSynchronously)
-                    .PipeTo(self);
+                    return x.Result;
 
+                }, TaskContinuationOptions.ExecuteSynchronously)
+                .PipeTo(self);
 
-                }
             });
 
             Receive<ElectionStart>(message =>
             {
-                if (Vehicle is not null)
-                {
-                    _logger.LogInformation("An election is start...");
-                    Self.Tell(new LeaderElectionRequest(), Self);
-                }
+                _logger.LogInformation("An election is start...");
+                Self.Tell(new LeaderElectionRequest(), Self);
             });
 
             Receive<LeaderNotificationRequest>(message =>
             {
-                if (Vehicle is not null)
+                var response = Vehicle.LeaderElected(message);
+                if (response.Acknowledge)
                 {
-                   
-                    var response = Vehicle.LeaderElected(message);
-                    if (response.Acknowledge)
-                    {
-                        _logger.LogInformation($"A leader with ID {message.Identifier} is elected");
-                    }
-                    else
-                        _logger.LogInformation($"A leader with ID {message.Identifier} is refused");
-
-                    Sender.Tell(response, Self);
-                   
+                    _logger.LogInformation($"A leader with ID {message.Identifier} is elected");
                 }
+                else
+                    _logger.LogInformation($"A leader with ID {message.Identifier} is refused");
+
+                Sender.Tell(response, Self);
             });
 
             Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
             Receive<CoordinationNotification>(CheckRunner);
-
-            Receive<VehicleExitNotification>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    Vehicle.CheckEndRound(message.Identifier);
-                }
-            });
+            Receive<VehicleExitNotification>(Vehicle.CheckEndRound);
 
 
             BaseBehaviour();
@@ -144,34 +124,27 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<LeaderElectionRequest>(message =>
             {
-                if (Vehicle is not null)
+                Sender.Tell(new LeaderElectionResponse
                 {
-                   
-                    Sender.Tell(new LeaderElectionResponse
-                    {
-                        Identifier = Identifier
-                    }, Self);
-                }
+                    Identifier = Identifier
+                }, Self);
             });
 
             Receive<LeaderNotificationRequest>(message =>
             {
-                if (Vehicle is not null)
+                var response = Vehicle.LeaderElected(message);
+
+                if (response.Acknowledge)
                 {
-                   var response = Vehicle.LeaderElected(message);
-
-                    if (response.Acknowledge)
-                    {
-                        _tokenAsk.Cancel();
-                        _logger.LogInformation($"A leader with ID {message.Identifier} is elected");
-                    }
-                    else
-                    {
-                        _logger.LogInformation($"A leader with ID {message.Identifier} is refused");
-                    }
-
-                    Sender.Tell(response, Self); 
+                    _tokenAsk.Cancel();
+                    _logger.LogInformation($"A leader with ID {message.Identifier} is elected");
                 }
+                else
+                {
+                    _logger.LogInformation($"A leader with ID {message.Identifier} is refused");
+                }
+
+                Sender.Tell(response, Self);
             });
 
             Receive<CoordinationNotification>(CheckRunner);
@@ -206,46 +179,30 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<ElectionStart>(message =>
             {
-                if (Vehicle is not null)
-                {
-                    _logger.LogInformation($"An election start is refused because i'm coordination behaviour");
-                }
+                _logger.LogInformation($"An election start is refused because i'm coordination behaviour");
             });
 
             Receive<LeaderElectionRequest>(message =>
             {
-                if (Vehicle is not null)
+                Sender.Tell(new LeaderElectionResponse
                 {
-                    Sender.Tell(new LeaderElectionResponse
-                    {
-                        Identifier = Identifier
-                    });
-                    _logger.LogInformation($"A election leader request is refused because I'm coordination behaviour");
-                }
+                    Identifier = Identifier
+                });
+                _logger.LogInformation($"A election leader request is refused because I'm coordination behaviour");
             });
 
             Receive<LeaderNotificationRequest>(message =>
             {
-                if (Vehicle is not null)
+                _logger.LogInformation($"An new leader is refused from node because I'm coordination behaviour");
+                Sender.Tell(new LeaderNotificationResponse
                 {
-                    _logger.LogInformation($"An new leader is refused from node because I'm coordination behaviour");
-                    Sender.Tell(new LeaderNotificationResponse
-                    {
-                        Acknowledge = false
-                    });
-                }
+                    Acknowledge = false
+                });
             });
 
             Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
-
-            Receive<VehicleExitNotification>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    Vehicle.CheckEndRound(message.Identifier);
-                }
-            });
+            Receive<VehicleExitNotification>(Vehicle.CheckEndRound);
 
             BaseBehaviour();
         }
@@ -260,45 +217,103 @@ namespace Distributed.Cross.Common.Actors
         {
             Receive<ElectionStart>(message =>
             {
-                if (Vehicle is not null)
-                {
-                    _logger.LogInformation($"An election start is refused because I'm crossing behaviour");
-                }
+                _logger.LogInformation($"An election start is refused because I'm crossing behaviour");
             });
 
             Receive<LeaderElectionRequest>(message =>
             {
-                if (Vehicle is not null)
+                Sender.Tell(new LeaderElectionResponse
                 {
-                    Sender.Tell(new LeaderElectionResponse
-                    {
-                        Identifier = Identifier
-                    }, Self);
-                    _logger.LogInformation($"A leader election is refused because I'm crossing behaviour");
-                }
+                    Identifier = Identifier
+                }, Self);
+                _logger.LogInformation($"A leader election is refused because I'm crossing behaviour");
+
             });
 
             Receive<LeaderNotificationRequest>(message =>
             {
-                if (Vehicle is not null)
-                {
-                    _logger.LogInformation($"An new leader is refused from node because I'm in crossing behaviour");
-                    Sender.Tell(new LeaderNotificationResponse());
-                }
+                _logger.LogInformation($"An new leader is refused from node because I'm in crossing behaviour");
+                Sender.Tell(new LeaderNotificationResponse());
+
             });
 
             Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
-
-            Receive<VehicleExitNotification>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    Vehicle.CheckEndRound(message.Identifier);
-                }
-            });
+            Receive<VehicleExitNotification>(Vehicle.CheckEndRound);
 
             BaseBehaviour();
+
+
+        }
+
+        #endregion
+
+        #region Broken behaviour
+
+        public void BrokenBehaviour()
+        {
+            Receive<BrokenVehicleRequest>(message =>
+            {
+                var response = Vehicle.BrokenRequest(message);
+                Sender.Tell(response, Self);
+            });
+
+            Receive<VehicleBrokenRemoveCommand>(message => RemoveVehicle(new VehicleRemoveCommand()));
+        }
+
+        #endregion 
+
+        #region Idle behaviour
+
+        public void IdleBehaviour()
+        {
+
+
+            Receive<VehicleOnNodeCommand>(message =>
+            {
+                _logger.LogInformation($"A new vehicle enter on cross");
+                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
+                Self.Tell(new ElectionStart());
+                var notification = new VehicleOnNodeNotification
+                {
+                    Identifier = Identifier,
+                    IsAdded = true
+                };
+                Sender.Tell(notification);
+
+                Become(EntryBehaviour);
+
+            });
+
+            Receive<VehicleMoveCommand>(message =>
+            {
+                _logger.LogInformation($"A new vehicle is crossing into this lane");
+                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
+                Vehicle.UpdateCrossingStatus(message);
+
+                if (Vehicle.Data.BrokenNode.HasValue)
+                {
+                    _logger.LogInformation($"I'm broken at node {Vehicle.Data.BrokenNode}");
+                    Broken();
+                    return;
+                }
+
+                Vehicle.StartCrossing();
+                SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle));
+
+                Become(CrossingBehaviour);
+            });
+
+
+            Receive<VehicleBrokenCommand>(message =>
+            {
+                var vehicle = message.Vehicle;
+                _logger.LogInformation($"A vehicle that input from {vehicle.InputLane} lane and output to {vehicle.OutputLane} is broken on {message.Vehicle.BrokenNode} node");
+                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
+                SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
+
+                Become(BrokenBehaviour);
+            });
 
 
         }
@@ -309,23 +324,21 @@ namespace Distributed.Cross.Common.Actors
 
         private void BaseBehaviour()
         {
-          
+
+
             Receive<InformationVehicleRequest>(messsage =>
             {
-                if (Vehicle is not null)
+                Sender.Tell(new InformationVehicleResponse
                 {
-                    Sender.Tell(new InformationVehicleResponse
-                    {
-                        Vehicle = Vehicle.Data
-                    });
-                }
+                    Vehicle = Vehicle.Data
+                });
             });
 
             Receive<ElectionResult>(message =>
             {
                 Stash.UnstashAll();
 
-                switch(message.Result)
+                switch (message.Result)
                 {
                     case ElectionResultType.Cancelled:
                         {
@@ -376,40 +389,13 @@ namespace Distributed.Cross.Common.Actors
 
         #endregion
 
-        #region Idle behaviour
-
-        public void IdleBehaviour()
+        public void Broken()
         {
-            Receive<VehicleOnNodeCommand>(message =>
-            {
-                _logger.LogInformation($"A new vehicle enter on cross");
-                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
-                Self.Tell(new ElectionStart());
-                var notification = new VehicleOnNodeNotification
-                {
-                    Identifier = Identifier,
-                    IsAdded = true 
-                };
-                Sender.Tell(notification);
-
-                Become(EntryBehaviour);
-
-            });
-
-            Receive<VehicleMoveCommand>(message =>
-            {
-                _logger.LogInformation($"A new vehicle is crossing into this lane");
-                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
-                Vehicle.UpdateCrossingStatus(message);
-                Vehicle.StartCrossing();
-                SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle));
-
-                Become(CrossingBehaviour);
-            });
-
+            Self.Tell(new VehicleRemoveCommand(), Self);
+            var brokeNode = ActorsMap[Const.BrokenIdentifier];
+            brokeNode.Tell(new VehicleBrokenCommand(Vehicle.Data), Self);
+           
         }
-
-        #endregion
 
         private void CheckRunner(CoordinationNotification message)
         {
@@ -427,7 +413,6 @@ namespace Distributed.Cross.Common.Actors
                     SendBroadcastMessage(new PriorityNotification(Identifier, Vehicle.Data.Priority));
                     Become(EntryBehaviour);
                 }
-
             }
         }
 
@@ -450,7 +435,7 @@ namespace Distributed.Cross.Common.Actors
             Become(IdleBehaviour);
         }
 
-        public void SendBroadcastMessage(object message )
+        public void SendBroadcastMessage(object message)
         {
             var selection = Context.ActorSelection("akka://MySystem/user/*");
             selection.Tell(message, Self);

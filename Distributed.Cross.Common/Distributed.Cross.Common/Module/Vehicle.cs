@@ -22,11 +22,10 @@ namespace Distributed.Cross.Common.Module
         private List<int> _vehicleRunnerLeft;
         private List<int> _vehicleRunner;
 
-
         public VehicleDto Data { get; private set; }
         private NodeActor _parentNode;
 
-        private List<int> _brokenNodes;
+        private List<int> _brokenNodes = new List<int>();
 
 
 
@@ -293,12 +292,12 @@ namespace Distributed.Cross.Common.Module
         }
 
         //Return true if round must be terminate
-        public void CheckEndRound(int identifier)
+        public void CheckEndRound(VehicleExitNotification message)
         {
             if (_parentNode.Identifier != _leaderIdentifier) return;
 
-            _vehicleRunnerLeft.Remove(identifier);
-            _logger.LogInformation($"Leader is notified about an exit vehicle with ID {identifier}");
+            _vehicleRunnerLeft.Remove(message.Identifier);
+            _logger.LogInformation($"Leader is notified about an exit vehicle with ID {message.Identifier}");
 
             if (_vehicleRunnerLeft.Any()) return;
             _logger.LogInformation("All vehicle left the cross. ROUND IS FINISH"!);
@@ -329,11 +328,23 @@ namespace Distributed.Cross.Common.Module
 
         }
 
+        public void BrokenInitialization()
+        {
+            _brokenNodes.Clear();
+            _brokenNodes.Add(_parentNode.Identifier);
+        }
+
+        public BrokenVehicleResponse BrokenRequest(BrokenVehicleRequest request)
+        => new BrokenVehicleResponse
+        {
+            BrokenNodes = _brokenNodes.ToList()
+        };
+
 
         public void StartCrossing()
         {
-            //Da gestire meglio il fatto che tutti i mezzi siano usciti prima del leader.
             var parentNode = _parentNode;
+
 
             Task.Run(() =>
             {
@@ -350,7 +361,10 @@ namespace Distributed.Cross.Common.Module
                 }
                 else
                 {
-                    CheckEndRound(_leaderIdentifier);
+                    CheckEndRound(new VehicleExitNotification 
+                    {
+                        Identifier = _leaderIdentifier 
+                    });
                 }
             });
         }

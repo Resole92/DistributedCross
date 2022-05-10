@@ -54,8 +54,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
             }
         }
 
-        private int _brokenNode;
-        public int BrokenNode
+        private int? _brokenNode;
+        public int? BrokenNode
         {
             get => _brokenNode;
             set

@@ -56,6 +56,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
+        public string PathVehicle1 => "M 70,40 V 50 Q 100,120 120,50 V 10";
+
         private ObservableCollection<VehicleGui> _outputVehicles = new();
         public ObservableCollection<VehicleGui> OutputVehicles
         {
@@ -74,6 +76,17 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _inputVehicles = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<VehicleGui> _crossVehicles = new();
+        public ObservableCollection<VehicleGui> CrossVehicles
+        {
+            get => _crossVehicles;
+            set
+            {
+                _crossVehicles = value;
                 OnPropertyChanged();
             }
         }
@@ -112,7 +125,13 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 InputVehicles.Add(null);
                 OutputVehicles.Add(null);
             }
+
+            for(var i = 0; i < 9; i++)
+            {
+                CrossVehicles.Add(null);
+            }
         }
+
 
         private int _vehicle1Destination = 0;
         public int Vehicle1Destination
@@ -232,106 +251,106 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 var result = response.Result;
             });
 
-        public RelayCommand Destination1Lane5Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle1Destination = 0;
-                Vehicle1Destination = 5;
-            });
-        public RelayCommand Destination1Lane6Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle1Destination = 0;
-                Vehicle1Destination = 6;
-            });
-        public RelayCommand Destination1Lane7Command =>
-             new RelayCommand(_ =>
-             {
-                 Vehicle1Destination = 0;
-                 Vehicle1Destination = 7;
-             });
-        public RelayCommand Destination1Lane8Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle1Destination = 0;
-                Vehicle1Destination = 8;
-            });
+        //public RelayCommand Destination1Lane5Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle1Destination = 0;
+        //        Vehicle1Destination = 5;
+        //    });
+        //public RelayCommand Destination1Lane6Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle1Destination = 0;
+        //        Vehicle1Destination = 6;
+        //    });
+        //public RelayCommand Destination1Lane7Command =>
+        //     new RelayCommand(_ =>
+        //     {
+        //         Vehicle1Destination = 0;
+        //         Vehicle1Destination = 7;
+        //     });
+        //public RelayCommand Destination1Lane8Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle1Destination = 0;
+        //        Vehicle1Destination = 8;
+        //    });
 
-        public RelayCommand Destination2Lane5Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle2Destination = 0;
-                Vehicle2Destination = 5;
-            });
-        public RelayCommand Destination2Lane6Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle2Destination = 0;
-                Vehicle2Destination = 6;
-            });
-        public RelayCommand Destination2Lane7Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle2Destination = 0;
-                Vehicle2Destination = 7;
-            });
-        public RelayCommand Destination2Lane8Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle2Destination = 0;
-                Vehicle2Destination = 8;
-            });
+        //public RelayCommand Destination2Lane5Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle2Destination = 0;
+        //        Vehicle2Destination = 5;
+        //    });
+        //public RelayCommand Destination2Lane6Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle2Destination = 0;
+        //        Vehicle2Destination = 6;
+        //    });
+        //public RelayCommand Destination2Lane7Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle2Destination = 0;
+        //        Vehicle2Destination = 7;
+        //    });
+        //public RelayCommand Destination2Lane8Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle2Destination = 0;
+        //        Vehicle2Destination = 8;
+        //    });
 
-        public RelayCommand Destination3Lane5Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle3Destination = 0;
-                Vehicle3Destination = 5;
-            });
-        public RelayCommand Destination3Lane6Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle3Destination = 0;
-                Vehicle3Destination = 6;
-            });
-        public RelayCommand Destination3Lane7Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle3Destination = 0;
-                Vehicle3Destination = 7;
-            });
-        public RelayCommand Destination3Lane8Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle3Destination = 0;
-                Vehicle3Destination = 8;
-            });
+        //public RelayCommand Destination3Lane5Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle3Destination = 0;
+        //        Vehicle3Destination = 5;
+        //    });
+        //public RelayCommand Destination3Lane6Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle3Destination = 0;
+        //        Vehicle3Destination = 6;
+        //    });
+        //public RelayCommand Destination3Lane7Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle3Destination = 0;
+        //        Vehicle3Destination = 7;
+        //    });
+        //public RelayCommand Destination3Lane8Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle3Destination = 0;
+        //        Vehicle3Destination = 8;
+        //    });
 
-        public RelayCommand Destination4Lane5Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle4Destination = 0;
-                Vehicle4Destination = 5;
-            }
-           );
-        public RelayCommand Destination4Lane6Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle4Destination = 0;
-                Vehicle4Destination = 6;
-            });
-        public RelayCommand Destination4Lane7Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle4Destination = 0;
-                Vehicle4Destination = 7;
-            });
-        public RelayCommand Destination4Lane8Command =>
-            new RelayCommand(_ =>
-            {
-                Vehicle4Destination = 0;
-                Vehicle4Destination = 8;
-            });
+        //public RelayCommand Destination4Lane5Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle4Destination = 0;
+        //        Vehicle4Destination = 5;
+        //    }
+        //   );
+        //public RelayCommand Destination4Lane6Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle4Destination = 0;
+        //        Vehicle4Destination = 6;
+        //    });
+        //public RelayCommand Destination4Lane7Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle4Destination = 0;
+        //        Vehicle4Destination = 7;
+        //    });
+        //public RelayCommand Destination4Lane8Command =>
+        //    new RelayCommand(_ =>
+        //    {
+        //        Vehicle4Destination = 0;
+        //        Vehicle4Destination = 8;
+        //    });
 
         private Dictionary<int, IActorRef> _actors = new Dictionary<int, IActorRef>();
 
@@ -346,6 +365,19 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 OnPropertyChanged();
             }
         }
+
+        public RelayCommand AddBrokenVehicle =>
+            new RelayCommand(_ =>
+            {
+                var environemt = _actors[Const.EnvironmentIdentifier];
+                environemt.Tell(new EnqueueNewVehicle(new Common.Data.VehicleDto
+                {
+                    BrokenNode = 13,
+                    OutputLane = 8,
+                    InputLane = 1,
+                    Speed = 3.5,
+                }));
+            });
 
         public RelayCommand AddRandomVehicleCommand =>
             new RelayCommand(_ =>

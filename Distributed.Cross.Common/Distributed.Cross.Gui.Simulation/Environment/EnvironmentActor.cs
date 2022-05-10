@@ -158,12 +158,18 @@ namespace Distributed.Cross.Common.Actors
                     }
 
                     EnvironmentViewModel.Instance.AddNewLaneItem(newVehicle.InputLane, newVehicle);
-
-
                     EnvironmentViewModel.Instance.InputVehicles[newVehicle.InputLane - 1] = newVehicle;
 
                 }
+            });
 
+
+            Receive<VehicleBrokenNotification>(message =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 9] = new VehicleGui(message.Vehicle);
+                });
             });
         }
 

@@ -10,7 +10,7 @@ namespace Distributed.Cross.Common.Data
         public int InputLane { get; set; }
         public int OutputLane { get; set; }
         public double Speed { get; set; }
-        public int BrokenNode { get; set; }
+        public int? BrokenNode { get; set; }
 
 
         public VehicleDto Clone()
