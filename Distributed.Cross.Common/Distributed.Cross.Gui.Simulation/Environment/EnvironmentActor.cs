@@ -21,7 +21,6 @@ namespace Distributed.Cross.Common.Actors
 
         private int _actualRound = 1;
 
-        private int _exampleToSelect;
         private Dictionary<int, Queue<QueueItem>> _dictionaryQueue = new();
         private Logger _logger;
 
@@ -30,12 +29,20 @@ namespace Distributed.Cross.Common.Actors
             _logger = new Logger("Environment");
             ActorsMap = actorsMap;
 
+            Receive<PriorityNotification>(message =>
+            {
+                EnvironmentViewModel.Instance.InputVehicles[message.Identifier - 1].Priority = message.Priority;
+            });
+
             Receive<ElectionStart>(message =>
             {
-                //EnvironmentViewModel.Instance.SelectedExample = _exampleToSelect % 2;
-                //EnvironmentViewModel.Instance.StartEnvironmentCommand?.Execute(null);
-                //_exampleToSelect++;
-                _actualRound++;
+                 _actualRound++;
+                EnvironmentViewModel.Instance.ActualRound = _actualRound;
+            });
+
+            Receive<NewLeaderNotification>(message =>
+            {
+                EnvironmentViewModel.Instance.LeaderIdentifier = message.Identifier;
             });
 
             Receive<VehicleExitNotification>(message =>

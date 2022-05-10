@@ -114,25 +114,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleRemoveCommand>(RemoveVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
-
-            Receive<CoordinationNotificationRequest>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    _tokenAsk.Cancel();
-                    _logger.LogInformation($"Coordination data received!");
-                    var isRunner = Vehicle.CoordinationInformationReceive(message);
-                    if (isRunner)
-                    {
-                        Become(CoordinationBehaviour);
-                    }
-                    else
-                    {
-                        Become(EntryBehaviour);
-                    }
-
-                }
-            });
+            Receive<CoordinationNotificationRequest>(CheckRunner);
 
             Receive<VehicleExitNotification>(message =>
             {
@@ -192,24 +174,7 @@ namespace Distributed.Cross.Common.Actors
                 }
             });
 
-            Receive<CoordinationNotificationRequest>(message =>
-            {
-                if (Vehicle is not null)
-                {
-                    _tokenAsk.Cancel();
-                    _logger.LogInformation($"Coordination data received!");
-                    var isRunner = Vehicle.CoordinationInformationReceive(message);
-                    if (isRunner)
-                    {
-                        Become(CoordinationBehaviour);
-                    }
-                    else
-                    {
-                        Become(EntryBehaviour);
-                    }
-
-                }
-            });
+            Receive<CoordinationNotificationRequest>(CheckRunner);
 
             Receive<VehicleRemoveCommand>(message =>
             {
@@ -393,7 +358,8 @@ namespace Distributed.Cross.Common.Actors
                         }
                     case ElectionResultType.Elected:
                         {
-                            _logger.LogInformation("An election is conclude successfully. I'm elected"); 
+                            _logger.LogInformation("An election is conclude successfully. I'm elected");
+                            SendBroadcastMessage(new NewLeaderNotification(Identifier));
                             break;
                         }
                 }
@@ -449,6 +415,25 @@ namespace Distributed.Cross.Common.Actors
 
         #endregion
 
+        private void CheckRunner(CoordinationNotificationRequest message)
+        {
+            if (Vehicle is not null)
+            {
+                _tokenAsk.Cancel();
+                _logger.LogInformation($"Coordination data received!");
+                var isRunner = Vehicle.CoordinationInformationReceive(message);
+                if (isRunner)
+                {
+                    Become(CoordinationBehaviour);
+                }
+                else
+                {
+                    SendBroadcastMessage(new PriorityNotification(Identifier, Vehicle.Data.Priority));
+                    Become(EntryBehaviour);
+                }
+
+            }
+        }
 
         public void RemoveVehicle(VehicleRemoveCommand message)
         {

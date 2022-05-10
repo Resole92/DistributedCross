@@ -354,7 +354,30 @@
         Stroke="Green" StrokeThickness="2"
         Stretch="None" />
                 <Label ></Label>-->
-
+                <StackPanel>
+                <TextBlock FontSize="6" >
+                    <Run Text="Input lane"></Run>
+                    <Run Text="{Binding InputVehicles[0].StartLane}"></Run>
+                </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Output lane"></Run>
+                    <Run Text="{Binding InputVehicles[0].EndLane}"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Priority"></Run>
+                    <Run Text="{Binding InputVehicles[0].Priority}"></Run>
+                    </TextBlock>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding InputVehicles[0]}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
                 <Label Foreground="Green" Margin="60,0,0,0">1</Label>
                 <Label Foreground="Black" Margin="110,20,0,0">5</Label>
 
@@ -404,6 +427,31 @@
                 <Label  Foreground="Orange" Margin="170,55,0,0">2</Label>
                 <Label Foreground="Black" Margin="150,105,0,0">6</Label>
 
+                <StackPanel  Margin="150,20,0,0">
+                    <TextBlock FontSize="6" >
+                    <Run Text="Input lane"></Run>
+                    <Run Text="{Binding InputVehicles[1].StartLane}"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Output lane"></Run>
+                    <Run Text="{Binding InputVehicles[1].EndLane}"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Priority"></Run>
+                    <Run Text="{Binding InputVehicles[1].Priority}"></Run>
+                    </TextBlock>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding InputVehicles[1]}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
+
                 <Path Fill="Orange"  Panel.ZIndex="90">
                     <Path.Style>
                         <Style TargetType="Path">
@@ -446,6 +494,30 @@
 
                 <Label Foreground="Blue" Margin="110,160,0,0">3</Label>
                 <Label Foreground="Black" Margin="60,140,0,0">7</Label>
+                <StackPanel  Margin="145,150,0,0">
+                    <TextBlock FontSize="6" >
+                    <Run Text="Input lane"></Run>
+                    <Run Text="{Binding InputVehicles[2].StartLane}"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Output lane"></Run>
+                    <Run Text="{Binding InputVehicles[2].EndLane}"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Priority"></Run>
+                    <Run Text="{Binding InputVehicles[2].Priority}"></Run>
+                    </TextBlock>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding InputVehicles[2]}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
 
                 <Path Fill="Blue"  Panel.ZIndex="90">
                     <Path.Style>
@@ -491,6 +563,31 @@
 
                 <Label Foreground="Red" Margin="0,105,0,0">4</Label>
                 <Label Foreground="Black" Margin="25,55,0,0">8</Label>
+
+                <StackPanel  Margin="0,150,0,0">
+                    <TextBlock FontSize="6" >
+                    <Run Text="Input lane"></Run>
+                    <Run Text="{Binding InputVehicles[3].StartLane}"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Output lane"></Run>
+                    <Run Text="{Binding InputVehicles[3].EndLane}"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="6" >
+                    <Run Text="Priority"></Run>
+                    <Run Text="{Binding InputVehicles[3].Priority}"></Run>
+                    </TextBlock>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding InputVehicles[3]}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                </StackPanel>
 
                 <Path Fill="Red" Panel.ZIndex="90" >
                     <Path.Style>
@@ -708,18 +805,7 @@
                                     Content="Create!" 
                                     Command="{Binding StartEnvironmentCommand}">            
                                 </Button>
-                                <StackPanel Orientation="Horizontal">
-
-                                    <Button 
-                                        Margin="3"
-                                        Height="30"
-                                        Width="100"
-                                        Content="Add random!" 
-                                        Command="{Binding AddRandomVehicleCommand}">
-                                    </Button>
-                                    <TextBox Margin="5" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding Path=NumberRandomVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                    <Label Margin="0 10 0 10" >Number of vehicle</Label>
-                                </StackPanel>
+                                
 
                                 <Button 
                                     HorizontalAlignment="Left"
@@ -736,57 +822,90 @@
                         
                     </TabItem>
                     <TabItem Header="Queue">
-                        <ListView ItemsSource="{Binding Queues}" ScrollViewer.CanContentScroll="False" VerticalContentAlignment="Top">
-                            <ListView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ListView.ItemsPanel>
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <WrapPanel>
-                                        <Grid Margin="10">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="30"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            
+                            
+                            <TextBlock Margin="10" HorizontalAlignment="Center">
+                                <Run Text="Round number:"></Run>
+                                <Run Text="{Binding ActualRound}"></Run>
+                                <Run Text="- Actual leader: "></Run>
+                                <Run Text="{Binding LeaderIdentifier}"></Run>
+                            </TextBlock>
+
+                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+
+                                <Button 
+                                        Margin="3"
+                                        Height="30"
+                                        Width="100"
+                                        Content="Add random!" 
+                                        Command="{Binding AddRandomVehicleCommand}">
+                                </Button>
+                                <TextBox Margin="5" Height="25" VerticalContentAlignment="Center" MinWidth="100" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding Path=NumberRandomVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                <Label Margin="0 10 0 10" >Number of vehicle</Label>
+                                
+
+                            </StackPanel>
+                            
+                            <ListView Grid.Row="2"  ItemsSource="{Binding Queues}"   VerticalContentAlignment="Top">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel>
+                                            <Grid Margin="10">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="30"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Center" >
                                             <Run Text="Lane number: "></Run>
                                             <Run  Text="{Binding LaneNumber}"></Run>
-                                        </TextBlock>
-                                            <ListView  Grid.Row="1"   ItemsSource="{Binding Queue}">
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock>
+                                                </TextBlock>
+                                                <ListView  Grid.Row="1"   ItemsSource="{Binding Queue}">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock>
                                                         <Run Text="Destination lane:"></Run>
                                                         <Run Text="{Binding EndLane}"></Run>
-                                                    </TextBlock>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </Grid>
-                                    </WrapPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListViewItem}">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                                <ContentPresenter />
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
+                                                            </TextBlock>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                            </Grid>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
+                        
+                       
                     </TabItem>
                 </TabControl>
             </TabItem>
            
 
-            <TabItem Header="Control lane check">
+            <!--<TabItem Header="Control lane check">
 
                 <Grid>
 
@@ -927,7 +1046,7 @@
                         </Button>
                     </StackPanel>
                 </Grid>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
         
 

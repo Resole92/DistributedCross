@@ -16,4 +16,13 @@ namespace Distributed.Cross.Common.Communication.Messages
         public VehicleDto VehicleDetail { get; set; }
         public bool Acknowledge { get; set; } = true;
     }
+
+    public class NewLeaderNotification
+    {
+        public int Identifier { get; set; }
+        public NewLeaderNotification(int identifier)
+        {
+            Identifier = identifier;
+        }
+    }
 }

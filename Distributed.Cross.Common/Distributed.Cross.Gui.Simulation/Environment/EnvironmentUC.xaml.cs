@@ -44,6 +44,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         private static EnvironmentViewModel _instance;
         public static EnvironmentViewModel Instance => _instance ??= new EnvironmentViewModel();
 
+ 
         private ObservableCollection<LaneQueue> _queues = new ObservableCollection<LaneQueue>();
         public ObservableCollection<LaneQueue> Queues
         {
@@ -164,6 +165,17 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             set
             {
                 _actualRound = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _leaderIdentifier;
+        public int LeaderIdentifier
+        {
+            get => _leaderIdentifier;
+            set
+            {
+                _leaderIdentifier = value;
                 OnPropertyChanged();
             }
         }
