@@ -10,7 +10,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
     public class VehicleGui : NotifyPropertyChanged
     {
         private int _startLane;
-        public int StartLane
+        public int InputLane
         {
             get => _startLane;
             set
@@ -21,7 +21,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
         }
 
         private int _endLane;
-        public int EndLane
+        public int OutputLane
         {
             get => _endLane;
             set
@@ -38,6 +38,17 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
             set
             {
                 _priority = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _velocity;
+        public double Velocity
+        {
+            get => _velocity;
+            set
+            {
+                _velocity = value;
                 OnPropertyChanged();
             }
         }

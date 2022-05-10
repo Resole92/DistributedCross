@@ -21,7 +21,7 @@ namespace Distributed.Cross.Common.Actors
 
         private int _actualRound = 1;
 
-        private Dictionary<int, Queue<QueueItem>> _dictionaryQueue = new();
+        private Dictionary<int, Queue<VehicleGui>> _dictionaryQueue = new();
         private Logger _logger;
 
         public EnvironmentActor(Dictionary<int, IActorRef> actorsMap)
@@ -31,7 +31,8 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<PriorityNotification>(message =>
             {
-                EnvironmentViewModel.Instance.InputVehicles[message.Identifier - 1].Priority = message.Priority;
+                if(EnvironmentViewModel.Instance.InputVehicles[message.Identifier - 1] is not null)
+                     EnvironmentViewModel.Instance.InputVehicles[message.Identifier - 1].Priority = message.Priority;
             });
 
             Receive<ElectionStart>(message =>
@@ -47,24 +48,25 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleExitNotification>(message =>
             {
-                if (message.StartLane != message.Identifier)
+                if (message.InputLane != message.Identifier)
                 {
-                    ExitVehicleNotification(message.StartLane, message.Identifier);
+                    ExitVehicleNotification(message.InputLane, message.Identifier);
                     _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross");
                 }
                 else
                 {
                     _logger.LogInformation($"Vehicle with ID {message.Identifier} move in crossing zone");
-                    if (_dictionaryQueue.ContainsKey(message.StartLane))
+                    if (_dictionaryQueue.ContainsKey(message.InputLane))
                     {
-                        var queue = _dictionaryQueue[message.StartLane];
+                        var queue = _dictionaryQueue[message.InputLane];
                         if (queue.Count > 0)
                         {
                             var newVehicle = queue.Dequeue();
                             AddNewVehicle(new VehicleDto
                             {
-                                InputLane = message.StartLane,
-                                OutputLane = newVehicle.EndLane,
+                                InputLane = message.InputLane,
+                                OutputLane = newVehicle.OutputLane,
+                                Velocity = newVehicle.Velocity
                             });
 
 
@@ -72,13 +74,13 @@ namespace Distributed.Cross.Common.Actors
                             EnvironmentViewModel.Instance.RemoveLaneItem(newVehicle);
                             Task.Run(async () =>
                             {
-                                EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = null;
+                                EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null;
                                 await Task.Delay(500);
-                                EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = new VehicleGui
+                                EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = new VehicleGui
                                 {
                                     Priority = 1,
-                                    StartLane = message.StartLane,
-                                    EndLane = newVehicle.EndLane,
+                                    InputLane = message.InputLane,
+                                    OutputLane = newVehicle.OutputLane,
                                 };
                             });
 
@@ -86,7 +88,7 @@ namespace Distributed.Cross.Common.Actors
                         else
                         {
 
-                            EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = null;
+                            EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null;
                         }
                     }
 
@@ -100,8 +102,9 @@ namespace Distributed.Cross.Common.Actors
 
                         EnvironmentViewModel.Instance.OutputVehicles[message.InputLane - 1] = new VehicleGui
                         {
-                            StartLane = message.InputLane,
-                            EndLane = message.OutputLane
+                            InputLane = message.InputLane,
+                            OutputLane = message.OutputLane,
+                            Velocity = message.Velocity,
                         };
 
                         if (message.InputLane == 1)
@@ -133,40 +136,44 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<EnqueueNewVehicle>(message =>
             {
-                _logger.LogInformation($"Add new vehicle in the queue. Start lane {message.StartLane} - Exit lane {message.DestinationLane}");
+                _logger.LogInformation($"Add new vehicle in the queue. Start lane {message.InputLane} - Exit lane {message.OutputLane}");
 
                 var isAdded = AddNewVehicle(new VehicleDto
                 {
-                    InputLane = message.StartLane,
-                    OutputLane = message.DestinationLane
+                    InputLane = message.InputLane,
+                    OutputLane = message.OutputLane,
+                    Velocity = message.Velocity
                 });
 
                 if (!isAdded)
                 {
-                    var newItem = new QueueItem
+                    var newItem = new VehicleGui
                     {
-                        EndLane = message.DestinationLane
+                        InputLane = message.InputLane,
+                        OutputLane = message.OutputLane,
+                        Velocity = message.Velocity,
                     };
 
-                    if (_dictionaryQueue.ContainsKey(message.StartLane))
+                    if (_dictionaryQueue.ContainsKey(message.InputLane))
                     {
-                        _dictionaryQueue[message.StartLane].Enqueue(newItem);
+                        _dictionaryQueue[message.InputLane].Enqueue(newItem);
                     }
                     else
                     {
-                        var queue = new Queue<QueueItem>();
+                        var queue = new Queue<VehicleGui>();
                         queue.Enqueue(newItem);
-                        _dictionaryQueue.Add(message.StartLane, queue);
+                        _dictionaryQueue.Add(message.InputLane, queue);
                     }
 
-                    EnvironmentViewModel.Instance.AddNewLaneItem(message.StartLane, newItem);
+                    EnvironmentViewModel.Instance.AddNewLaneItem(message.InputLane, newItem);
 
 
-                    EnvironmentViewModel.Instance.InputVehicles[message.StartLane - 1] = new VehicleGui
+                    EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = new VehicleGui
                     {
                         Priority = 1,
-                        StartLane = message.StartLane,
-                        EndLane = message.DestinationLane,
+                        InputLane = message.InputLane,
+                        OutputLane = message.OutputLane,
+                        Velocity = message.Velocity
                     };
 
                 }

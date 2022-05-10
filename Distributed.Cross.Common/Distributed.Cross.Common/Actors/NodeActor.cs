@@ -406,6 +406,7 @@ namespace Distributed.Cross.Common.Actors
                 {
                     InputLane = Vehicle.Data.InputLane,
                     OutputLane = Vehicle.Data.OutputLane,
+                    Velocity = Vehicle.Data.Velocity,
                 });
 
                 Become(CrossingBehaviour);
@@ -446,7 +447,7 @@ namespace Distributed.Cross.Common.Actors
 
             var exitMessage = new VehicleExitNotification
             {
-                StartLane = startLane,
+                InputLane = startLane,
                 Identifier = Identifier
             };
             SendBroadcastMessage(exitMessage);

@@ -6,7 +6,12 @@ namespace Distributed.Cross.Common.Communication.Environment
 {
     public class EnqueueNewVehicle
     {
-        public int StartLane { get; set; }
-        public int DestinationLane { get; set; }
+        public int InputLane { get; set; }
+        public int OutputLane { get; set; }
+
+        /// <summary>
+        /// Seconds for crossing
+        /// </summary>
+        public double Velocity { get; set; } = 3.5;
     }
 }

@@ -78,7 +78,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
-        public void AddNewLaneItem(int lane, QueueItem item)
+        public void AddNewLaneItem(int lane, VehicleGui item)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -99,7 +99,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
         }
 
-        public void RemoveLaneItem(QueueItem item)
+        public void RemoveLaneItem(VehicleGui item)
             => Application.Current.Dispatcher.Invoke(() => _queues.ToList().ForEach(x => x.Queue.Remove(item)));
 
 
@@ -364,8 +364,9 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
                         environemt.Tell(new EnqueueNewVehicle
                         {
-                            DestinationLane = exitLane,
-                            StartLane = entryLane
+                            OutputLane = exitLane,
+                            InputLane = entryLane,
+                            Velocity = 3.5
                         });
                     }
                 });

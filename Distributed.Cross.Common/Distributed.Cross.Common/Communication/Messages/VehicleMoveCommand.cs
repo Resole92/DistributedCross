@@ -18,5 +18,6 @@ namespace Distributed.Cross.Common.Communication.Messages
     {
         public int InputLane { get; set; }
         public int OutputLane { get; set; }
+        public double Velocity { get; set; }
     }
 }

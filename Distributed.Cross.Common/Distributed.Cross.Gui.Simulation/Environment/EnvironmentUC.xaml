@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Distributed.Cross.Gui.Simulation.Environment"
              mc:Ignorable="d" 
+             xmlns:l="clr-namespace:Distributed.Cross.Gui.Simulation.AttachedProperties"
              DataContext="{Binding Source={x:Static local:EnvironmentViewModel.Instance}}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -15,7 +16,7 @@
             <PointAnimationUsingPath
                  Storyboard.Target="{Binding ElementName=Vehicle1}"
                 Storyboard.TargetProperty="Center"
-                Duration="0:0:2" >
+                Duration="0:0:2">
                 <PointAnimationUsingPath.PathGeometry>
                     <PathGeometry Figures="M 70,40 V 50 Q 100,120 120,50 V 10" />
                 </PointAnimationUsingPath.PathGeometry>
@@ -357,11 +358,11 @@
                 <StackPanel>
                 <TextBlock FontSize="6" >
                     <Run Text="Input lane"></Run>
-                    <Run Text="{Binding InputVehicles[0].StartLane}"></Run>
+                    <Run Text="{Binding InputVehicles[0].InputLane}"></Run>
                 </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Output lane"></Run>
-                    <Run Text="{Binding InputVehicles[0].EndLane}"></Run>
+                    <Run Text="{Binding InputVehicles[0].OutputLane}"></Run>
                     </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Priority"></Run>
@@ -395,13 +396,13 @@
                     </Path.Style>
                     <Path.Data>
                         <!-- Describes an ellipse. -->
-                        <EllipseGeometry 
+                        <EllipseGeometry  
             Center="70,40" RadiusX="10" RadiusY="10" >
                         </EllipseGeometry>
                     </Path.Data>
                 </Path>
 
-                <Path Fill="Green"  Panel.ZIndex="90">
+                <Path Fill="Green"  Panel.ZIndex="90" >
                     <Path.Style>
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
@@ -416,9 +417,9 @@
                     <Path.Data>
 
                         <!-- Describes an ellipse. -->
-                        <EllipseGeometry x:Name="Vehicle1"
-            Center="70,40" RadiusX="10" RadiusY="10" >
-                           
+                        <EllipseGeometry 
+                            x:Name="Vehicle1"
+                            Center="70,40" RadiusX="10" RadiusY="10" >
                         </EllipseGeometry>
                     </Path.Data>
                     
@@ -430,11 +431,11 @@
                 <StackPanel  Margin="150,20,0,0">
                     <TextBlock FontSize="6" >
                     <Run Text="Input lane"></Run>
-                    <Run Text="{Binding InputVehicles[1].StartLane}"></Run>
+                    <Run Text="{Binding InputVehicles[1].InputLane}"></Run>
                     </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Output lane"></Run>
-                    <Run Text="{Binding InputVehicles[1].EndLane}"></Run>
+                    <Run Text="{Binding InputVehicles[1].OutputLane}"></Run>
                     </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Priority"></Run>
@@ -497,11 +498,11 @@
                 <StackPanel  Margin="145,150,0,0">
                     <TextBlock FontSize="6" >
                     <Run Text="Input lane"></Run>
-                    <Run Text="{Binding InputVehicles[2].StartLane}"></Run>
+                    <Run Text="{Binding InputVehicles[2].InputLane}"></Run>
                     </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Output lane"></Run>
-                    <Run Text="{Binding InputVehicles[2].EndLane}"></Run>
+                    <Run Text="{Binding InputVehicles[2].OutputLane}"></Run>
                     </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Priority"></Run>
@@ -567,11 +568,11 @@
                 <StackPanel  Margin="0,150,0,0">
                     <TextBlock FontSize="6" >
                     <Run Text="Input lane"></Run>
-                    <Run Text="{Binding InputVehicles[3].StartLane}"></Run>
+                    <Run Text="{Binding InputVehicles[3].InputLane}"></Run>
                     </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Output lane"></Run>
-                    <Run Text="{Binding InputVehicles[3].EndLane}"></Run>
+                    <Run Text="{Binding InputVehicles[3].OutputLane}"></Run>
                     </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Priority"></Run>
@@ -875,7 +876,7 @@
                                                         <DataTemplate>
                                                             <TextBlock>
                                                         <Run Text="Destination lane:"></Run>
-                                                        <Run Text="{Binding EndLane}"></Run>
+                                                        <Run Text="{Binding OutputLane}"></Run>
                                                             </TextBlock>
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>

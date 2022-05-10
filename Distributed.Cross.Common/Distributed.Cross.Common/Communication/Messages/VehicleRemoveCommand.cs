@@ -10,7 +10,7 @@ namespace Distributed.Cross.Common.Communication.Messages
 
     public class VehicleExitNotification
     {
-        public int StartLane { get; set; }
+        public int InputLane { get; set; }
         public int Identifier { get; set; }
     }
 }

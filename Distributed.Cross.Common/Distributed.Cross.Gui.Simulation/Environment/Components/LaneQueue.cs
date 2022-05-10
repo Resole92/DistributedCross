@@ -24,8 +24,8 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
             }
         }
 
-        private ObservableCollection<QueueItem> _queue = new ObservableCollection<QueueItem>();
-        public ObservableCollection<QueueItem> Queue
+        private ObservableCollection<VehicleGui> _queue = new ObservableCollection<VehicleGui>();
+        public ObservableCollection<VehicleGui> Queue
         {
             get => _queue;
             set
@@ -38,19 +38,4 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
         
     }
 
-
-    public class QueueItem : NotifyPropertyChanged
-    {
-
-        private int _endLane;
-        public int EndLane
-        {
-            get => _endLane;
-            set
-            {
-                _endLane = value;
-                OnPropertyChanged();
-            }
-        }
-    }
 }

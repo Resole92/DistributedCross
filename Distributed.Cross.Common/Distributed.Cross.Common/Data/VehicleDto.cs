@@ -9,6 +9,7 @@ namespace Distributed.Cross.Common.Data
         public int Priority { get; set; } = 1;
         public int InputLane { get; set; }
         public int OutputLane { get; set; }
+        public double Velocity { get; set; }
 
 
         public VehicleDto Clone()
@@ -16,7 +17,8 @@ namespace Distributed.Cross.Common.Data
         {
             Priority = Priority,
             InputLane = InputLane,
-            OutputLane = OutputLane
+            OutputLane = OutputLane,
+            Velocity = Velocity,
         };
 
         public override string ToString()

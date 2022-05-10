@@ -313,7 +313,7 @@ namespace Distributed.Cross.Common.Module
             Task.Run(() =>
             {
                 _logger.LogInformation($"I'm starting from {Data.InputLane} and moving on destination lane {Data.OutputLane}");
-                Thread.Sleep(3500);
+                Thread.Sleep((int)(Data.Velocity * 1000));
                 var self = parentNode.ActorsMap[Data.OutputLane];
 
                 var leaderActor = parentNode.ActorsMap[_leaderIdentifier];
