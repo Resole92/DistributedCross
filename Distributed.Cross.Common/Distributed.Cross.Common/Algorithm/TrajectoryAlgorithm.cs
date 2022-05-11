@@ -30,7 +30,16 @@ namespace Distributed.Cross.Common.Algorithm
                 var edges = _map.Map.GetToEdges(node);
                 foreach (var edge in edges)
                 {
-                    _graphEdgeMatrix[node.Identifier - 1, edge.Tail.Identifier - 1] = edge.Weight;
+                    //Edges to broken nodes are set to 0.
+                    if (_map.BrokenNodes.Contains(edge.Tail) || _map.BrokenNodes.Contains(edge.Head))
+                    {
+                        _graphEdgeMatrix[node.Identifier - 1, edge.Tail.Identifier - 1] = 0;
+                    }
+                    else
+                    {
+                        _graphEdgeMatrix[node.Identifier - 1, edge.Tail.Identifier - 1] = edge.Weight;
+                    }
+                   
                 }
             }
         }
@@ -49,12 +58,12 @@ namespace Distributed.Cross.Common.Algorithm
             };
 
             //If -1 this means that no trajectory was found
-            while(destination.ParentIdentifier != nodeIdentifier - 1 && destination.ParentIdentifier != -1)
+            while (destination.ParentIdentifier != nodeIdentifier - 1 && destination.ParentIdentifier != -1)
             {
                 result.Trajectory.Add(destination.ParentIdentifier + 1);
                 destination = dist[destination.ParentIdentifier];
             }
-            
+
             result.Trajectory.Reverse();
             return result;
         }

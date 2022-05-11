@@ -103,13 +103,17 @@ namespace Distributed.Cross.Common.Algorithm
 
                         collision.VehicleCollided.Remove(collisionWithRemovedVehicle);
                     }
-
                 }
                 else
                 {
                     break;
                 }
             }
+
+            // Add all vehicle with no trajectory available (due to broken vehicles)
+            collisions
+                .Where(collision => collision.NotTrajectoryAvailable).ToList()
+                .ForEach(vehicle => _collisionResults.Add(vehicle.VehicleIdentifier));
         }
 
         private List<CollisionVehicles> LayerCollisionCalculation(CollisionLayer layer)
@@ -125,6 +129,18 @@ namespace Distributed.Cross.Common.Algorithm
             for (var first = 0; first < trajectories.Count; first++)
             {
                 var firstTrajectory = trajectories[first];
+
+                //No trajectory available (due to broken vehicles)
+                if(!firstTrajectory.IsTrajectoryFound)
+                {
+                    collisionsBewtweenVehicles.Add(
+                        new CollisionVehicles
+                        {
+                            VehicleIdentifier = firstTrajectory.Identifier,
+                            NotTrajectoryAvailable = true
+                        });
+                    continue;
+                }
 
                 var firstVehicleCollisionFound = collisionsBewtweenVehicles.FirstOrDefault(x => x.VehicleIdentifier == firstTrajectory.Identifier);
                 if (firstVehicleCollisionFound is null)

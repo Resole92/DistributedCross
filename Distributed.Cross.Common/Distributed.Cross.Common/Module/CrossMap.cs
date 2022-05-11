@@ -12,6 +12,9 @@ namespace Distributed.Cross.Common.Module
         public Graph<CrossNode> Map { get; set; } = new Graph<CrossNode>();
         private CrossNode[,] _crossGrid;
 
+        public List<CrossNode> BrokenNodes { get; private set; } = new List<CrossNode>();
+
+
         public int Height { get; private set; }
         public int Lenght { get; private set; }
 
@@ -27,8 +30,12 @@ namespace Distributed.Cross.Common.Module
             {
                 node.Vehicle = null;
             }
+
+            BrokenNodes.Clear();
         }
 
+        public void AddBrokenNode(int identifier)
+            => BrokenNodes.Add(Map.GetAllNodes().First(x => x.Identifier == identifier));
 
         public CrossNode[,] BuildInternalMap()
         {

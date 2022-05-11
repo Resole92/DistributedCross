@@ -71,7 +71,8 @@
                 Storyboard.TargetProperty="Center"
                 Duration="0:0:2" >
                 <PointAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M 150,70 H 140 Q 120,70 120,50 V 10" />
+                    <PathGeometry Figures="M 150,70 H 140 Q 120,70 120,50 V 10" 
+                                  />
                 </PointAnimationUsingPath.PathGeometry>
             </PointAnimationUsingPath>
         </Storyboard>

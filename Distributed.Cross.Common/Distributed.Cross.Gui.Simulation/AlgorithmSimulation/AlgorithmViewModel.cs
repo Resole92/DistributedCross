@@ -39,6 +39,8 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             => new RelayCommand(_ =>
             {
                 var crossMap = BuildMap();
+
+
                 var collisionAlgorithm = new CollisionAlgorithm(crossMap);
 
                 var round = 0;
@@ -49,7 +51,7 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
                     Console.WriteLine($"Running round number {round}");
                     collisionAlgorithm.Calculate();
                 }
-                while (CheckCrossVehicle(collisionAlgorithm, crossMap, round));
+                while (CheckCrossVehicle(collisionAlgorithm, crossMap, round) && round < 100);
                 Console.WriteLine($"All vehicle cross!");
 
 
@@ -107,6 +109,7 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
             var builder = new CrossBuilder(3, 3);
             builder.CreateBasicInputOutput();
             var crossMap = builder.Build();
+            crossMap.AddBrokenNode(1);
 
             crossMap.AddVehicle(new Common.Data.VehicleDto
             {

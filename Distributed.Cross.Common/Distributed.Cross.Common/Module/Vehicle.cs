@@ -214,13 +214,9 @@ namespace Distributed.Cross.Common.Module
         {
             _map.EraseMapFromVehicles();
 
-            //_logger.LogInformation("Log coordination vehicle detail");
-            //foreach (var vehicle in coordinationRequest.VehiclesDetail)
-            //{
-            //    _logger.LogInformation($"{vehicle}");
-            //}
-
+            coordinationRequest.BrokenNodes.ForEach(_map.AddBrokenNode);
             coordinationRequest.VehiclesDetail.ForEach(_map.AddVehicle);
+
             var collisionAlgorithm = new CollisionAlgorithm(_map);
             collisionAlgorithm.Calculate();
             var amIrunner = collisionAlgorithm.AmIRunner(Data.InputLane);
