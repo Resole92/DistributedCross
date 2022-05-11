@@ -258,10 +258,27 @@ namespace Distributed.Cross.Common.Actors
                 Sender.Tell(response, Self);
             });
 
-            Receive<VehicleBrokenRemoveCommand>(message => RemoveVehicle(new VehicleRemoveCommand
+            Receive<VehicleBrokenRemoveCommand>(message =>
             {
-                BrokenNode = message.Identifier
-            })); 
+                Vehicle.RemoveBrokeNode(message.Identifier);
+                SendBroadcastMessage(new VehicleExitNotification
+                {
+                    BrokenNode = message.Identifier
+                });
+
+                if (!Vehicle.BrokenNodes.Any())
+                {
+                    Become(IdleBehaviour);
+                }
+                
+            });
+
+
+            Receive<VehicleBrokenCommand>(message =>
+            {
+                SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
+                Vehicle.AddBrokenNode(message.Vehicle.BrokenNode.Value);
+            });
         }
 
         #endregion 
@@ -315,7 +332,7 @@ namespace Distributed.Cross.Common.Actors
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
 
-                Vehicle.BrokenInitialization(message.Vehicle.BrokenNode.Value);
+                Vehicle.AddBrokenNode(message.Vehicle.BrokenNode.Value);
 
                 Become(BrokenBehaviour);
             });

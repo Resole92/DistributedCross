@@ -15,7 +15,7 @@ namespace Distributed.Cross.Common.Module
 {
     public class Vehicle
     {
-       
+
         private int _leaderIdentifier;
         private Logger _logger;
         private CrossMap _map;
@@ -71,7 +71,7 @@ namespace Distributed.Cross.Common.Module
                 {
                     Identifier = _parentNode.Identifier
                 }, TimeSpan.FromSeconds(Const.MaxTimeout));
-                requests.Add((vehicleId,request));
+                requests.Add((vehicleId, request));
             }
 
             _logger.LogInformation($"Start check responses");
@@ -99,7 +99,7 @@ namespace Distributed.Cross.Common.Module
 
             var isSomeoneCrossing = someoneBetter.Any(x => x > totalInputLane);
 
-            if(isSomeoneCrossing)
+            if (isSomeoneCrossing)
             {
                 var crossings = someoneBetter.Where(x => x > totalInputLane);
 
@@ -108,7 +108,7 @@ namespace Distributed.Cross.Common.Module
             }
 
             var isSomeoneResponse = someoneBetter.Any();
-            if(isSomeoneResponse)
+            if (isSomeoneResponse)
             {
                 _logger.LogInformation($"Find some one better that are {string.Join(",", someoneBetter)}");
                 return new ElectionResult(ElectionResultType.Bully);
@@ -122,7 +122,7 @@ namespace Distributed.Cross.Common.Module
 
             //Ask  also about broken nodes 
 
-            var requestsSubmitted = new List<(int,Task<LeaderNotificationResponse>)>();
+            var requestsSubmitted = new List<(int, Task<LeaderNotificationResponse>)>();
 
             for (int vehicle = 1; vehicle <= totalInputLane; vehicle++)
             {
@@ -133,13 +133,13 @@ namespace Distributed.Cross.Common.Module
                     Identifier = _parentNode.Identifier
                 }, TimeSpan.FromSeconds(Const.MaxTimeout));
 
-                requestsSubmitted.Add((vehicle,requestSubmitted));
+                requestsSubmitted.Add((vehicle, requestSubmitted));
             }
 
-           var requestBrokenNodes = _parentNode.ActorsMap[0].Ask<BrokenVehicleResponse>(new BrokenVehicleRequest
-           {
-               Identifier = _parentNode.Identifier
-           }, TimeSpan.FromSeconds(Const.MaxTimeout));
+            var requestBrokenNodes = _parentNode.ActorsMap[0].Ask<BrokenVehicleResponse>(new BrokenVehicleRequest
+            {
+                Identifier = _parentNode.Identifier
+            }, TimeSpan.FromSeconds(Const.MaxTimeout));
 
             _map.EraseMapFromVehicles();
             _map.AddVehicle(Data);
@@ -270,7 +270,7 @@ namespace Distributed.Cross.Common.Module
 
         public LeaderNotificationResponse LeaderElected(LeaderNotificationRequest request)
         {
-            if(request.Identifier > _parentNode.Identifier)
+            if (request.Identifier > _parentNode.Identifier)
             {
                 _leaderIdentifier = request.Identifier;
                 return new LeaderNotificationResponse
@@ -279,7 +279,7 @@ namespace Distributed.Cross.Common.Module
                     VehicleDetail = Data.Clone()
                 };
             }
-            
+
             return new LeaderNotificationResponse
             {
                 Acknowledge = false,
@@ -300,7 +300,7 @@ namespace Distributed.Cross.Common.Module
 
             var self = _parentNode.ActorsMap[_leaderIdentifier];
             self.Tell(new RoundEndNotification());
-          
+
         }
 
         public void EndRound(RoundEndNotification endRoundNotification)
@@ -324,11 +324,17 @@ namespace Distributed.Cross.Common.Module
 
         }
 
-        public void BrokenInitialization(int identifier)
+        public void AddBrokenNode(int identifier)
         {
-            BrokenNodes.Clear();
-            BrokenNodes.Add(identifier);
+            if (!BrokenNodes.Contains(identifier))
+                BrokenNodes.Add(identifier);
         }
+
+        
+
+        public void RemoveBrokeNode(int identifier)
+        => BrokenNodes.Remove(identifier);
+        
 
         public BrokenVehicleResponse BrokenRequest(BrokenVehicleRequest request)
         => new BrokenVehicleResponse
