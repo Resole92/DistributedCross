@@ -81,6 +81,8 @@ namespace Distributed.Cross.Common.Algorithm
         {
             var collisions = LayerCollisionCalculation(layer);
 
+            
+
             while (collisions.Any())
             {
                
@@ -114,6 +116,8 @@ namespace Distributed.Cross.Common.Algorithm
             collisions
                 .Where(collision => collision.NotTrajectoryAvailable).ToList()
                 .ForEach(vehicle => _collisionResults.Add(vehicle.VehicleIdentifier));
+
+
         }
 
         private List<CollisionVehicles> LayerCollisionCalculation(CollisionLayer layer)

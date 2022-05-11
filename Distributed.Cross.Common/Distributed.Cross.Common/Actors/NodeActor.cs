@@ -258,7 +258,10 @@ namespace Distributed.Cross.Common.Actors
                 Sender.Tell(response, Self);
             });
 
-            Receive<VehicleBrokenRemoveCommand>(message => RemoveVehicle(new VehicleRemoveCommand()));
+            Receive<VehicleBrokenRemoveCommand>(message => RemoveVehicle(new VehicleRemoveCommand
+            {
+                BrokenNode = message.Identifier
+            })); 
         }
 
         #endregion 
@@ -311,6 +314,8 @@ namespace Distributed.Cross.Common.Actors
                 _logger.LogInformation($"A vehicle that input from {vehicle.InputLane} lane and output to {vehicle.OutputLane} is broken on {message.Vehicle.BrokenNode} node");
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
+
+                Vehicle.BrokenInitialization(message.Vehicle.BrokenNode.Value);
 
                 Become(BrokenBehaviour);
             });
@@ -428,7 +433,9 @@ namespace Distributed.Cross.Common.Actors
             var exitMessage = new VehicleExitNotification
             {
                 InputLane = startLane,
-                Identifier = Identifier
+                Identifier = Identifier,
+                BrokenNode = message.BrokenNode
+              
             };
             SendBroadcastMessage(exitMessage);
 

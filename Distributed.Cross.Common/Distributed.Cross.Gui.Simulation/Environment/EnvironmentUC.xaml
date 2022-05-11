@@ -228,17 +228,17 @@
             </PointAnimationUsingPath>
         </Storyboard>
 
-    </UserControl.Resources>  
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Viewbox Grid.Column="0" MaxHeight="700">
-        <Canvas HorizontalAlignment="Left" Width="200" Height="200" >
+            <Canvas HorizontalAlignment="Left" Width="200" Height="200" >
 
-            <!-- This Path is only to show the path that the animated object will follow. -->
-            <!--<Path VerticalAlignment="Top" Margin="15,15,15,15" 
+                <!-- This Path is only to show the path that the animated object will follow. -->
+                <!--<Path VerticalAlignment="Top" Margin="15,15,15,15" 
         Data="M 10,100 C 35,0 135,0 160,100 180,190 285,200 310,100"
         Stroke="Black" StrokeThickness="2"
         Stretch="None" />-->
@@ -356,10 +356,10 @@
         Stretch="None" />
                 <Label ></Label>-->
                 <StackPanel>
-                <TextBlock FontSize="6" >
+                    <TextBlock FontSize="6" >
                     <Run Text="Input lane"></Run>
                     <Run Text="{Binding InputVehicles[0].InputLane}"></Run>
-                </TextBlock>
+                    </TextBlock>
                     <TextBlock FontSize="6" >
                     <Run Text="Output lane"></Run>
                     <Run Text="{Binding InputVehicles[0].OutputLane}"></Run>
@@ -410,7 +410,7 @@
                                 <DataTrigger Value="{x:Null}" Binding="{Binding OutputVehicles[0]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
-                                
+
                             </Style.Triggers>
                         </Style>
                     </Path.Style>
@@ -422,7 +422,7 @@
                             Center="70,40" RadiusX="10" RadiusY="10" >
                         </EllipseGeometry>
                     </Path.Data>
-                    
+
                 </Path>
 
                 <Label  Foreground="Orange" Margin="170,55,0,0">2</Label>
@@ -551,15 +551,15 @@
                             </Style.Triggers>
                         </Style>
                     </Path.Style>
-                <Path.Data>
+                    <Path.Data>
 
-                    <!-- Describes an ellipse. -->
-                    <EllipseGeometry x:Name="Vehicle3"
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry x:Name="Vehicle3"
             Center="120,150" RadiusX="10" RadiusY="10" >
-                    </EllipseGeometry>
-                </Path.Data>
-            </Path>
-            
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
 
 
                 <Label Foreground="Red" Margin="0,105,0,0">4</Label>
@@ -628,6 +628,84 @@
                     </Path.Data>
                 </Path>
 
+                
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[0]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="70,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[1]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="95,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[2]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="120,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[3]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="70,95" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
                 <Path Fill="Gray" Panel.ZIndex="90" >
                     <Path.Style>
                         <Style TargetType="Path">
@@ -642,7 +720,83 @@
                     <Path.Data>
                         <!-- Describes an ellipse. -->
                         <EllipseGeometry 
-            Center="90.5,90.5" RadiusX="10" RadiusY="10" >
+            Center="95,95" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[5]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="120,95" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[6]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="70,120" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[7]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="95,120" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Fill="Gray" Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[8]}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="120,120" RadiusX="10" RadiusY="10" >
                         </EllipseGeometry>
                     </Path.Data>
                 </Path>
@@ -652,8 +806,8 @@
 
 
                 <Canvas.Style>
-                <Style TargetType="Canvas">
-                    <Style.Triggers>
+                    <Style TargetType="Canvas">
+                        <Style.Triggers>
 
 
                             <DataTrigger Value="5" Binding="{Binding Vehicle1Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -730,40 +884,40 @@
 
 
                             <DataTrigger Value="5" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin35" Storyboard="{StaticResource From3To5Storyboard}"/>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin35"/>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                        
-                        <DataTrigger Value="6" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin36" Storyboard="{StaticResource From3To6Storyboard}" />
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin36"/>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                        
-                        <DataTrigger Value="7" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin37" Storyboard="{StaticResource From3To7Storyboard}" />
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin37"/>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                        
-                        <DataTrigger Value="8" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard  x:Name="Begin38" Storyboard="{StaticResource From3To8Storyboard}" />
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <RemoveStoryboard BeginStoryboardName="Begin38"/>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin35" Storyboard="{StaticResource From3To5Storyboard}"/>
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin35"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="6" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin36" Storyboard="{StaticResource From3To6Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin36"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="7" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin37" Storyboard="{StaticResource From3To7Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin37"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+
+                            <DataTrigger Value="8" Binding="{Binding Vehicle3Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard  x:Name="Begin38" Storyboard="{StaticResource From3To8Storyboard}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <RemoveStoryboard BeginStoryboardName="Begin38"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
 
 
                             <DataTrigger Value="5" Binding="{Binding Vehicle4Destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -801,10 +955,10 @@
                                     <RemoveStoryboard BeginStoryboardName="Begin48"/>
                                 </DataTrigger.ExitActions>
                             </DataTrigger>
-                        </Style.Triggers> 
-                </Style>
-            </Canvas.Style>
-        </Canvas>
+                        </Style.Triggers>
+                    </Style>
+                </Canvas.Style>
+            </Canvas>
 
         </Viewbox>
 
@@ -823,9 +977,9 @@
                                     Height="30"
                                     Width="100"
                                     Content="Create!" 
-                                    Command="{Binding StartEnvironmentCommand}">            
+                                    Command="{Binding StartEnvironmentCommand}">
                                 </Button>
-                                
+
 
                                 <Button 
                                     HorizontalAlignment="Left"
@@ -842,9 +996,16 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Button Margin="10" Height="30" Width="150" Content="Add broken vehicle!" Command="{Binding AddBrokenVehicle}"></Button>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <Button  Margin="10" Height="30" Width="150" Content="Add broken vehicle!" Command="{Binding AddBrokenVehicleCommand}"/>
+                                <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" Height="30" MinWidth="100" Text="{Binding SelectedBrokenVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1"  Orientation="Horizontal">
+                                <Button HorizontalAlignment="Left" Margin="10" Height="30" Width="150" Content="Remove broken vehicle!" Command="{Binding RemoveBrokenVehicleCommand}"></Button>
+                                <TextBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10" Height="30" MinWidth="100" Text="{Binding SelectedRemoveBrokenVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                            </StackPanel>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Queue">
@@ -854,8 +1015,8 @@
                                 <RowDefinition Height="Auto"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
-                            
-                            
+
+
                             <TextBlock Margin="10" HorizontalAlignment="Center">
                                 <Run Text="Round number:"></Run>
                                 <Run Text="{Binding ActualRound}"></Run>
@@ -874,10 +1035,10 @@
                                 </Button>
                                 <TextBox Margin="5" Height="25" VerticalContentAlignment="Center" MinWidth="100" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding Path=NumberRandomVehicle, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                 <Label Margin="0 10 0 10" >Number of vehicle</Label>
-                                
+
 
                             </StackPanel>
-                            
+
                             <ListView Grid.Row="2"  ItemsSource="{Binding Queues}"   VerticalContentAlignment="Top">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -924,12 +1085,12 @@
                                 </ListView.ItemContainerStyle>
                             </ListView>
                         </Grid>
-                        
-                       
+
+
                     </TabItem>
                 </TabControl>
             </TabItem>
-           
+
 
             <!--<TabItem Header="Control lane check">
 
@@ -1074,7 +1235,7 @@
                 </Grid>
             </TabItem>-->
         </TabControl>
-        
+
 
     </Grid>
 </UserControl>

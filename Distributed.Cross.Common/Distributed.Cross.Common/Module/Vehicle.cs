@@ -25,7 +25,7 @@ namespace Distributed.Cross.Common.Module
         public VehicleDto Data { get; private set; }
         private NodeActor _parentNode;
 
-        private List<int> _brokenNodes = new List<int>();
+        public List<int> BrokenNodes { get; private set; } = new List<int>();
 
 
 
@@ -324,16 +324,16 @@ namespace Distributed.Cross.Common.Module
 
         }
 
-        public void BrokenInitialization()
+        public void BrokenInitialization(int identifier)
         {
-            _brokenNodes.Clear();
-            _brokenNodes.Add(_parentNode.Identifier);
+            BrokenNodes.Clear();
+            BrokenNodes.Add(identifier);
         }
 
         public BrokenVehicleResponse BrokenRequest(BrokenVehicleRequest request)
         => new BrokenVehicleResponse
         {
-            BrokenNodes = _brokenNodes.ToList()
+            BrokenNodes = BrokenNodes.ToList()
         };
 
 

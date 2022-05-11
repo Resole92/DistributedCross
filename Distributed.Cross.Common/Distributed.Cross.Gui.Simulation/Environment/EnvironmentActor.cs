@@ -58,7 +58,11 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleExitNotification>(message =>
             {
-                if (message.InputLane != message.Identifier)
+                if(message.BrokenNode.HasValue)
+                {
+                    EnvironmentViewModel.Instance.CrossVehicles[message.BrokenNode.Value - 9] = null;
+                }
+                else if (message.InputLane != message.Identifier)
                 {
                     ExitVehicleNotification(message.InputLane, message.Identifier);
                     _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross");
@@ -79,8 +83,6 @@ namespace Distributed.Cross.Common.Actors
                                 OutputLane = newVehicle.OutputLane,
                                 Speed = newVehicle.Speed
                             });
-
-
 
                             EnvironmentViewModel.Instance.RemoveLaneItem(newVehicle);
                             Task.Run(async () =>
@@ -171,6 +173,7 @@ namespace Distributed.Cross.Common.Actors
                     EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 9] = new VehicleGui(message.Vehicle);
                 });
             });
+
         }
 
         private bool AddNewVehicle(VehicleDto vehicle)
@@ -186,6 +189,7 @@ namespace Distributed.Cross.Common.Actors
         private void ExitVehicleNotification(int startLane, int exitLane)
         {
             EnvironmentViewModel.Instance.OutputVehicles[startLane - 1] = null;
+          
         }
 
         public static Props Props(Dictionary<int, IActorRef> actorsMap)

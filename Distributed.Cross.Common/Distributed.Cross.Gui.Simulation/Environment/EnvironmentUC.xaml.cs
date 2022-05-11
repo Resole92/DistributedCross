@@ -212,7 +212,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
-        private int _numberRandomVehicle = 1;
+        private int _numberRandomVehicle = 20;
         public int NumberRandomVehicle
         {
             get => _numberRandomVehicle;
@@ -366,17 +366,46 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
-        public RelayCommand AddBrokenVehicle =>
+        private int _selectedBrokenVehicle = 9;
+        public int SelectedBrokenVehicle
+        {
+            get => _selectedBrokenVehicle;
+            set
+            {
+                _selectedBrokenVehicle = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public RelayCommand AddBrokenVehicleCommand =>
             new RelayCommand(_ =>
             {
                 var environemt = _actors[Const.EnvironmentIdentifier];
                 environemt.Tell(new EnqueueNewVehicle(new Common.Data.VehicleDto
                 {
-                    BrokenNode = 13,
+                    BrokenNode = SelectedBrokenVehicle,
                     OutputLane = 8,
                     InputLane = 1,
                     Speed = 3.5,
                 }));
+            });
+
+        private int _selectedRemoveBrokenVehicle = 9;
+        public int SelectedRemoveBrokenVehicle
+        {
+            get => _selectedRemoveBrokenVehicle;
+            set
+            {
+                _selectedRemoveBrokenVehicle = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public RelayCommand RemoveBrokenVehicleCommand =>
+            new RelayCommand(_ =>
+            {
+                var brokenNode = _actors[Const.BrokenIdentifier];
+                brokenNode.Tell(new VehicleBrokenRemoveCommand(SelectedRemoveBrokenVehicle));
             });
 
         public RelayCommand AddRandomVehicleCommand =>
