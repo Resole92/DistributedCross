@@ -95,8 +95,8 @@ namespace Distributed.Cross.Common.Actors
                         }
                         else
                         {
-
-                            EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null;
+                            Application.Current.Dispatcher.Invoke(() =>
+                                EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null);
                         }
                     }
 
@@ -143,10 +143,11 @@ namespace Distributed.Cross.Common.Actors
 
 
                 var isAdded = AddNewVehicle(message.Vehicle);
+                var newVehicle = new VehicleGui(message.Vehicle);
 
                 if (!isAdded)
                 {
-                    var newVehicle = new VehicleGui(message.Vehicle);
+                   
 
                     if (_dictionaryQueue.ContainsKey(newVehicle.InputLane))
                     {
@@ -160,8 +161,12 @@ namespace Distributed.Cross.Common.Actors
                     }
 
                     EnvironmentViewModel.Instance.AddNewLaneItem(newVehicle.InputLane, newVehicle);
-                    EnvironmentViewModel.Instance.InputVehicles[newVehicle.InputLane - 1] = newVehicle;
+                    
 
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(() => EnvironmentViewModel.Instance.InputVehicles[newVehicle.InputLane - 1] = newVehicle);
                 }
             });
 
@@ -171,6 +176,7 @@ namespace Distributed.Cross.Common.Actors
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 9] = new VehicleGui(message.Vehicle);
+                    EnvironmentViewModel.Instance.InputVehicles[message.Vehicle.InputLane - 1] = null;
                 });
             });
 
