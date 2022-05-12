@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Distributed.Cross.Common.Actors
 {
-    public class NodeActor : ReceiveActor, IWithUnboundedStash
+    public partial class NodeActor : ReceiveActor, IWithUnboundedStash
     {
 
         public Dictionary<int, IActorRef> ActorsMap { get; private set; }
@@ -248,40 +248,6 @@ namespace Distributed.Cross.Common.Actors
 
         #endregion
 
-        #region Broken behaviour
-
-        public void BrokenBehaviour()
-        {
-            Receive<BrokenVehicleRequest>(message =>
-            {
-                var response = Vehicle.BrokenRequest(message);
-                Sender.Tell(response, Self);
-            });
-
-            Receive<VehicleBrokenRemoveCommand>(message =>
-            {
-                Vehicle.RemoveBrokeNode(message.Identifier);
-                SendBroadcastMessage(new VehicleExitNotification
-                {
-                    BrokenNode = message.Identifier
-                });
-
-                if (!Vehicle.BrokenNodes.Any())
-                {
-                    Become(IdleBehaviour);
-                }
-                
-            });
-
-
-            Receive<VehicleBrokenCommand>(message =>
-            {
-                SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
-                Vehicle.AddBrokenNode(message.Vehicle.BrokenNode.Value);
-            });
-        }
-
-        #endregion 
 
         #region Idle behaviour
 
@@ -327,13 +293,10 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleBrokenCommand>(message =>
             {
-                var vehicle = message.Vehicle;
-                _logger.LogInformation($"A vehicle that input from {vehicle.InputLane} lane and output to {vehicle.OutputLane} is broken on {message.Vehicle.BrokenNode} node");
-                Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
-                SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
-
-                Vehicle.AddBrokenNode(message.Vehicle.BrokenNode.Value);
-
+                //var vehicle = message.Vehicle;
+                Self.Tell(message);
+                //SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
+                //AddBrokenNode(message.Vehicle);
                 Become(BrokenBehaviour);
             });
 
