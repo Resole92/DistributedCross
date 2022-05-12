@@ -107,7 +107,15 @@ namespace Distributed.Cross.Common.Actors
             {
                 Application.Current.Dispatcher.Invoke(() =>
                     {
+                       
+
                         var vehicle = new VehicleGui(message.Vehicle);
+
+                        foreach(var croosNode in message.CrossingNodes)
+                        {
+                            EnvironmentViewModel.Instance.TechNodes[croosNode - 1] = message.Vehicle.InputLane;
+                        }
+
                         EnvironmentViewModel.Instance.OutputVehicles[message.Vehicle.InputLane - 1] = vehicle;
 
                         if (vehicle.InputLane == 1)
@@ -195,6 +203,13 @@ namespace Distributed.Cross.Common.Actors
         private void ExitVehicleNotification(int startLane, int exitLane)
         {
             EnvironmentViewModel.Instance.OutputVehicles[startLane - 1] = null;
+            for(var i = 0; i < EnvironmentViewModel.Instance.TechNodes.Count; i++)
+            {
+                if(EnvironmentViewModel.Instance.TechNodes[i] == startLane)
+                {
+                    EnvironmentViewModel.Instance.TechNodes[i] = 0;
+                }
+            }
           
         }
 

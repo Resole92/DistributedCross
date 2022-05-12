@@ -804,6 +804,293 @@
 
 
 
+                <!--#region Tech grid-->
+                <Grid>
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[7]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[7]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[7]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[7]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="45,70" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path   Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[8]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[8]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[8]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[8]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="70,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path  Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[9]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[9]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[9]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[9]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="95,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path   Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[10]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[10]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[10]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[10]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="120,70" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path  Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[11]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[11]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[11]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[11]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="70,95" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path  Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[12]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[12]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[12]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[12]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="95,95" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path   Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[13]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[13]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[13]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[13]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="120,95" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[14]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[14]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[14]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[14]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="70,120" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path  Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[15]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[15]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[15]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[15]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry 
+            Center="95,120" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Path  StrokeThickness="1"  Panel.ZIndex="90" >
+                    <Path.Style>
+                        <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[16]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[16]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[16]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[16]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <!-- Describes an ellipse. -->
+                        <EllipseGeometry  
+            Center="120,120" RadiusX="10" RadiusY="10" >
+                        </EllipseGeometry>
+                    </Path.Data>
+                </Path>
+                </Grid>
+
+                <!--#endregion-->
+
+
 
                 <Canvas.Style>
                     <Style TargetType="Canvas">
@@ -1092,148 +1379,6 @@
             </TabItem>
 
 
-            <!--<TabItem Header="Control lane check">
-
-                <Grid>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0">
-
-
-                        <Button 
-                x:Name="DestinstionLane4Button"
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 1 to 5" 
-            Command="{Binding Destination1Lane5Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 1 to 6" 
-            Command="{Binding Destination1Lane6Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 1 to 7" 
-            Command="{Binding Destination1Lane7Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 1 to 8" 
-            Command="{Binding Destination1Lane8Command}">
-                        </Button>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1">
-
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 2 to 5" 
-            Command="{Binding Destination2Lane5Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 2 to 6" 
-            Command="{Binding Destination2Lane6Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 2 to 7" 
-            Command="{Binding Destination2Lane7Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 2 to 8" 
-            Command="{Binding Destination2Lane8Command}">
-                        </Button>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="2">
-
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 3 to 5" 
-            Command="{Binding Destination3Lane5Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 3 to 6" 
-            Command="{Binding Destination3Lane6Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 3 to 7" 
-            Command="{Binding Destination3Lane7Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 3 to 8" 
-            Command="{Binding Destination3Lane8Command}">
-                        </Button>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="3">
-
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 4 to 5" 
-            Command="{Binding Destination4Lane5Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 4 to 6" 
-            Command="{Binding Destination4Lane6Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 4 to 7" 
-            Command="{Binding Destination4Lane7Command}">
-                        </Button>
-                        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Destination 4 to 8" 
-            Command="{Binding Destination4Lane8Command}">
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </TabItem>-->
         </TabControl>
 
 

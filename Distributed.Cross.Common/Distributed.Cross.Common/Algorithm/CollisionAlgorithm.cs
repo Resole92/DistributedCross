@@ -13,6 +13,8 @@ namespace Distributed.Cross.Common.Algorithm
         private List<int> _collisionResults { get; set; } = new List<int>();
         private TrajectoryAlgorithm _trajectoryAlgorithm;
 
+        private List<TrajectoryResult> _trajectories = new();
+
         public CollisionAlgorithm(CrossMap map)
         {
             _map = map;
@@ -61,9 +63,11 @@ namespace Distributed.Cross.Common.Algorithm
             foreach(var vehicle in layer.Vehicles.ToList())
             {
                 var vehicleTrajectory = _trajectoryAlgorithm.Calculate(vehicle);
+                _trajectories.Add(vehicleTrajectory);
                 foreach (var priorityVehicle in priorityVehicles)
                 {
                     var vehiclePriorityTrajectory = _trajectoryAlgorithm.Calculate(priorityVehicle);
+                    _trajectories.Add(vehiclePriorityTrajectory);
 
                     var collisions = vehicleTrajectory.Trajectory.Intersect(vehiclePriorityTrajectory.Trajectory);
 
@@ -127,6 +131,7 @@ namespace Distributed.Cross.Common.Algorithm
             foreach (var vehicle in layer.Vehicles)
             {
                 var trajectory = _trajectoryAlgorithm.Calculate(vehicle);
+                _trajectories.Add(trajectory);
                 trajectories.Add(trajectory);
             }
 
@@ -195,6 +200,11 @@ namespace Distributed.Cross.Common.Algorithm
             return collisionsBewtweenVehicles;
         }
 
+        public TrajectoryResult GetTrajectory(int identifier)
+        {
+            return _trajectories.First(x => x.Identifier == identifier);
+        }
+
         public bool AmIRunner(int identifier)
         => !_collisionResults.Any(x => x == identifier);
 
@@ -214,6 +224,8 @@ namespace Distributed.Cross.Common.Algorithm
         
 
     }
+
+
 
 
 }

@@ -130,6 +130,11 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             {
                 CrossVehicles.Add(null);
             }
+
+            for(var i = 0; i <17; i++)
+            {
+                TechNodes.Add(0);
+            }
         }
 
 
@@ -223,6 +228,17 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
+        private ObservableCollection<int> _techNodes = new ();
+        public ObservableCollection<int> TechNodes
+        {
+            get => _techNodes;
+            set
+            {
+                _techNodes = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private void EnvironmentInitialization()
         {
@@ -251,106 +267,6 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 var result = response.Result;
             });
 
-        //public RelayCommand Destination1Lane5Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle1Destination = 0;
-        //        Vehicle1Destination = 5;
-        //    });
-        //public RelayCommand Destination1Lane6Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle1Destination = 0;
-        //        Vehicle1Destination = 6;
-        //    });
-        //public RelayCommand Destination1Lane7Command =>
-        //     new RelayCommand(_ =>
-        //     {
-        //         Vehicle1Destination = 0;
-        //         Vehicle1Destination = 7;
-        //     });
-        //public RelayCommand Destination1Lane8Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle1Destination = 0;
-        //        Vehicle1Destination = 8;
-        //    });
-
-        //public RelayCommand Destination2Lane5Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle2Destination = 0;
-        //        Vehicle2Destination = 5;
-        //    });
-        //public RelayCommand Destination2Lane6Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle2Destination = 0;
-        //        Vehicle2Destination = 6;
-        //    });
-        //public RelayCommand Destination2Lane7Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle2Destination = 0;
-        //        Vehicle2Destination = 7;
-        //    });
-        //public RelayCommand Destination2Lane8Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle2Destination = 0;
-        //        Vehicle2Destination = 8;
-        //    });
-
-        //public RelayCommand Destination3Lane5Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle3Destination = 0;
-        //        Vehicle3Destination = 5;
-        //    });
-        //public RelayCommand Destination3Lane6Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle3Destination = 0;
-        //        Vehicle3Destination = 6;
-        //    });
-        //public RelayCommand Destination3Lane7Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle3Destination = 0;
-        //        Vehicle3Destination = 7;
-        //    });
-        //public RelayCommand Destination3Lane8Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle3Destination = 0;
-        //        Vehicle3Destination = 8;
-        //    });
-
-        //public RelayCommand Destination4Lane5Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle4Destination = 0;
-        //        Vehicle4Destination = 5;
-        //    }
-        //   );
-        //public RelayCommand Destination4Lane6Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle4Destination = 0;
-        //        Vehicle4Destination = 6;
-        //    });
-        //public RelayCommand Destination4Lane7Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle4Destination = 0;
-        //        Vehicle4Destination = 7;
-        //    });
-        //public RelayCommand Destination4Lane8Command =>
-        //    new RelayCommand(_ =>
-        //    {
-        //        Vehicle4Destination = 0;
-        //        Vehicle4Destination = 8;
-        //    });
 
         private Dictionary<int, IActorRef> _actors = new Dictionary<int, IActorRef>();
 

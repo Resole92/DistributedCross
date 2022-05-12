@@ -285,7 +285,7 @@ namespace Distributed.Cross.Common.Actors
                 }
 
                 Vehicle.StartCrossing();
-                SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle));
+                SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle, message.CrossNode));
 
                 Become(CrossingBehaviour);
             });
