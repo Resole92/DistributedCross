@@ -8,7 +8,7 @@
              DataContext="{Binding Source={x:Static local:EnvironmentViewModel.Instance}}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Storyboard x:Key="From1To5Storyboard">
 
             <!-- Animates the ellipse along the path. -->
@@ -237,6 +237,8 @@
         <Viewbox Grid.Column="0" MaxHeight="700">
             <Canvas HorizontalAlignment="Left" Width="200" Height="200" >
 
+                <Grid Visibility="{Binding Path=IsNormalModeEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+
                 <!-- This Path is only to show the path that the animated object will follow. -->
                 <!--<Path VerticalAlignment="Top" Margin="15,15,15,15" 
         Data="M 10,100 C 35,0 135,0 160,100 180,190 285,200 310,100"
@@ -379,8 +381,8 @@
                         </Style>
                     </StackPanel.Style>
                 </StackPanel>
-                <Label Foreground="Green" Margin="60,0,0,0">1</Label>
-                <Label Foreground="Black" Margin="110,20,0,0">5</Label>
+                <Label Foreground="Green" Margin="60,-5,0,0">1</Label>
+                <Label Foreground="Black" Margin="112,13,0,0">5</Label>
 
 
                 <Path Fill="Green"  Panel.ZIndex="90">
@@ -425,8 +427,8 @@
 
                 </Path>
 
-                <Label  Foreground="Orange" Margin="170,55,0,0">2</Label>
-                <Label Foreground="Black" Margin="150,105,0,0">6</Label>
+                <Label  Foreground="Orange" Margin="175,55,0,0">2</Label>
+                <Label Foreground="Black" Margin="155,105,0,0">6</Label>
 
                 <StackPanel  Margin="150,20,0,0">
                     <TextBlock FontSize="6" >
@@ -493,8 +495,8 @@
                     </Path.Data>
                 </Path>
 
-                <Label Foreground="Blue" Margin="110,160,0,0">3</Label>
-                <Label Foreground="Black" Margin="60,140,0,0">7</Label>
+                <Label Foreground="Blue" Margin="110,170,0,0">3</Label>
+                <Label Foreground="Black" Margin="60,150,0,0">7</Label>
                 <StackPanel  Margin="145,150,0,0">
                     <TextBlock FontSize="6" >
                     <Run Text="Input lane"></Run>
@@ -563,7 +565,7 @@
 
 
                 <Label Foreground="Red" Margin="0,105,0,0">4</Label>
-                <Label Foreground="Black" Margin="25,55,0,0">8</Label>
+                <Label Foreground="Black" Margin="20,55,0,0">8</Label>
 
                 <StackPanel  Margin="0,150,0,0">
                     <TextBlock FontSize="6" >
@@ -801,11 +803,95 @@
                     </Path.Data>
                 </Path>
 
-
+                </Grid>
 
 
                 <!--#region Tech grid-->
-                <Grid>
+                <Grid Visibility="{Binding Path=IsTechModeEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[4]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[4]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[4]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[4]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="120,45" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[5]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[5]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[5]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[5]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="145,120" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[6]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[6]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[6]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[6]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="70,145" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
 
                     <Path Panel.ZIndex="90" >
                         <Path.Style>
@@ -1263,8 +1349,17 @@
                                     Margin="3"
                                     Height="30"
                                     Width="100"
-                                    Content="Create!" 
-                                    Command="{Binding StartEnvironmentCommand}">
+                                    Content="Tech mode" 
+                                    Command="{Binding EnableTechModeCommand}">
+                                </Button>
+
+                                <Button  
+                                    HorizontalAlignment="Left"
+                                    Margin="3"
+                                    Height="30"
+                                    Width="100"
+                                    Content="Normal mode" 
+                                    Command="{Binding EnableNormalModeCommand}">
                                 </Button>
 
 

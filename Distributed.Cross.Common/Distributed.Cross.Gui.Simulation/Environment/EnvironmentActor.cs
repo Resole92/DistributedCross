@@ -110,8 +110,8 @@ namespace Distributed.Cross.Common.Actors
                        
 
                         var vehicle = new VehicleGui(message.Vehicle);
-
-                        foreach(var croosNode in message.CrossingNodes)
+                        EnvironmentViewModel.Instance.TechNodes[message.Vehicle.OutputLane - 1] = message.Vehicle.InputLane;
+                        foreach (var croosNode in message.CrossingNodes)
                         {
                             EnvironmentViewModel.Instance.TechNodes[croosNode - 1] = message.Vehicle.InputLane;
                         }

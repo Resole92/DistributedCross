@@ -52,6 +52,8 @@ namespace Distributed.Cross.Common.Module
 
         public ElectionResult LeaderRequestAsk(CancellationToken token)
         {
+            #region Request bully
+
             _logger.LogInformation($"A leader election algorithm is started");
 
             var totalInputLane = _map.Map.GetAllNodes().Where(x => x.Type == CrossNodeType.Input).Count();
@@ -94,6 +96,7 @@ namespace Distributed.Cross.Common.Module
                 }
             }
 
+
             if (token.IsCancellationRequested) return new ElectionResult(ElectionResultType.Cancelled);
 
             var isSomeoneCrossing = someoneBetter.Any(x => x > totalInputLane);
@@ -113,11 +116,11 @@ namespace Distributed.Cross.Common.Module
                 return new ElectionResult(ElectionResultType.Bully);
             }
 
+            #endregion
+
+            #region Request to be a leader
 
             _logger.LogInformation($"I'm LEADER! Try to notify!");
-
-
-
 
             //Ask  also about broken nodes 
 
@@ -166,6 +169,12 @@ namespace Distributed.Cross.Common.Module
                 }
             }
 
+            _logger.LogInformation($"OK I'm definitely the LEADER");
+
+            #endregion
+
+            #region Broken node
+
             var brokenNode = new List<int>();
 
             try
@@ -180,7 +189,11 @@ namespace Distributed.Cross.Common.Module
                 _logger.LogError($"No leader of broken node present \n" + ex.Message);
             }
 
-            _logger.LogInformation($"OK I'm definitely the LEADER");
+            #endregion
+
+            #region Coordination notification
+
+
             _leaderIdentifier = _parentNode.Identifier;
 
             var vehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle != null && node.Type == CrossNodeType.Input).Select(x => x.Vehicle);
@@ -200,6 +213,8 @@ namespace Distributed.Cross.Common.Module
             _parentNode.ActorsMap[Data.InputLane].Tell(coordinationDetail);
 
             return new ElectionResult(ElectionResultType.Elected);
+
+            #endregion 
 
         }
 
@@ -264,7 +279,7 @@ namespace Distributed.Cross.Common.Module
         {
             notification.AllVehicles.ForEach(_map.AddVehicle);
             _leaderIdentifier = notification.LeaderIdentifier;
-            _vehicleRunnerLeft = notification.VehiclesRunning;
+            _vehicleRunnerLeft = notification.VehiclesRunning.ToList();
             _vehicleRunner = _vehicleRunnerLeft.ToList();
         }
 

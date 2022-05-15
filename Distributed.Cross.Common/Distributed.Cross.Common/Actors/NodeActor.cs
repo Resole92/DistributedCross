@@ -248,7 +248,6 @@ namespace Distributed.Cross.Common.Actors
 
         #endregion
 
-
         #region Idle behaviour
 
         public void IdleBehaviour()

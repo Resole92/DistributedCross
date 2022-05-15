@@ -116,6 +116,33 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             => Application.Current.Dispatcher.Invoke(() => _queues.ToList().ForEach(x => x.Queue.Remove(item)));
 
 
+        private bool _isTechModeEnable = false;
+        public bool IsTechModeEnable
+        {
+            get => _isTechModeEnable;
+            set
+            {
+                _isTechModeEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isNormalModeEnable = true;
+        public bool IsNormalModeEnable
+        {
+            get => _isNormalModeEnable;
+            set
+            {
+                _isNormalModeEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public RelayCommand EnableTechModeCommand =>
+            new RelayCommand(_ => IsTechModeEnable = !IsTechModeEnable);
+        public RelayCommand EnableNormalModeCommand =>
+            new RelayCommand(_ => IsNormalModeEnable = !IsNormalModeEnable);
+
 
         EnvironmentViewModel()
         {
