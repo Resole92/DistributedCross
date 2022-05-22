@@ -23,7 +23,24 @@
             Content="Collision!"
             Command="{Binding StartCollisionAlgorithmCommand}"
             ></Button>
+            <Button
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Test trajectory!"
+            Command="{Binding TrajectoryTestCommand}"
+            ></Button>
+            <Button
+            Margin="3"
+            Height="30"
+            Width="100"
+            Content="Test collision!"
+            Command="{Binding CollisionTestCommand}"
+            ></Button>
+            
         </StackPanel>
+
+        
 
     </Grid>
 </UserControl>

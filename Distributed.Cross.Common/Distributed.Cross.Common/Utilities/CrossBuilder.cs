@@ -19,7 +19,7 @@ namespace Distributed.Cross.Common.Utilities
         }
 
 
-        public void CreateBasicInputOutput()
+        public CrossBuilder CreateBasicInputOutput()
         {
             AddInputLane(0, 0);
             AddInputLane(0, _length - 1);
@@ -30,6 +30,8 @@ namespace Distributed.Cross.Common.Utilities
             AddOutputLane(_height - 1, _length - 1);
             AddOutputLane(_height - 1, 0);
             AddOutputLane(0, 0);
+
+            return this;
         }
 
         public void AddInputLane(int row, int column)
