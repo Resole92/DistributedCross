@@ -630,14 +630,91 @@
                     </Path.Data>
                 </Path>
 
-                
 
-                <Path Fill="Gray" Panel.ZIndex="90" >
+
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[4]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="120,45" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[5]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="145,120" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[6]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="70,145" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[7]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="45,70" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+
+                    <Path Fill="Gray" Panel.ZIndex="90" >
                     <Path.Style>
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[0]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[8]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -656,7 +733,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[1]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[9]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -675,7 +752,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[2]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[10]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -694,7 +771,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[3]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[11]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -713,7 +790,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[4]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[12]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -732,7 +809,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[5]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[13]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -751,7 +828,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[6]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[14]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -770,7 +847,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[7]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[15]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -789,7 +866,7 @@
                         <Style TargetType="Path">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[8]}">
+                                <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[16]}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>

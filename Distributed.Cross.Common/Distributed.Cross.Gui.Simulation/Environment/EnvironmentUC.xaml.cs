@@ -153,7 +153,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 OutputVehicles.Add(null);
             }
 
-            for(var i = 0; i < 9; i++)
+            for(var i = 0; i < 17; i++)
             {
                 CrossVehicles.Add(null);
             }

@@ -60,7 +60,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 if(message.BrokenNode.HasValue)
                 {
-                    EnvironmentViewModel.Instance.CrossVehicles[message.BrokenNode.Value - 9] = null;
+                    EnvironmentViewModel.Instance.CrossVehicles[message.BrokenNode.Value - 1] = null;
                 }
                 else if (message.InputLane != message.Identifier)
                 {
@@ -183,7 +183,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 9] = new VehicleGui(message.Vehicle);
+                    EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 1] = new VehicleGui(message.Vehicle);
                     EnvironmentViewModel.Instance.InputVehicles[message.Vehicle.InputLane - 1] = null;
                 });
             });
