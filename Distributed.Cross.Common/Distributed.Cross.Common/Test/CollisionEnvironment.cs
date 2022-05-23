@@ -29,17 +29,19 @@ namespace Distributed.Cross.Common.Test
             var roundVehicles = new List<VehicleDto>();
             
 
-            foreach(var queue in dictionaries.Values)
-            {
-                var vehicle = queue.Dequeue();
-                crossMap.AddVehicle(vehicle);
-                roundVehicles.Add(vehicle);
-            }
-
             var roundNumber = 1;
 
             while(dictionaries.Any())
             {
+                roundVehicles.Clear();
+
+                foreach (var queue in dictionaries.Values)
+                {
+                    var vehicle = queue.Dequeue();
+                    crossMap.AddVehicle(vehicle);
+                    roundVehicles.Add(vehicle);
+                }
+
                 var collisionAlgorithm = new CollisionAlgorithm(crossMap);
                 collisionAlgorithm.Calculate();
 
@@ -48,7 +50,7 @@ namespace Distributed.Cross.Common.Test
                     Number = roundNumber
                 };
 
-                foreach (var roundVehicle in roundVehicles)
+                foreach (var roundVehicle in roundVehicles.ToList())
                 {
 
                     var vehicleId = roundVehicle.InputLane;
@@ -57,6 +59,7 @@ namespace Distributed.Cross.Common.Test
                     {
                         crossMap.RemoveVehicle(vehicleId);
                         roundDto.VehiclesRunning.Add(vehicleId);
+                       
                     }
                     else
                     {
@@ -66,15 +69,11 @@ namespace Distributed.Cross.Common.Test
                     }
                 }
 
+
                 foreach (var vehicleRun in roundDto.VehiclesRunning)
                 {
                     var queue = dictionaries[vehicleRun];
-                    if (queue.Any())
-                    {
-                        var vehicle = queue.Dequeue();
-                        crossMap.AddVehicle(vehicle);
-                    }
-                    else
+                    if (!queue.Any())
                     {
                         dictionaries.Remove(vehicleRun);
                     }
@@ -82,14 +81,15 @@ namespace Distributed.Cross.Common.Test
 
                 //Check if round is ok
 
-                var expectedRound = data.Rounds.First(round => round.Number == roundNumber);
-                if (!expectedRound.IsSameRound(roundDto)) return false;
+                var expectedRound = data.Rounds.FirstOrDefault(round => round.Number == roundNumber);
+                if(expectedRound is null ) return data.MustBeTrue == false;
+                if (!expectedRound.IsSameRound(roundDto)) return data.MustBeTrue == false;
 
                 roundNumber++;
 
             }
 
-            return true;
+            return data.MustBeTrue == true;
            
             
         }

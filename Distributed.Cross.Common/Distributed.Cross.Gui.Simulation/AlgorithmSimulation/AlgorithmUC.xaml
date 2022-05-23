@@ -10,19 +10,6 @@
     <Grid>
 
         <StackPanel>
-        <Button 
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Trajetory!" 
-            Command="{Binding StartTrajectoryAlgorithmCommand}"></Button>
-        <Button
-            Margin="3"
-            Height="30"
-            Width="100"
-            Content="Collision!"
-            Command="{Binding StartCollisionAlgorithmCommand}"
-            ></Button>
             <Button
             Margin="3"
             Height="30"

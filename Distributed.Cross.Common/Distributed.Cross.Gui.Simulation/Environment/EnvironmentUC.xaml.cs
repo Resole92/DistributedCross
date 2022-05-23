@@ -271,7 +271,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         {
             ActorSystem system = ActorSystem.Create("MySystem");
 
-            var map = AlgorithmSimulation.AlgorithmViewModel.Instance.BuildEmptyMap();
+            var map = BuildEmptyMap();
             var totalNode = map.Map.GetAllNodes().Count();
 
             var environmentActor = system.ActorOf(EnvironmentActor.Props(_actors), "Environment");
@@ -284,6 +284,17 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
             }
         }
+
+
+        public CrossMap BuildEmptyMap()
+        {
+            var builder = new CrossBuilder(3, 3);
+            builder.CreateBasicInputOutput();
+            var crossMap = builder.Build();
+            return crossMap;
+        }
+
+
 
         public RelayCommand RequestInformationVehicle =>
             new RelayCommand(_ =>
