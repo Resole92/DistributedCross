@@ -11,6 +11,7 @@ namespace Distributed.Cross.Common.Data
         public int Number { get; set; }
         public List<int> VehiclesRunning { get; set; } = new();
         public List<int> VehiclesNotRunning { get; set; } = new();
+        public List<int> VehiclesBlocked { get; set; } = new();
 
         public bool IsSameRound(RoundDto round)
         {
@@ -20,6 +21,9 @@ namespace Distributed.Cross.Common.Data
 
             if (VehiclesNotRunning.Except(round.VehiclesNotRunning).Any()) return false;
             if (round.VehiclesNotRunning.Except(VehiclesNotRunning).Any()) return false;
+
+            if (VehiclesBlocked.Except(round.VehiclesBlocked).Any()) return false;
+            if (round.VehiclesBlocked.Except(VehiclesBlocked).Any()) return false;
 
             return true;
 

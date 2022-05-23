@@ -113,7 +113,9 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
 
                 var collisionEnvironment = new CollisionEnvironment();
 
-                var tests = new List<CollisionDataTest> { CollisionTest1, CollisionTest2, CollisionTest3, CollisionTest4 };
+                var tests = new List<CollisionDataTest> { CollisionTest1, CollisionTest2, CollisionTest3, CollisionTest4, CollisionTest5, CollisionTest6 , CollisionTest7 };
+                //tests = new List<CollisionDataTest> { CollisionTest5 };
+
                 var results = tests.Select(collisionEnvironment.Test);
                 var resultsDisplayed = "Results are:" + string.Join(",", results);
                 MessageBox.Show(resultsDisplayed);
@@ -207,6 +209,76 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
                     new() { Number = 2, VehiclesNotRunning = new() { 4 }, VehiclesRunning = new() {1, 3 } },
                     new() { Number = 3, VehiclesRunning = new() { 1, 4} }
 
+                },
+                MustBeTrue = true,
+            };
+
+
+         public CollisionDataTest CollisionTest5 =>
+            new CollisionDataTest
+            {
+                Builder = BasicBuilder,
+                Vehicles = new ()
+                {
+                    new () {InputLane = 1, OutputLane = 7},
+                    new () {InputLane = 2, OutputLane = 8},
+                    new () {InputLane = 3, OutputLane = 5},
+                    new () {InputLane = 4, OutputLane = 6},
+                },
+                BrokenNodes = new()
+                {
+                    17
+                },
+                Rounds = new ()
+                {
+                    new () {Number = 1, VehiclesNotRunning = new () {2}, VehiclesRunning  = new() {1}, VehiclesBlocked = new() { 3, 4} },
+                    new () {Number = 2, VehiclesRunning = new() {2} }
+                },
+                MustBeTrue = true,
+            };
+
+         public CollisionDataTest CollisionTest6 =>
+            new CollisionDataTest
+            {
+                Builder = BasicBuilder,
+                Vehicles = new ()
+                {
+                    new () {InputLane = 1, OutputLane = 7},
+                    new () {InputLane = 2, OutputLane = 8},
+                    new () {InputLane = 3, OutputLane = 5},
+                    new () {InputLane = 4, OutputLane = 6},
+                },
+                BrokenNodes = new()
+                {
+                    16
+                },
+                Rounds = new ()
+                {
+                    new () {Number = 1, VehiclesNotRunning = new () {2, 4}, VehiclesRunning  = new() {1, 3} },
+                    new () {Number = 2, VehiclesRunning = new() {2, 4} }
+                },
+                MustBeTrue = true,
+            };
+
+        public CollisionDataTest CollisionTest7 =>
+            new CollisionDataTest
+            {
+                Builder = BasicBuilder,
+                Vehicles = new ()
+                {
+                    new () {InputLane = 1, OutputLane = 7},
+                    new () {InputLane = 2, OutputLane = 8},
+                    new () {InputLane = 3, OutputLane = 5},
+                    new () {InputLane = 4, OutputLane = 6},
+                },
+                BrokenNodes = new()
+                {
+                    6
+                },
+                Rounds = new ()
+                {
+                    new () {Number = 1, VehiclesNotRunning = new () {2}, VehiclesRunning  = new() {1, 3}, VehiclesBlocked = new() { 4} },
+                    new () {Number = 2, VehiclesRunning = new() {2} }
                 },
                 MustBeTrue = true,
             };

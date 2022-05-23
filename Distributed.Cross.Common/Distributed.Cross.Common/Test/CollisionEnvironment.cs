@@ -63,14 +63,22 @@ namespace Distributed.Cross.Common.Test
                     }
                     else
                     {
-                        roundDto.VehiclesNotRunning.Add(vehicleId);
-                        var queue = dictionaries[vehicleId];
-                        queue.Enqueue(roundVehicle);
+                        var trajectory = collisionAlgorithm.GetTrajectory(vehicleId);
+                        if(trajectory.IsTrajectoryFound)
+                        {
+                            roundDto.VehiclesNotRunning.Add(vehicleId);
+                            var queue = dictionaries[vehicleId];
+                            queue.Enqueue(roundVehicle);
+                        }
+                        else
+                        {
+                            roundDto.VehiclesBlocked.Add(vehicleId);
+                        }
                     }
                 }
 
 
-                foreach (var vehicleRun in roundDto.VehiclesRunning)
+                foreach (var vehicleRun in roundDto.VehiclesRunning.Union(roundDto.VehiclesBlocked))
                 {
                     var queue = dictionaries[vehicleRun];
                     if (!queue.Any())
