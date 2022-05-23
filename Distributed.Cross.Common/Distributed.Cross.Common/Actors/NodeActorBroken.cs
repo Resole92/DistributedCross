@@ -39,6 +39,8 @@ namespace Distributed.Cross.Common.Actors
                     BrokenNode = message.Identifier
                 });
 
+                SendBroadcastMessage(new ElectionStart());
+
                 if (!BrokenNodes.Any())
                 {
                     Become(IdleBehaviour);
