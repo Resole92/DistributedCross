@@ -256,7 +256,7 @@ namespace Distributed.Cross.Common.Module
 
                 destinationActor.Tell(new VehicleMoveCommand
                 {
-                    CrossNode = collisionAlgorithm.GetTrajectory(_parentNode.Identifier).Trajectory.ToList(),
+                    CrossNode = collisionAlgorithm.GetTrajectory(_parentNode.Identifier).Trajectory. Union(new List<int> { _parentNode.Identifier }).ToList(),
                     Vehicle = Data.Clone(),
                     LeaderIdentifier = _leaderIdentifier,
                     AllVehicles = coordinationRequest.VehiclesDetail,

@@ -306,6 +306,14 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             });
 
 
+        public RelayCommand StopSimulationCommand =>
+           new RelayCommand(_ =>
+           {
+               var actor = _actors[Const.EnvironmentIdentifier];
+               actor.Tell(new StopSimulationCommand());
+           });
+
+
         private Dictionary<int, IActorRef> _actors = new Dictionary<int, IActorRef>();
 
 
@@ -334,6 +342,12 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         public RelayCommand AddBrokenVehicleCommand =>
             new RelayCommand(_ =>
             {
+                if(SelectedBrokenVehicle < 1 || SelectedBrokenVehicle > 17)
+                {
+                    MessageBox.Show("Range accepted is 1-17. Please correct node number", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 var environemt = _actors[Const.EnvironmentIdentifier];
                 environemt.Tell(new EnqueueNewVehicle(new Common.Data.VehicleDto
                 {

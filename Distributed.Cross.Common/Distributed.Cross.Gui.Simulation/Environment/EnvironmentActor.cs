@@ -8,7 +8,9 @@ using Distributed.Cross.Gui.Simulation.Environment;
 using Distributed.Cross.Gui.Simulation.Environment.Components;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,7 +60,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleExitNotification>(message =>
             {
-                if(message.BrokenNode.HasValue)
+                if (message.BrokenNode.HasValue)
                 {
                     EnvironmentViewModel.Instance.CrossVehicles[message.BrokenNode.Value - 1] = null;
                 }
@@ -87,9 +89,10 @@ namespace Distributed.Cross.Common.Actors
                             EnvironmentViewModel.Instance.RemoveLaneItem(newVehicle);
                             Task.Run(async () =>
                             {
-                                EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null;
+                                Application.Current.Dispatcher.Invoke(() => EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null);
                                 await Task.Delay(500);
-                                EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = newVehicle;
+                                Application.Current.Dispatcher.Invoke(() => EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = newVehicle);
+
                             });
 
                         }
@@ -99,6 +102,11 @@ namespace Distributed.Cross.Common.Actors
                                 EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null);
                         }
                     }
+                    else
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                                EnvironmentViewModel.Instance.InputVehicles[message.InputLane - 1] = null);
+                    }
 
                 }
             });
@@ -107,7 +115,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 Application.Current.Dispatcher.Invoke(() =>
                     {
-                       
+
 
                         var vehicle = new VehicleGui(message.Vehicle);
                         EnvironmentViewModel.Instance.TechNodes[message.Vehicle.OutputLane - 1] = message.Vehicle.InputLane;
@@ -155,7 +163,7 @@ namespace Distributed.Cross.Common.Actors
 
                 if (!isAdded)
                 {
-                   
+
 
                     if (_dictionaryQueue.ContainsKey(newVehicle.InputLane))
                     {
@@ -169,7 +177,7 @@ namespace Distributed.Cross.Common.Actors
                     }
 
                     EnvironmentViewModel.Instance.AddNewLaneItem(newVehicle.InputLane, newVehicle);
-                    
+
 
                 }
                 else
@@ -188,6 +196,19 @@ namespace Distributed.Cross.Common.Actors
                 });
             });
 
+            Receive<StopSimulationCommand>(message =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _dictionaryQueue.Clear();
+                    foreach (var queue in EnvironmentViewModel.Instance.Queues)
+                    {
+                        queue.Queue.Clear();
+                    }
+
+                });
+            });
+
         }
 
         private bool AddNewVehicle(VehicleDto vehicle)
@@ -203,20 +224,24 @@ namespace Distributed.Cross.Common.Actors
         private void ExitVehicleNotification(int startLane, int exitLane)
         {
             EnvironmentViewModel.Instance.OutputVehicles[startLane - 1] = null;
-            for(var i = 0; i < EnvironmentViewModel.Instance.TechNodes.Count; i++)
+            for (var i = 0; i < EnvironmentViewModel.Instance.TechNodes.Count; i++)
             {
-                if(EnvironmentViewModel.Instance.TechNodes[i] == startLane)
+                if (EnvironmentViewModel.Instance.TechNodes[i] == startLane)
                 {
                     EnvironmentViewModel.Instance.TechNodes[i] = 0;
                 }
             }
-          
+
         }
 
         public static Props Props(Dictionary<int, IActorRef> actorsMap)
         {
             return Akka.Actor.Props.Create(() => new EnvironmentActor(actorsMap));
         }
+
+
+        private string SimulationPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
 
     }
 }

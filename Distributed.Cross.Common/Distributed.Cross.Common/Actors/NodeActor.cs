@@ -292,10 +292,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleBrokenCommand>(message =>
             {
-                //var vehicle = message.Vehicle;
                 Self.Tell(message);
-                //SendBroadcastMessage(new VehicleBrokenNotification(message.Vehicle));
-                //AddBrokenNode(message.Vehicle);
                 Become(BrokenBehaviour);
             });
 

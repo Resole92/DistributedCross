@@ -630,7 +630,82 @@
                     </Path.Data>
                 </Path>
 
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[0]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="70,40" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
 
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[1]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="150,70" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[2]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="120,150" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+
+                    <Path Fill="Gray" Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="{x:Null}" Binding="{Binding CrossVehicles[3]}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="40,120" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
 
                     <Path Fill="Gray" Panel.ZIndex="90" >
                         <Path.Style>
@@ -884,7 +959,121 @@
 
 
                 <!--#region Tech grid-->
+                
                 <Grid Visibility="{Binding Path=IsTechModeEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[0]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[0]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[0]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[0]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="70,40" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[1]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[1]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[1]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[1]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="150,70" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[2]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[2]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[2]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[2]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="120,150" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
+
+                    <Path Panel.ZIndex="90" >
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Stroke" Value="Black"/>
+                                <Style.Triggers>
+                                    <DataTrigger Value="1" Binding="{Binding TechNodes[3]}">
+                                        <Setter Property="Stroke" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="2" Binding="{Binding TechNodes[3]}">
+                                        <Setter Property="Stroke" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="3" Binding="{Binding TechNodes[3]}">
+                                        <Setter Property="Stroke" Value="Blue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Value="4" Binding="{Binding TechNodes[3]}">
+                                        <Setter Property="Stroke" Value="red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                        <Path.Data>
+                            <!-- Describes an ellipse. -->
+                            <EllipseGeometry 
+            Center="40,120" RadiusX="10" RadiusY="10" >
+                            </EllipseGeometry>
+                        </Path.Data>
+                    </Path>
 
                     <Path Panel.ZIndex="90" >
                         <Path.Style>
@@ -1472,6 +1661,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"></RowDefinition>
                                 <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
 
@@ -1498,7 +1688,17 @@
 
                             </StackPanel>
 
-                            <ListView Grid.Row="2"  ItemsSource="{Binding Queues}"   VerticalContentAlignment="Top">
+                            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                <Button 
+                                        Margin="3"
+                                        Height="30"
+                                        Width="100"
+                                        Content="Stop simulation" 
+                                        Command="{Binding StopSimulationCommand}">
+                                </Button>
+                            </StackPanel>
+
+                            <ListView Grid.Row="3"  ItemsSource="{Binding Queues}"   VerticalContentAlignment="Top">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" />

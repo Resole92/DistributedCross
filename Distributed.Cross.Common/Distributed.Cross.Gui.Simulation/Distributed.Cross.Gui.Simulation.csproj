@@ -116,6 +116,9 @@
     <Compile Include="Environment\EnvironmentUC.xaml.cs">
       <DependentUpon>EnvironmentUC.xaml</DependentUpon>
     </Compile>
+    <Content Include="Simulation\ReadMe.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Utilities\NotifyPropertyChanged.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Page Include="AlgorithmSimulation\AlgorithmUC.xaml">
