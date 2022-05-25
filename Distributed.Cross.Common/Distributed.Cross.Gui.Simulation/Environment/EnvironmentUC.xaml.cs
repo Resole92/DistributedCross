@@ -116,7 +116,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             => Application.Current.Dispatcher.Invoke(() => _queues.ToList().ForEach(x => x.Queue.Remove(item)));
 
 
-        private bool _isTechModeEnable = false;
+        private bool _isTechModeEnable = true;
         public bool IsTechModeEnable
         {
             get => _isTechModeEnable;

@@ -1720,8 +1720,10 @@
                                                     <ListView.ItemTemplate>
                                                         <DataTemplate>
                                                             <TextBlock>
-                                                        <Run Text="Destination lane:"></Run>
-                                                        <Run Text="{Binding OutputLane}"></Run>
+                                                                <Run Text="Destination:"></Run>
+                                                                <Run Text="{Binding OutputLane}"></Run>
+                                                                <Run Text="Broken? "></Run>
+                                                                <Run Text="{Binding BrokenNode}"></Run>
                                                             </TextBlock>
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>

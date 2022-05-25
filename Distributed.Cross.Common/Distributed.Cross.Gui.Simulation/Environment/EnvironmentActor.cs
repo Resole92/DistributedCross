@@ -20,7 +20,14 @@ namespace Distributed.Cross.Common.Actors
 {
     public class EnvironmentActor : ReceiveActor
     {
+
+        private int _numberVehicleForBroke = 5;
+        private int _numberOfVehiclesSpawned = 0;
+        private int _secondForRemoving = 15;
+
         public Dictionary<int, IActorRef> ActorsMap { get; private set; }
+        public Dictionary<int, int> BrokenVehicle { get; private set; } = new();
+
 
         private int _actualRound = 1;
 
@@ -83,7 +90,8 @@ namespace Distributed.Cross.Common.Actors
                             {
                                 InputLane = message.InputLane,
                                 OutputLane = newVehicle.OutputLane,
-                                Speed = newVehicle.Speed
+                                Speed = newVehicle.Speed,
+                                BrokenNode = newVehicle.BrokenNode,
                             });
 
                             EnvironmentViewModel.Instance.RemoveLaneItem(newVehicle);
@@ -157,6 +165,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 _logger.LogInformation($"Add new vehicle in the queue. Start lane {message.Vehicle.InputLane} - Exit lane {message.Vehicle.OutputLane}");
 
+                CheckVehicleIsToBroken(message.Vehicle);
 
                 var isAdded = AddNewVehicle(message.Vehicle);
                 var newVehicle = new VehicleGui(message.Vehicle);
@@ -193,7 +202,18 @@ namespace Distributed.Cross.Common.Actors
                 {
                     EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 1] = new VehicleGui(message.Vehicle);
                     EnvironmentViewModel.Instance.InputVehicles[message.Vehicle.InputLane - 1] = null;
+
+                  
                 });
+
+                var thread = new Thread(_ =>
+                {
+                    var removeTime = _secondForRemoving * 1000;
+                    Thread.Sleep(removeTime);
+                    var actor = ActorsMap[Const.BrokenIdentifier];
+                    actor.Tell(new VehicleBrokenRemoveCommand(message.Vehicle.BrokenNode.Value));
+                });
+                thread.Start();
             });
 
             Receive<StopSimulationCommand>(message =>
@@ -219,6 +239,36 @@ namespace Distributed.Cross.Common.Actors
             }, TimeSpan.FromSeconds(Const.MaxTimeout));
 
             return response.Result.IsAdded;
+        }
+
+        private void CheckVehicleIsToBroken(VehicleDto vehicle)
+        {
+            _numberOfVehiclesSpawned++;
+            if(_numberOfVehiclesSpawned % _numberVehicleForBroke == 0)
+            {
+               
+
+                Random randInput = new Random(Guid.NewGuid().GetHashCode());
+                var entryLane = randInput.Next(1, 101);
+                if(entryLane > 94)
+                {
+                    vehicle.BrokenNode = vehicle.InputLane;
+                    return;
+                }
+
+                var outputLane = randInput.Next(1, 101);
+                if (outputLane > 94)
+                {
+                    vehicle.BrokenNode = vehicle.OutputLane;
+                    return;
+                }
+
+                var crossLane = randInput.Next(9, 18);
+                vehicle.BrokenNode = crossLane;
+            }
+
+            
+           
         }
 
         private void ExitVehicleNotification(int startLane, int exitLane)
