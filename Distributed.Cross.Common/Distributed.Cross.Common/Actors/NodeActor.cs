@@ -237,7 +237,7 @@ namespace Distributed.Cross.Common.Actors
 
             });
 
-            Receive<VehicleRemoveCommand>(RemoveVehicle);
+            Receive<VehicleRemoveCommand>(RemoveCrossingVehicle);
             Receive<RoundEndNotification>(Vehicle.EndRound);
             Receive<VehicleExitNotification>(Vehicle.CheckEndRound);
 
@@ -276,12 +276,12 @@ namespace Distributed.Cross.Common.Actors
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Vehicle.UpdateCrossingStatus(message);
 
-                if (Vehicle.Data.BrokenNode.HasValue)
-                {
-                    _logger.LogInformation($"I'm broken at node {Vehicle.Data.BrokenNode}");
-                    Broken();
-                    return;
-                }
+                //if (Vehicle.Data.BrokenNode.HasValue)
+                //{
+                //    _logger.LogInformation($"I'm broken at node {Vehicle.Data.BrokenNode}");
+                //    Broken();
+                //    return;
+                //}
 
                 Vehicle.StartCrossing();
                 SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle, message.CrossNode));
@@ -370,11 +370,13 @@ namespace Distributed.Cross.Common.Actors
 
         #endregion
 
-        public void Broken()
+        public void CheckIfBroken()
         {
-            Self.Tell(new VehicleRemoveCommand(), Self);
-            var brokeNode = ActorsMap[Const.BrokenIdentifier];
-            brokeNode.Tell(new VehicleBrokenCommand(Vehicle.Data), Self);
+            if (Vehicle.Data.BrokenNode.HasValue)
+            {
+                var brokeNode = ActorsMap[Const.BrokenIdentifier];
+                brokeNode.Tell(new VehicleBrokenCommand(Vehicle.Data), Self);
+            }
            
         }
 
@@ -397,10 +399,14 @@ namespace Distributed.Cross.Common.Actors
             }
         }
 
+        public void RemoveCrossingVehicle(VehicleRemoveCommand message)
+        {
+            CheckIfBroken();
+            RemoveVehicle(message);
+        }
+
         public void RemoveVehicle(VehicleRemoveCommand message)
         {
-            if (Vehicle is null) return;
-
             var startLane = Vehicle.Data.InputLane;
             _logger.LogInformation($"Vehicle is removed");
             Vehicle.RemoveParentNode();

@@ -328,7 +328,7 @@ namespace Distributed.Cross.Common.Module
             {
                 _logger.LogInformation($"I'm LEADER and I left the cross! Bye bye");
 
-                self.Tell(new VehicleRemoveCommand());
+                 self.Tell(new VehicleRemoveCommand());
             }
 
             //Remove must be done before, otherwise new node can send a message of request acutal busy node before removing.
@@ -356,7 +356,7 @@ namespace Distributed.Cross.Common.Module
                 if (parentNode.Identifier != _leaderIdentifier)
                 {
                     _logger.LogInformation($"I have cross!");
-                    self.Tell(new VehicleRemoveCommand());
+                     self.Tell(new VehicleRemoveCommand());
                 }
                 else
                 {
