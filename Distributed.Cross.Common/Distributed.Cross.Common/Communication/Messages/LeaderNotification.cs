@@ -21,10 +21,12 @@ namespace Distributed.Cross.Common.Communication.Messages
     {
         public int Identifier { get; set; }
         public IReadOnlyList<VehicleDto> InvolvedVehicles { get; set; }
-        public NewLeaderNotification(int identifier, IReadOnlyList<VehicleDto> involvedVehicles)
+        public IReadOnlyList<int> BrokenNodes { get; set; }
+        public NewLeaderNotification(int identifier, IReadOnlyList<VehicleDto> involvedVehicles, IReadOnlyList<int> brokenNodes)
         {
             Identifier = identifier;
             InvolvedVehicles = involvedVehicles;
+            BrokenNodes = brokenNodes;
         }
     }
 }

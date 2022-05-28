@@ -11,12 +11,12 @@ namespace Distributed.Cross.Common.Communication.Messages
     {
         public ElectionResultType Result { get; set; }
         public IReadOnlyList<VehicleDto> InvolvedVehicles { get; set; }
-        public ElectionResult(ElectionResultType result, IReadOnlyList<VehicleDto> involvedVehicles = null)
+        public IReadOnlyList<int> BrokenNodes { get; set; }
+        public ElectionResult(ElectionResultType result, IReadOnlyList<VehicleDto> involvedVehicles = null, IReadOnlyList<int> brokenNodes = null)
         {
-            
-
             Result = result;
             InvolvedVehicles = involvedVehicles ?? new List<VehicleDto>();
+            BrokenNodes = brokenNodes ?? new List<int>();
         }
     }
 

@@ -25,7 +25,7 @@ namespace Distributed.Cross.Common.Actors
         private int _numberOfVehiclesSpawned = 0;
         private int _secondForRemoving = 15;
 
-        private List<RoundDto> _rounds { get; set; } = new();
+        private List<CrossRoundStatusDto> _rounds { get; set; } = new();
         private CrossRoundStatusDto _actualRound; 
 
         public Dictionary<int, IActorRef> ActorsMap { get; private set; }
@@ -71,10 +71,17 @@ namespace Distributed.Cross.Common.Actors
                 });
 
                 _actualRound = new CrossRoundStatusDto();
-                _actualRound.Round.Number = _actualRoundNumber;
+                _actualRound.Number = _actualRoundNumber;
+                _actualRound.LeaderVehicle = message.Identifier;
+
                 foreach(var vehicle in message.InvolvedVehicles)
                 {
                     _actualRound.Vehicles.Add(vehicle);
+                }
+
+                foreach (var brokenNode in message.BrokenNodes)
+                {
+                    _actualRound.BrokenNode.Add(brokenNode);
                 }
 
             });
@@ -285,6 +292,7 @@ namespace Distributed.Cross.Common.Actors
 
         private void ExitVehicleNotification(int startLane, int exitLane)
         {
+            _actualRound.VehiclesRunning.Add(startLane);
             EnvironmentViewModel.Instance.OutputVehicles[startLane - 1] = null;
             for (var i = 0; i < EnvironmentViewModel.Instance.TechNodes.Count; i++)
             {

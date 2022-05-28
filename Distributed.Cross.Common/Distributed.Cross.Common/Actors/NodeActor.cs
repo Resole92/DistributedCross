@@ -275,14 +275,6 @@ namespace Distributed.Cross.Common.Actors
                 _logger.LogInformation($"A new vehicle is crossing into this lane");
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Vehicle.UpdateCrossingStatus(message);
-
-                //if (Vehicle.Data.BrokenNode.HasValue)
-                //{
-                //    _logger.LogInformation($"I'm broken at node {Vehicle.Data.BrokenNode}");
-                //    Broken();
-                //    return;
-                //}
-
                 Vehicle.StartCrossing();
                 SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle, message.CrossNode));
 
@@ -353,7 +345,7 @@ namespace Distributed.Cross.Common.Actors
                     case ElectionResultType.Elected:
                         {
                             _logger.LogInformation("An election is conclude successfully. I'm elected");
-                            SendBroadcastMessage(new NewLeaderNotification(Identifier, message.InvolvedVehicles) );
+                            SendBroadcastMessage(new NewLeaderNotification(Identifier, message.InvolvedVehicles, message.BrokenNodes));
                             break;
                         }
                 }

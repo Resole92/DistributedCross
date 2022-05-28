@@ -8,10 +8,14 @@ namespace Distributed.Cross.Common.Data
 {
     public class CrossRoundStatusDto
     {
+        public int Number { get; set; }
         public List<VehicleDto> Vehicles { get; set; } = new();
         public List<int> BrokenNode { get; set; } = new();
+        public List<int> VehiclesRunning { get; set; } = new();
+        public List<int> VehiclesNotRunning { get; set; } => Vehicles.Select(x => x.InputLane).Except(VehiclesRunning);
+        public int LeaderVehicle { get; set; }
 
-        public RoundDto Round { get; set; } = new RoundDto();
+
 
     }
 
@@ -21,6 +25,7 @@ namespace Distributed.Cross.Common.Data
         public List<int> VehiclesRunning { get; set; } = new();
         public List<int> VehiclesNotRunning { get; set; } = new();
         public List<int> VehiclesBlocked { get; set; } = new();
+        public int LeaderVehicle { get; set; }
 
 
         public bool IsSameRound(RoundDto round)

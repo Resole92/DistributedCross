@@ -138,7 +138,7 @@ namespace Distributed.Cross.Common.Module
                 requestsSubmitted.Add((vehicle, requestSubmitted));
             }
 
-            var requestBrokenNodes = _parentNode.ActorsMap[0].Ask<BrokenVehicleResponse>(new BrokenVehicleRequest
+            var requestBrokenNodes = _parentNode.ActorsMap[Const.BrokenIdentifier].Ask<BrokenVehicleResponse>(new BrokenVehicleRequest
             {
                 Identifier = _parentNode.Identifier
             }, TimeSpan.FromSeconds(Const.MaxTimeout));
@@ -212,7 +212,7 @@ namespace Distributed.Cross.Common.Module
 
             _parentNode.ActorsMap[Data.InputLane].Tell(coordinationDetail);
 
-            return new ElectionResult(ElectionResultType.Elected, vehicles.Select(x => x.Clone()).ToList());
+            return new ElectionResult(ElectionResultType.Elected, vehicles.Select(x => x.Clone()).ToList(), brokenNode);
 
             #endregion 
 
@@ -315,11 +315,14 @@ namespace Distributed.Cross.Common.Module
 
             var self = _parentNode.ActorsMap[_leaderIdentifier];
             self.Tell(new RoundEndNotification());
+            
 
         }
 
         public void EndRound(RoundEndNotification endRoundNotification)
         {
+
+
 
             var self = _parentNode.ActorsMap[Data.OutputLane];
 
@@ -359,7 +362,7 @@ namespace Distributed.Cross.Common.Module
                 }
                 else
                 {
-                    CheckEndRound(new VehicleExitNotification 
+                    self.Tell(new VehicleExitNotification 
                     {
                         Identifier = _leaderIdentifier 
                     });
