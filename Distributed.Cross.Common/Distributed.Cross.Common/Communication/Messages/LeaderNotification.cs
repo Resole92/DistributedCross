@@ -20,9 +20,11 @@ namespace Distributed.Cross.Common.Communication.Messages
     public class NewLeaderNotification
     {
         public int Identifier { get; set; }
-        public NewLeaderNotification(int identifier)
+        public IReadOnlyList<VehicleDto> InvolvedVehicles { get; set; }
+        public NewLeaderNotification(int identifier, IReadOnlyList<VehicleDto> involvedVehicles)
         {
             Identifier = identifier;
+            InvolvedVehicles = involvedVehicles;
         }
     }
 }

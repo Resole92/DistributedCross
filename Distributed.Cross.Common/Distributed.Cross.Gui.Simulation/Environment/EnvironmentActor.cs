@@ -25,11 +25,14 @@ namespace Distributed.Cross.Common.Actors
         private int _numberOfVehiclesSpawned = 0;
         private int _secondForRemoving = 15;
 
+        private List<RoundDto> _rounds { get; set; } = new();
+        private CrossRoundStatusDto _actualRound; 
+
         public Dictionary<int, IActorRef> ActorsMap { get; private set; }
         public Dictionary<int, int> BrokenVehicle { get; private set; } = new();
 
 
-        private int _actualRound = 1;
+        private int _actualRoundNumber = 1;
 
         private Dictionary<int, Queue<VehicleGui>> _dictionaryQueue = new();
         private Logger _logger;
@@ -50,11 +53,14 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<ElectionStart>(message =>
             {
-                _actualRound++;
+                _actualRoundNumber++;
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    EnvironmentViewModel.Instance.ActualRound = _actualRound;
+                    EnvironmentViewModel.Instance.ActualRound = _actualRoundNumber;
                 });
+
+                
+
             });
 
             Receive<NewLeaderNotification>(message =>
@@ -63,6 +69,14 @@ namespace Distributed.Cross.Common.Actors
                 {
                     EnvironmentViewModel.Instance.LeaderIdentifier = message.Identifier;
                 });
+
+                _actualRound = new CrossRoundStatusDto();
+                _actualRound.Round.Number = _actualRoundNumber;
+                foreach(var vehicle in message.InvolvedVehicles)
+                {
+                    _actualRound.Vehicles.Add(vehicle);
+                }
+
             });
 
             Receive<VehicleExitNotification>(message =>
@@ -201,9 +215,7 @@ namespace Distributed.Cross.Common.Actors
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 1] = new VehicleGui(message.Vehicle);
-                    EnvironmentViewModel.Instance.InputVehicles[message.Vehicle.InputLane - 1] = null;
-
-                  
+                    //EnvironmentViewModel.Instance.InputVehicles[message.Vehicle.InputLane - 1] = null;
                 });
 
                 var thread = new Thread(_ =>
@@ -288,10 +300,5 @@ namespace Distributed.Cross.Common.Actors
         {
             return Akka.Actor.Props.Create(() => new EnvironmentActor(actorsMap));
         }
-
-
-        private string SimulationPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-
     }
 }

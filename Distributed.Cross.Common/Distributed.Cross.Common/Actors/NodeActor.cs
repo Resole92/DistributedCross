@@ -353,7 +353,7 @@ namespace Distributed.Cross.Common.Actors
                     case ElectionResultType.Elected:
                         {
                             _logger.LogInformation("An election is conclude successfully. I'm elected");
-                            SendBroadcastMessage(new NewLeaderNotification(Identifier));
+                            SendBroadcastMessage(new NewLeaderNotification(Identifier, message.InvolvedVehicles) );
                             break;
                         }
                 }
@@ -401,6 +401,7 @@ namespace Distributed.Cross.Common.Actors
 
         public void RemoveCrossingVehicle(VehicleRemoveCommand message)
         {
+
             CheckIfBroken();
             RemoveVehicle(message);
         }

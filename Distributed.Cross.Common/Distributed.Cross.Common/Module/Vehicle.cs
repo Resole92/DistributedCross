@@ -212,7 +212,7 @@ namespace Distributed.Cross.Common.Module
 
             _parentNode.ActorsMap[Data.InputLane].Tell(coordinationDetail);
 
-            return new ElectionResult(ElectionResultType.Elected);
+            return new ElectionResult(ElectionResultType.Elected, vehicles.Select(x => x.Clone()).ToList());
 
             #endregion 
 
@@ -352,10 +352,9 @@ namespace Distributed.Cross.Common.Module
                 var self = parentNode.ActorsMap[Data.OutputLane];
 
                 var leaderActor = parentNode.ActorsMap[_leaderIdentifier];
-               
+                _logger.LogInformation($"I have cross!");
                 if (parentNode.Identifier != _leaderIdentifier)
                 {
-                    _logger.LogInformation($"I have cross!");
                      self.Tell(new VehicleRemoveCommand());
                 }
                 else

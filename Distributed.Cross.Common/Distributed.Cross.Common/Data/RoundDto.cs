@@ -6,12 +6,22 @@ using System.Text;
 
 namespace Distributed.Cross.Common.Data
 {
+    public class CrossRoundStatusDto
+    {
+        public List<VehicleDto> Vehicles { get; set; } = new();
+        public List<int> BrokenNode { get; set; } = new();
+
+        public RoundDto Round { get; set; } = new RoundDto();
+
+    }
+
     public class RoundDto
     {
         public int Number { get; set; }
         public List<int> VehiclesRunning { get; set; } = new();
         public List<int> VehiclesNotRunning { get; set; } = new();
         public List<int> VehiclesBlocked { get; set; } = new();
+
 
         public bool IsSameRound(RoundDto round)
         {
