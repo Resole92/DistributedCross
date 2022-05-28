@@ -12,7 +12,7 @@ namespace Distributed.Cross.Common.Data
         public List<VehicleDto> Vehicles { get; set; } = new();
         public List<int> BrokenNode { get; set; } = new();
         public List<int> VehiclesRunning { get; set; } = new();
-        public List<int> VehiclesNotRunning { get; set; } => Vehicles.Select(x => x.InputLane).Except(VehiclesRunning);
+        public List<int> VehiclesNotRunning => Vehicles.Select(x => x.InputLane).Except(VehiclesRunning).ToList();
         public int LeaderVehicle { get; set; }
 
 

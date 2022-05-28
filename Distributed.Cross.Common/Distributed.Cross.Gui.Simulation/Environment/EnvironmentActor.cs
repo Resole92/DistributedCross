@@ -1,9 +1,11 @@
 ﻿using Akka.Actor;
+using Distributed.Cross.Common.Algorithm;
 using Distributed.Cross.Common.Communication.Environment;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Data;
 using Distributed.Cross.Common.Module;
 using Distributed.Cross.Common.Utilities;
+using Distributed.Cross.Gui.Simulation.AlgorithmSimulation;
 using Distributed.Cross.Gui.Simulation.Environment;
 using Distributed.Cross.Gui.Simulation.Environment.Components;
 using System;
@@ -53,6 +55,8 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<ElectionStart>(message =>
             {
+
+
                 _actualRoundNumber++;
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -69,6 +73,9 @@ namespace Distributed.Cross.Common.Actors
                 {
                     EnvironmentViewModel.Instance.LeaderIdentifier = message.Identifier;
                 });
+
+
+                CheckRound(_actualRound);
 
                 _actualRound = new CrossRoundStatusDto();
                 _actualRound.Number = _actualRoundNumber;
@@ -182,6 +189,11 @@ namespace Distributed.Cross.Common.Actors
 
             });
 
+            Receive<RoundEndNotification>(_ =>
+            {
+                _rounds.Add(_actualRound);
+            });
+
             Receive<EnqueueNewVehicle>(message =>
             {
                 _logger.LogInformation($"Add new vehicle in the queue. Start lane {message.Vehicle.InputLane} - Exit lane {message.Vehicle.OutputLane}");
@@ -222,7 +234,6 @@ namespace Distributed.Cross.Common.Actors
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     EnvironmentViewModel.Instance.CrossVehicles[message.Vehicle.BrokenNode.Value - 1] = new VehicleGui(message.Vehicle);
-                    //EnvironmentViewModel.Instance.InputVehicles[message.Vehicle.InputLane - 1] = null;
                 });
 
                 var thread = new Thread(_ =>
@@ -307,6 +318,46 @@ namespace Distributed.Cross.Common.Actors
         public static Props Props(Dictionary<int, IActorRef> actorsMap)
         {
             return Akka.Actor.Props.Create(() => new EnvironmentActor(actorsMap));
+        }
+
+        public void CheckRound(CrossRoundStatusDto crossData)
+        {
+            if (crossData is null) return;
+
+            var expectedLeader = crossData.Vehicles.Max(x => x.InputLane);
+            var leader = crossData.LeaderVehicle;
+
+            if(expectedLeader != leader)
+            {
+                int a = 10;
+            }
+
+            var builder = AlgorithmViewModel.Instance.BasicBuilder;
+            var crossMap = builder.Build();
+            crossData.BrokenNode.ForEach(crossMap.AddBrokenNode);
+            crossData.Vehicles.ForEach(crossMap.AddVehicle);
+           
+
+            var algorithm = new CollisionAlgorithm(crossMap);
+            algorithm.Calculate();
+            var vehiclesIdentifier = crossData.Vehicles.Select(x => x.InputLane);
+           
+            foreach(var vehicleIdentifier in vehiclesIdentifier)
+            {
+                if(algorithm.AmIRunner(vehicleIdentifier))
+                {
+                    var vehicleFound = crossData.VehiclesRunning.FirstOrDefault(x => x == vehicleIdentifier);
+                    if(vehicleFound is 0)
+                    {
+                        int fff = 10;
+                    }
+                }
+            }
+
+
+           
+
+           
         }
     }
 }

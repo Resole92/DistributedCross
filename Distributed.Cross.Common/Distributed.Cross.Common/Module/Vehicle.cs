@@ -315,14 +315,14 @@ namespace Distributed.Cross.Common.Module
 
             var self = _parentNode.ActorsMap[_leaderIdentifier];
             self.Tell(new RoundEndNotification());
-            
 
+            var environment = _parentNode.ActorsMap[Const.EnvironmentIdentifier];
+            environment.Tell(new RoundEndNotification());            
         }
 
         public void EndRound(RoundEndNotification endRoundNotification)
         {
-
-
+            
 
             var self = _parentNode.ActorsMap[Data.OutputLane];
 
