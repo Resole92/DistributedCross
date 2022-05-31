@@ -14,5 +14,8 @@ namespace Distributed.Cross.Common.Communication.Messages
         public int InputLane { get; set; }
         public int Identifier { get; set; }
         public int? BrokenNode { get; set; }
+
+        //Only for simulation
+        public int ActualRound { get; set; }
     }
 }

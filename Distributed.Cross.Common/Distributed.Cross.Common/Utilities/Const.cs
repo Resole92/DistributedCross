@@ -8,7 +8,7 @@ namespace Distributed.Cross.Common.Utilities
 {
     public class Const
     {
-        public static double MaxTimeout => 1.5;
+        public static TimeSpan MaxTimeout => TimeSpan.FromSeconds(1.5);
         public static int BrokenIdentifier => 0;
         public static int EnvironmentIdentifier => -1;
 

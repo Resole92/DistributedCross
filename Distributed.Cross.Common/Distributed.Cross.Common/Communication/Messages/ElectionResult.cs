@@ -10,13 +10,9 @@ namespace Distributed.Cross.Common.Communication.Messages
     public class ElectionResult
     {
         public ElectionResultType Result { get; set; }
-        public IReadOnlyList<VehicleDto> InvolvedVehicles { get; set; }
-        public IReadOnlyList<int> BrokenNodes { get; set; }
-        public ElectionResult(ElectionResultType result, IReadOnlyList<VehicleDto> involvedVehicles = null, IReadOnlyList<int> brokenNodes = null)
+        public ElectionResult(ElectionResultType result)
         {
             Result = result;
-            InvolvedVehicles = involvedVehicles ?? new List<VehicleDto>();
-            BrokenNodes = brokenNodes ?? new List<int>();
         }
     }
 

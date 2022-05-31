@@ -8,6 +8,7 @@ using Distributed.Cross.Common.Utilities;
 using Distributed.Cross.Gui.Simulation.AlgorithmSimulation;
 using Distributed.Cross.Gui.Simulation.Environment;
 using Distributed.Cross.Gui.Simulation.Environment.Components;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,10 +23,12 @@ namespace Distributed.Cross.Common.Actors
 {
     public class EnvironmentActor : ReceiveActor
     {
-
+        private int _licensePlateCount = 1;
         private int _numberVehicleForBroke = 5;
         private int _numberOfVehiclesSpawned = 0;
         private int _secondForRemoving = 15;
+
+
 
         private List<CrossRoundStatusDto> _rounds { get; set; } = new();
         private CrossRoundStatusDto _actualRound; 
@@ -34,15 +37,23 @@ namespace Distributed.Cross.Common.Actors
         public Dictionary<int, int> BrokenVehicle { get; private set; } = new();
 
 
-        private int _actualRoundNumber = 1;
+        private int _actualRoundNumber = 0;
 
         private Dictionary<int, Queue<VehicleGui>> _dictionaryQueue = new();
         private Logger _logger;
+
+        public static string SimulationFolderName => "Simulation";
+        public static string SimulationFolderPath => Path.Combine(Const.ApplicationPath, SimulationFolderName);
+        private int CountCheckRound = 0;
 
         public EnvironmentActor(Dictionary<int, IActorRef> actorsMap)
         {
             _logger = new Logger("Environment");
             ActorsMap = actorsMap;
+            if(!Directory.Exists(SimulationFolderPath))
+            {
+                Directory.CreateDirectory(SimulationFolderPath);
+            }
 
             Receive<PriorityNotification>(message =>
             {
@@ -53,29 +64,27 @@ namespace Distributed.Cross.Common.Actors
                 });
             });
 
-            Receive<ElectionStart>(message =>
-            {
-
-
-                _actualRoundNumber++;
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    EnvironmentViewModel.Instance.ActualRound = _actualRoundNumber;
-                });
-
-                
-
-            });
+           
 
             Receive<NewLeaderNotification>(message =>
             {
+
+                if(_rounds.Count() > 2)
+                {
+                    CheckRound(_rounds[CountCheckRound++]);
+                }
+                
+
+                _actualRoundNumber++;
+                _logger.LogInformation($"Start round number {_actualRoundNumber}");
+
+                Sender.Tell(new NewLeaderNotificationResponse { RoundNumber = _actualRoundNumber });
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     EnvironmentViewModel.Instance.LeaderIdentifier = message.Identifier;
+                    EnvironmentViewModel.Instance.ActualRound = _actualRoundNumber;
                 });
-
-
-                CheckRound(_actualRound);
 
                 _actualRound = new CrossRoundStatusDto();
                 _actualRound.Number = _actualRoundNumber;
@@ -91,6 +100,8 @@ namespace Distributed.Cross.Common.Actors
                     _actualRound.BrokenNode.Add(brokenNode);
                 }
 
+                _rounds.Add(_actualRound);
+
             });
 
             Receive<VehicleExitNotification>(message =>
@@ -101,12 +112,12 @@ namespace Distributed.Cross.Common.Actors
                 }
                 else if (message.InputLane != message.Identifier)
                 {
-                    ExitVehicleNotification(message.InputLane, message.Identifier);
-                    _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross");
+                    ExitVehicleNotification(message.InputLane, message.Identifier, message.ActualRound);
+                    _logger.LogInformation($"Vehicle with ID {message.Identifier} exit from cross on round {_actualRoundNumber} and associate to round {message.ActualRound}");
                 }
                 else
                 {
-                    _logger.LogInformation($"Vehicle with ID {message.Identifier} move in crossing zone");
+                    _logger.LogInformation($"Vehicle with ID {message.Identifier} move in crossing zone on round {_actualRoundNumber}");
                     if (_dictionaryQueue.ContainsKey(message.InputLane))
                     {
                         var queue = _dictionaryQueue[message.InputLane];
@@ -120,6 +131,7 @@ namespace Distributed.Cross.Common.Actors
                                 OutputLane = newVehicle.OutputLane,
                                 Speed = newVehicle.Speed,
                                 BrokenNode = newVehicle.BrokenNode,
+                                LicensePlate = _licensePlateCount++
                             });
 
                             EnvironmentViewModel.Instance.RemoveLaneItem(newVehicle);
@@ -191,7 +203,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<RoundEndNotification>(_ =>
             {
-                _rounds.Add(_actualRound);
+                _logger.LogInformation($"Round {_actualRoundNumber} is end");
             });
 
             Receive<EnqueueNewVehicle>(message =>
@@ -259,6 +271,12 @@ namespace Distributed.Cross.Common.Actors
                 });
             });
 
+            Receive<CreateSimulationData>(message =>
+            {
+                CreateJsonSimulation(_rounds);
+                _rounds.Clear();
+            });
+
         }
 
         private bool AddNewVehicle(VehicleDto vehicle)
@@ -266,7 +284,7 @@ namespace Distributed.Cross.Common.Actors
             var response = ActorsMap[vehicle.InputLane].Ask<VehicleOnNodeNotification>(new VehicleOnNodeCommand
             {
                 Vehicle = vehicle
-            }, TimeSpan.FromSeconds(Const.MaxTimeout));
+            }, Const.MaxTimeout);
 
             return response.Result.IsAdded;
         }
@@ -296,14 +314,13 @@ namespace Distributed.Cross.Common.Actors
                 var crossLane = randInput.Next(9, 18);
                 vehicle.BrokenNode = crossLane;
             }
-
-            
-           
         }
 
-        private void ExitVehicleNotification(int startLane, int exitLane)
+        private void ExitVehicleNotification(int startLane, int exitLane, int roundNumber)
         {
-            _actualRound.VehiclesRunning.Add(startLane);
+
+            var targetRound = _rounds.First(x => x.Number == roundNumber);
+            targetRound.VehiclesRunning.Add(startLane);
             EnvironmentViewModel.Instance.OutputVehicles[startLane - 1] = null;
             for (var i = 0; i < EnvironmentViewModel.Instance.TechNodes.Count; i++)
             {
@@ -320,16 +337,32 @@ namespace Distributed.Cross.Common.Actors
             return Akka.Actor.Props.Create(() => new EnvironmentActor(actorsMap));
         }
 
+       
+
+        public void CreateJsonSimulation(List<CrossRoundStatusDto> crossRounds)
+        {
+            var simulationFile = Path.Combine(SimulationFolderPath, $"{DateTime.Now:yyyyMMdd_hhmmss}_Simulation.json");
+
+            // serialize JSON directly to a file
+            using (StreamWriter file = File.CreateText(simulationFile))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, crossRounds);
+            }
+        }
+
         public void CheckRound(CrossRoundStatusDto crossData)
         {
             if (crossData is null) return;
+
+            _logger.LogInformation($"Check round number {crossData.Number}...");
 
             var expectedLeader = crossData.Vehicles.Max(x => x.InputLane);
             var leader = crossData.LeaderVehicle;
 
             if(expectedLeader != leader)
             {
-                int a = 10;
+                _logger.LogError($"Leader on round {crossData.Number} is {leader}, but was expected {expectedLeader}");
             }
 
             var builder = AlgorithmViewModel.Instance.BasicBuilder;
@@ -349,7 +382,15 @@ namespace Distributed.Cross.Common.Actors
                     var vehicleFound = crossData.VehiclesRunning.FirstOrDefault(x => x == vehicleIdentifier);
                     if(vehicleFound is 0)
                     {
-                        int fff = 10;
+                        _logger.LogError($"On round {crossData.Number} a vehicle with identifier {vehicleIdentifier} is not a runner but it expected that run on this round");
+                    }
+                }
+                else
+                {
+                    var vehicleFound = crossData.VehiclesRunning.FirstOrDefault(x => x == vehicleIdentifier);
+                    if (vehicleFound is not 0)
+                    {
+                        _logger.LogError($"On round {crossData.Number} a vehicle with identifier {vehicleIdentifier} is a runner but it expected that wait for next round");
                     }
                 }
             }

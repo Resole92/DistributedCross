@@ -7,7 +7,5 @@ namespace Distributed.Cross.Common.Communication.Messages
 {
     public class ElectionStart
     {
-        public List<int> LastRoundVehicleRunning { get; set; }
-        public List<VehicleDto> Vehicles { get; set; }
     }
 }

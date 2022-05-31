@@ -345,7 +345,6 @@ namespace Distributed.Cross.Common.Actors
                     case ElectionResultType.Elected:
                         {
                             _logger.LogInformation("An election is conclude successfully. I'm elected");
-                            SendBroadcastMessage(new NewLeaderNotification(Identifier, message.InvolvedVehicles, message.BrokenNodes));
                             break;
                         }
                 }
@@ -401,6 +400,7 @@ namespace Distributed.Cross.Common.Actors
         public void RemoveVehicle(VehicleRemoveCommand message)
         {
             var startLane = Vehicle.Data.InputLane;
+            var roundNumber = Vehicle.ActualRound;
             _logger.LogInformation($"Vehicle is removed");
             Vehicle.RemoveParentNode();
             Vehicle = null;
@@ -409,8 +409,9 @@ namespace Distributed.Cross.Common.Actors
             {
                 InputLane = startLane,
                 Identifier = Identifier,
-                BrokenNode = message.BrokenNode
-              
+                BrokenNode = message.BrokenNode,
+                ActualRound = roundNumber
+
             };
             SendBroadcastMessage(exitMessage);
 

@@ -305,6 +305,13 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 var result = response.Result;
             });
 
+        
+        public RelayCommand SimulationDataCommand =>
+           new RelayCommand(_ =>
+           {
+               var actor = _actors[Const.EnvironmentIdentifier];
+               actor.Tell(new CreateSimulationData());
+           });
 
         public RelayCommand StopSimulationCommand =>
            new RelayCommand(_ =>

@@ -14,6 +14,9 @@ namespace Distributed.Cross.Common.Communication.Messages
         public int LeaderIdentifier { get; set; }
         public List<int> VehiclesRunning { get; set; }
 
+        //Only for simulation
+        public int ActualRound { get; set; }
+
     }
 
     public class VehicleMoveNotification

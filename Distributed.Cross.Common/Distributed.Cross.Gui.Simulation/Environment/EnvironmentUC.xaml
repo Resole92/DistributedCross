@@ -1680,6 +1680,13 @@
                                         Margin="3"
                                         Height="30"
                                         Width="100"
+                                        Content="Simulation data" 
+                                        Command="{Binding SimulationDataCommand}">
+                        </Button>
+                        <Button 
+                                        Margin="3"
+                                        Height="30"
+                                        Width="100"
                                         Content="Stop simulation" 
                                         Command="{Binding StopSimulationCommand}">
                         </Button>

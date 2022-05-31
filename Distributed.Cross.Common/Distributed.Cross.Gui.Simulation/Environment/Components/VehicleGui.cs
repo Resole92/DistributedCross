@@ -65,12 +65,24 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
             }
         }
 
+        private int _licensePlate;
+        public int LicensePlate
+        {
+            get => _licensePlate;
+            set
+            {
+                _licensePlate = value;
+                OnPropertyChanged();
+            }
+        }
+
         public VehicleGui(VehicleDto vehicle)
         {
             InputLane = vehicle.InputLane;
             OutputLane = vehicle.OutputLane;
             Speed = vehicle.Speed;
             BrokenNode = vehicle.BrokenNode;
+            LicensePlate = vehicle.LicensePlate;
         }
     }
 }

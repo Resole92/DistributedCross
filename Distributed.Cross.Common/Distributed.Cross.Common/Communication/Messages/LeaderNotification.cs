@@ -29,4 +29,10 @@ namespace Distributed.Cross.Common.Communication.Messages
             BrokenNodes = brokenNodes;
         }
     }
+
+    public class NewLeaderNotificationResponse
+    {
+        public int RoundNumber { get; set; }
+        public NewLeaderNotificationResponse(){}
+    }
 }

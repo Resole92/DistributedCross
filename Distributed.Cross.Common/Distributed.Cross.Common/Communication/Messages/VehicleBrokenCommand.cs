@@ -12,7 +12,7 @@ namespace Distributed.Cross.Common.Communication.Messages
 
         public VehicleBrokenCommand(VehicleDto vehicle)
         {
-            Vehicle = vehicle;
+            Vehicle = vehicle.Clone();
         }
     }
 

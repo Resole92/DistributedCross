@@ -11,6 +11,7 @@ namespace Distributed.Cross.Common.Data
         public int OutputLane { get; set; }
         public double Speed { get; set; }
         public int? BrokenNode { get; set; }
+        public int LicensePlate { get; set; }
 
 
         public VehicleDto Clone()
@@ -21,11 +22,12 @@ namespace Distributed.Cross.Common.Data
             OutputLane = OutputLane,
             Speed = Speed,
             BrokenNode = BrokenNode,
+            LicensePlate = LicensePlate,
         };
 
         public override string ToString()
         {
-            return $"Vehicle start from lane {InputLane} to lane {OutputLane} with priority {Priority} and speed {Speed}";
+            return $"Vehicle {LicensePlate} start from lane {InputLane} to lane {OutputLane} with priority {Priority} and speed {Speed}";
         }
 
     }
