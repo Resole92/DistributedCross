@@ -382,12 +382,14 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 brokenNode.Tell(new VehicleBrokenRemoveCommand(SelectedRemoveBrokenVehicle));
             });
 
+
+        private bool _isAddingRandomVehicle = false;
         public RelayCommand AddRandomVehicleCommand =>
             new RelayCommand(_ =>
             {
                 Task.Run(() =>
                 {
-
+                    _isAddingRandomVehicle = true;
                     var environemt = _actors[Const.EnvironmentIdentifier];
                     Random randInput = new Random(Guid.NewGuid().GetHashCode());
 
@@ -396,6 +398,10 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
                         var entryLane = randInput.Next(1, 5);
                         var exitLane = randInput.Next(5, 9);
+                        if(i % 50 == 0)
+                        {
+                            Thread.Sleep(1000);
+                        }
 
                         environemt.Tell(new EnqueueNewVehicle(new Common.Data.VehicleDto
                         {
@@ -404,7 +410,9 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                             Speed = 3.5,
                         }));
                     }
+
+                    _isAddingRandomVehicle = false;
                 });
-            });
+            }, _ => !_isAddingRandomVehicle);
     }
 }
