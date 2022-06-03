@@ -3,6 +3,7 @@ using Distributed.Cross.Common.Algorithm;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Data;
 using Distributed.Cross.Common.Module;
+using Distributed.Cross.Common.Test;
 using Distributed.Cross.Common.Utilities;
 using Distributed.Cross.Gui.Simulation.AlgorithmSimulation;
 using Distributed.Cross.Gui.Simulation.Environment;
@@ -343,68 +344,50 @@ namespace Distributed.Cross.Common.Actors
             return Akka.Actor.Props.Create(() => new EnvironmentActor(actorsMap));
         }
 
-       
 
         public void CreateJsonSimulation(List<CrossRoundStatusDto> crossRounds)
         {
+            var simulationData = new SimulationData
+            {
+                Rounds = crossRounds
+            };
+
             var simulationFile = Path.Combine(SimulationFolderPath, $"{DateTime.Now:yyyyMMdd_hhmmss}_Simulation.json");
 
             // serialize JSON directly to a file
             using (StreamWriter file = File.CreateText(simulationFile))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, crossRounds);
+                serializer.Serialize(file, simulationData);
             }
         }
 
         public void CheckRound(CrossRoundStatusDto crossData)
         {
             if (crossData is null) return;
-
             _logger.LogInformation($"Check round number {crossData.Number}...");
-
-            var expectedLeader = crossData.Vehicles.Max(x => x.InputLane);
-            var leader = crossData.LeaderVehicle;
-
-            if(expectedLeader != leader)
+            var crossEnvironment = new CrossRoundEnvironment(AlgorithmViewModel.Instance.BasicBuilder);
+            if(!crossEnvironment.Test(crossData))
             {
-                _logger.LogError($"Leader on round {crossData.Number} is {leader}, but was expected {expectedLeader}");
-            }
-
-            var builder = AlgorithmViewModel.Instance.BasicBuilder;
-            var crossMap = builder.Build();
-            crossData.BrokenNode.ForEach(crossMap.AddBrokenNode);
-            crossData.Vehicles.ForEach(crossMap.AddVehicle);
-           
-
-            var algorithm = new CollisionAlgorithm(crossMap);
-            algorithm.Calculate();
-            var vehiclesIdentifier = crossData.Vehicles.Select(x => x.InputLane);
-           
-            foreach(var vehicleIdentifier in vehiclesIdentifier)
-            {
-                if(algorithm.AmIRunner(vehicleIdentifier))
+                if(crossEnvironment.IsWrongLeader)
+                    _logger.LogError($"Leader on round {crossData.Number} is {crossEnvironment.ActualLeader}, but was expected {crossEnvironment.ExpectedLeader}");
+                if(crossEnvironment.IsNotRunnerButMustRun)
                 {
-                    var vehicleFound = crossData.VehiclesRunning.FirstOrDefault(x => x == vehicleIdentifier);
-                    if(vehicleFound is 0)
+                    foreach(var vehicleIdentifier in crossEnvironment.VehiclesNotRunnerButMust)
                     {
                         _logger.LogError($"On round {crossData.Number} a vehicle with identifier {vehicleIdentifier} is not a runner but it expected that run on this round");
                     }
                 }
-                else
+                    
+                if(crossEnvironment.IsRunnerButMustNotRun)
                 {
-                    var vehicleFound = crossData.VehiclesRunning.FirstOrDefault(x => x == vehicleIdentifier);
-                    if (vehicleFound is not 0)
+                    foreach (var vehicleIdentifier in crossEnvironment.VehiclesRunnerButNot)
                     {
                         _logger.LogError($"On round {crossData.Number} a vehicle with identifier {vehicleIdentifier} is a runner but it expected that wait for next round");
                     }
                 }
+
             }
-
-
-           
-
-           
         }
     }
 }

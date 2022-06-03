@@ -1650,6 +1650,7 @@
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
@@ -1710,7 +1711,17 @@
                         </Button>
                     </StackPanel>
 
-                    <ListView Grid.Row="4"  ItemsSource="{Binding Queues}"   VerticalContentAlignment="Top">
+                    <StackPanel Orientation="Horizontal" Grid.Row="4">
+                        <Button 
+                                        Margin="3 10 10 10"
+                                        Height="30"
+                                        Width="150"
+                                        Content="Check simulation data" 
+                                        Command="{Binding CheckSimulationCommand}">
+                        </Button>
+                    </StackPanel>
+
+                    <ListView Grid.Row="5"  ItemsSource="{Binding Queues}"   VerticalContentAlignment="Top">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" />

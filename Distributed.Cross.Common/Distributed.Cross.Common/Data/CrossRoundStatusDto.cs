@@ -5,6 +5,12 @@ using System.Text;
 
 namespace Distributed.Cross.Common.Data
 {
+    public class SimulationData
+    {
+
+        public List<CrossRoundStatusDto> Rounds { get; set; } = new List<CrossRoundStatusDto>();
+    }
+
     public class CrossRoundStatusDto
     {
         public int Number { get; set; }

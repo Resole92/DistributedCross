@@ -24,6 +24,11 @@ using System.Threading;
 using System.Collections.ObjectModel;
 using Distributed.Cross.Gui.Simulation.Environment.Components;
 using Akka.Configuration;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using Distributed.Cross.Common.Data;
+using System.IO;
+using Distributed.Cross.Common.Test;
 
 namespace Distributed.Cross.Gui.Simulation.Environment
 {
@@ -406,6 +411,35 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 OnPropertyChanged();
             }
         }
+
+        public RelayCommand CheckSimulationCommand =>
+            new RelayCommand(_ =>
+            {
+                var dialog = new OpenFileDialog();
+                dialog.Filter = "json file (*.json)|*.json";
+                dialog.InitialDirectory = EnvironmentActor.SimulationFolderPath;
+                var response  = dialog.ShowDialog();
+                if(response.HasValue && response.Value)
+                {
+                    var serializeData = File.ReadAllText(dialog.FileName);
+                    var simulationData = JsonConvert.DeserializeObject<SimulationData>(serializeData);
+
+                    foreach(var round in simulationData.Rounds)
+                    {
+                        var crossEnvironment = new CrossRoundEnvironment(AlgorithmSimulation.AlgorithmViewModel.Instance.BasicBuilder);
+                        if(!crossEnvironment.Test(round))
+                        {
+                            MessageBox.Show($"Round {round.Number} is not correct", "Warning", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                            return;
+                        }
+                    }
+
+                    MessageBox.Show($"Simulation file passed the test", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+
+            });
+
 
         public RelayCommand ChangeSimulationSettingCommand =>
             new RelayCommand(_ =>
