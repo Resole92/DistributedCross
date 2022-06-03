@@ -1,6 +1,5 @@
 ﻿using Akka.Actor;
 using Distributed.Cross.Common.Algorithm;
-using Distributed.Cross.Common.Communication.Environment;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Data;
 using Distributed.Cross.Common.Module;

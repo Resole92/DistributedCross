@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Akka.Actor;
 using Distributed.Cross.Common.Actors;
-using Distributed.Cross.Common.Communication.Environment;
 using Distributed.Cross.Common.Communication.Messages;
 using Distributed.Cross.Common.Module;
 using Distributed.Cross.Common.Utilities;
@@ -407,111 +406,5 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     }
                 });
             });
-
-        public RelayCommand StartEnvironmentCommand
-            => new RelayCommand(_ =>
-            {
-
-                Task.Run(() =>
-                {
-
-                    Example0(_actors);
-                });
-
-            });
-
-        /// <summary>
-        /// In this example there are 3 vehicle and 3 round
-        /// </summary>
-        /// <param name="actors"></param>
-        public void Example0(Dictionary<int, IActorRef> actors)
-        {
-            var actor1 = actors[1];
-            var actor2 = actors[2];
-            var actor3 = actors[3];
-
-            actor1.Tell(new VehicleOnNodeCommand
-            {
-                Vehicle = new Common.Data.VehicleDto
-                {
-                    InputLane = 1,
-                    OutputLane = 6,
-                }
-            });
-
-
-            actor2.Tell(new VehicleOnNodeCommand
-            {
-                Vehicle = new Common.Data.VehicleDto
-                {
-                    InputLane = 2,
-                    OutputLane = 7,
-                }
-            });
-
-            actor3.Tell(new VehicleOnNodeCommand
-            {
-                Vehicle = new Common.Data.VehicleDto
-                {
-                    InputLane = 3,
-                    OutputLane = 5,
-                }
-            });
-
-        }
-
-        /// <summary>
-        /// For vehicle and 1 round
-        /// </summary>
-        public void Example1(Dictionary<int, IActorRef> actors)
-        {
-            var actor1 = actors[1];
-            var actor2 = actors[2];
-            var actor3 = actors[3];
-            var actor4 = actors[4];
-
-            actor1.Tell(new VehicleOnNodeCommand
-            {
-                Vehicle = new Common.Data.VehicleDto
-                {
-                    InputLane = 1,
-                    OutputLane = 8,
-                }
-            });
-
-            Thread.Sleep(500);
-
-            actor2.Tell(new VehicleOnNodeCommand
-            {
-                Vehicle = new Common.Data.VehicleDto
-                {
-                    InputLane = 2,
-                    OutputLane = 5,
-                }
-            });
-
-            Thread.Sleep(500);
-
-            actor3.Tell(new VehicleOnNodeCommand
-            {
-                Vehicle = new Common.Data.VehicleDto
-                {
-                    InputLane = 3,
-                    OutputLane = 6,
-                }
-            });
-
-            Thread.Sleep(3000);
-
-            actor4.Tell(new VehicleOnNodeCommand
-            {
-                Vehicle = new Common.Data.VehicleDto
-                {
-                    InputLane = 4,
-                    OutputLane = 7,
-                }
-            });
-        }
-
     }
 }

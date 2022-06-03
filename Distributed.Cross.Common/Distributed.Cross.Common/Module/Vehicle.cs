@@ -87,11 +87,7 @@ namespace Distributed.Cross.Common.Module
                 try
                 {
                     var result = request.Item2.Result;
-                    if (result.Acknowledge)
-                    {
-
-                        someoneBetter.Add(result.Identifier);
-                    }
+                    someoneBetter.Add(result.Identifier);
                 }
                 catch (Exception ex)
                 {
