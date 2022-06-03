@@ -45,6 +45,7 @@ namespace Distributed.Cross.Common.Actors
         public static string SimulationFolderPath => Path.Combine(Const.ApplicationPath, SimulationFolderName);
         private int CountCheckRound = 0;
 
+
         public EnvironmentActor(Dictionary<int, IActorRef> actorsMap)
         {
             _logger = new Logger("Environment");
@@ -274,6 +275,12 @@ namespace Distributed.Cross.Common.Actors
             {
                 CreateJsonSimulation(_rounds);
                 _rounds.Clear();
+            });
+
+            Receive<SimulationSettingCommand>(message =>
+            {
+                _secondForRemoving = message.TimeForRepair;
+                _numberVehicleForBroke = message.NumberVehicleForBroke;
             });
 
         }

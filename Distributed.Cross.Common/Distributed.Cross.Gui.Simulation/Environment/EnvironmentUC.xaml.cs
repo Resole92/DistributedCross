@@ -23,6 +23,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Collections.ObjectModel;
 using Distributed.Cross.Gui.Simulation.Environment.Components;
+using Akka.Configuration;
 
 namespace Distributed.Cross.Gui.Simulation.Environment
 {
@@ -43,7 +44,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         private static EnvironmentViewModel _instance;
         public static EnvironmentViewModel Instance => _instance ??= new EnvironmentViewModel();
 
- 
+
         private ObservableCollection<LaneQueue> _queues = new ObservableCollection<LaneQueue>();
         public ObservableCollection<LaneQueue> Queues
         {
@@ -146,18 +147,18 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         EnvironmentViewModel()
         {
             EnvironmentInitialization();
-            for(var i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 InputVehicles.Add(null);
                 OutputVehicles.Add(null);
             }
 
-            for(var i = 0; i < 17; i++)
+            for (var i = 0; i < 17; i++)
             {
                 CrossVehicles.Add(null);
             }
 
-            for(var i = 0; i <17; i++)
+            for (var i = 0; i < 17; i++)
             {
                 TechNodes.Add(0);
             }
@@ -254,7 +255,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             }
         }
 
-        private ObservableCollection<int> _techNodes = new ();
+        private ObservableCollection<int> _techNodes = new();
         public ObservableCollection<int> TechNodes
         {
             get => _techNodes;
@@ -268,12 +269,13 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
         private void EnvironmentInitialization()
         {
+
             ActorSystem system = ActorSystem.Create("MySystem");
 
             var map = BuildEmptyMap();
             var totalNode = map.Map.GetAllNodes().Count();
 
-            var environmentActor = system.ActorOf(EnvironmentActor.Props(_actors), "Environment");
+            var environmentActor = system.ActorOf(EnvironmentActor.Props(_actors).WithMailbox("priority-mailbox"), "Environment");
             _actors.Add(Const.EnvironmentIdentifier, environmentActor);
 
             for (var actorname = 0; actorname < map.Map.GetAllNodes().Count(); actorname++)
@@ -304,7 +306,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                 var result = response.Result;
             });
 
-        
+
         public RelayCommand SimulationDataCommand =>
            new RelayCommand(_ =>
            {
@@ -348,7 +350,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
         public RelayCommand AddBrokenVehicleCommand =>
             new RelayCommand(_ =>
             {
-                if(SelectedBrokenVehicle < 1 || SelectedBrokenVehicle > 17)
+                if (SelectedBrokenVehicle < 1 || SelectedBrokenVehicle > 17)
                 {
                     MessageBox.Show("Range accepted is 1-17. Please correct node number", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -383,6 +385,52 @@ namespace Distributed.Cross.Gui.Simulation.Environment
             });
 
 
+        private int _timeToRepair = 15;
+        public int TimeToRepair
+        {
+            get => _timeToRepair;
+            set
+            {
+                _timeToRepair = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _numberVehicleForBroke = 5;
+        public int NumberVehicleForBroke
+        {
+            get => _numberVehicleForBroke;
+            set
+            {
+                _numberVehicleForBroke = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public RelayCommand ChangeSimulationSettingCommand =>
+            new RelayCommand(_ =>
+            {
+                if (TimeToRepair < 10 || TimeToRepair > 50)
+                {
+                    MessageBox.Show("Time must be greater than 10 and lower whan 50", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
+                if (NumberVehicleForBroke < 5 || NumberVehicleForBroke > 10000)
+                {
+                    MessageBox.Show("Number of vehicles to spawn a broke vehicle must  be greater than 5 and lower whan 10000", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                }
+
+
+                var environmentActor = _actors[Const.EnvironmentIdentifier];
+                environmentActor.Tell(new SimulationSettingCommand
+                {
+                    TimeForRepair = TimeToRepair,
+                    NumberVehicleForBroke = NumberVehicleForBroke
+                });
+            });
+
+
         private bool _isAddingRandomVehicle = false;
         public RelayCommand AddRandomVehicleCommand =>
             new RelayCommand(_ =>
@@ -398,7 +446,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
                         var entryLane = randInput.Next(1, 5);
                         var exitLane = randInput.Next(5, 9);
-                        if(i % 50 == 0)
+                        if (i % 50 == 0)
                         {
                             Thread.Sleep(1000);
                         }

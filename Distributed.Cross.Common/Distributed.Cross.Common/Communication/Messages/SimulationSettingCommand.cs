@@ -10,5 +10,9 @@ namespace Distributed.Cross.Common.Communication.Messages
         /// After this number of vehicle spawn a random broken vehicle is inserted
         /// </summary>
         public int NumberVehicleForBroke { get; set; }
+        /// <summary>
+        /// Time in seconds 
+        /// </summary>
+        public int TimeForRepair { get; set; }
     }
 }

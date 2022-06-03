@@ -110,6 +110,7 @@
     <Compile Include="AlgorithmSimulation\AlgorithmUC.xaml.cs">
       <DependentUpon>AlgorithmUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Environment\Components\EnvironmentActorMailBox.cs" />
     <Compile Include="Environment\Components\VehicleGui.cs" />
     <Compile Include="Environment\Components\LaneQueue.cs" />
     <Compile Include="Environment\EnvironmentActor.cs" />
