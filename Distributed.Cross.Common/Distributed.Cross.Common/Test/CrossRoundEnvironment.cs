@@ -16,10 +16,10 @@ namespace Distributed.Cross.Common.Test
 
 
         public bool IsRunnerButMustNotRun { get; private set; }
-        public List<int> VehiclesRunnerButNot { get; private set; }
+        public List<int> VehiclesRunnerButNot { get; private set; } = new();
 
         public bool IsNotRunnerButMustRun { get; private set; }
-        public List<int> VehiclesNotRunnerButMust { get; private set; }
+        public List<int> VehiclesNotRunnerButMust { get; private set; } = new();
 
 
         private CrossBuilder _builder;

@@ -22,8 +22,6 @@ namespace Distributed.Cross.Common.Module
         private List<int> _vehicleRunnerLeft;
         private List<int> _vehicleRunner;
 
-        //Only for simulation
-        public int ActualRound { get; private set; }
 
         public VehicleDto Data { get; private set; }
         private NodeActor _parentNode;
@@ -91,7 +89,15 @@ namespace Distributed.Cross.Common.Module
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Failed to request bully presence to identifier {request.Item1}\n" + ex.Message);
+                    if(ex.InnerException is not null && ex.InnerException.Message.Contains("Timeout"))
+                    {
+                        _logger.LogInformation($"Identifier with id {request.Item1} is not present");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Failed to request bully presence to identifier {request.Item1}\n" + ex.Message);
+                    }
+                   
                 }
             }
 
@@ -125,7 +131,7 @@ namespace Distributed.Cross.Common.Module
 
             var requestsSubmitted = new List<(int, Task<LeaderNotificationResponse>)>();
 
-            for (int vehicle = 1; vehicle <= totalInputLane; vehicle++)
+            for (int vehicle = 1; vehicle <= totalElectionRequests; vehicle++)
             {
                 if (vehicle == _parentNode.Identifier) continue;
                 var targetActor = _parentNode.ActorsMap[vehicle];
@@ -154,8 +160,16 @@ namespace Distributed.Cross.Common.Module
                     var result = requestSubmitted.Item2.Result;
                     if (!result.Acknowledge)
                     {
-                        _logger.LogInformation($"Some leader is already present for node {result.VehicleDetail.InputLane}");
-                        return new ElectionResult(ElectionResultType.LeaderAlreadyPresent);
+                        if(requestSubmitted.Item1 > totalInputLane)
+                        {
+                            _logger.LogInformation($"Election refused because vehicle {requestSubmitted.Item1} is crossing");
+                            return new ElectionResult(ElectionResultType.Crossing);
+                        }
+                        else
+                        {
+                            _logger.LogInformation($"Some leader is already present for node {result.VehicleDetail.InputLane}");
+                            return new ElectionResult(ElectionResultType.LeaderAlreadyPresent);
+                        }
                     }
                     var data = result.VehicleDetail;
                     _map.AddVehicle(data);
@@ -164,7 +178,16 @@ namespace Distributed.Cross.Common.Module
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Failed to request vehicle details for vehicle {requestSubmitted.Item1}\n" + ex.Message);
+                    if (ex.InnerException is not null && ex.InnerException.Message.Contains("Timeout"))
+                    {
+                        _logger.LogInformation($"Identifier with id {requestSubmitted.Item1} is not crossing");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Failed to request vehicle details for vehicle {requestSubmitted.Item1}\n" + ex.Message);
+
+                    }
+
                 }
             }
 
@@ -192,9 +215,6 @@ namespace Distributed.Cross.Common.Module
 
             #region Coordination notification
 
-
-            _leaderIdentifier = _parentNode.Identifier;
-
             var vehicles = _map.Map.GetAllNodes().Where(node => node.Vehicle != null && node.Type == CrossNodeType.Input).Select(x => x.Vehicle);
 
             //Can be removed when is not in simulation
@@ -209,7 +229,8 @@ namespace Distributed.Cross.Common.Module
             {
                 VehiclesDetail = vehicles.Select(x => x.Clone()).ToList(),
                 BrokenNodes = brokenNode,
-                ActualRound = roundNumber
+                ActualRound = roundNumber,
+                LeaderIdentifier = _parentNode.Identifier
             };
 
             foreach (var vehicleThatHaveResponse in vehiclesThatHaveResponse)
@@ -234,7 +255,7 @@ namespace Distributed.Cross.Common.Module
         /// <returns></returns>
         public bool CoordinationInformationReceive(CoordinationNotification coordinationRequest)
         {
-            ActualRound = coordinationRequest.ActualRound;  //Only for simulation
+            var actualRound = coordinationRequest.ActualRound;  //Only for simulation
 
             _map.EraseMapFromVehicles();
 
@@ -255,23 +276,29 @@ namespace Distributed.Cross.Common.Module
             _vehicleRunnerLeft = allRunner;
             _vehicleRunner = _vehicleRunnerLeft.ToList();
 
-            var isLeaderRunner = collisionAlgorithm.AmIRunner(_leaderIdentifier);
-            if (isLeaderRunner) _leaderIdentifier = coordinationRequest.VehiclesDetail.First(x => x.InputLane == _leaderIdentifier).OutputLane;
+            var leaderIdentifier = coordinationRequest.LeaderIdentifier;
+
+            var isLeaderRunner = collisionAlgorithm.AmIRunner(leaderIdentifier);
+            if (isLeaderRunner)
+                leaderIdentifier = coordinationRequest.VehiclesDetail.First(x => x.InputLane == leaderIdentifier).OutputLane;
 
             if (amIrunner)
             {
                 var destinationActor = _parentNode.ActorsMap[Data.OutputLane];
                 var startActor = _parentNode.ActorsMap[Data.InputLane];
-                startActor.Tell(new VehicleRemoveCommand());
+                startActor.Tell(new VehicleRemoveCommand
+                {
+                    ActualRound = actualRound
+                }); 
 
                 destinationActor.Tell(new VehicleMoveCommand
                 {
                     CrossNode = collisionAlgorithm.GetTrajectory(_parentNode.Identifier).Trajectory. Union(new List<int> { _parentNode.Identifier }).ToList(),
                     Vehicle = Data.Clone(),
-                    LeaderIdentifier = _leaderIdentifier,
+                    LeaderIdentifier = leaderIdentifier,
                     AllVehicles = coordinationRequest.VehiclesDetail,
                     VehiclesRunning = allRunner,
-                    ActualRound = ActualRound
+                    ActualRound = actualRound
                 });
 
                 _logger.LogInformation($"Vehicle is crossing now from lane {Data.InputLane} to lane {Data.OutputLane}");
@@ -279,6 +306,7 @@ namespace Distributed.Cross.Common.Module
             }
             else
             {
+                _leaderIdentifier = leaderIdentifier;
                 _logger.LogInformation($"Vehicle NOT CROSSING from lane {Data.InputLane} to lane {Data.OutputLane}...");
                 Data.Priority++;
             }
@@ -286,10 +314,12 @@ namespace Distributed.Cross.Common.Module
             return amIrunner;
         }
 
+        private int _actualRound;
+
         public void UpdateCrossingStatus(VehicleMoveCommand notification)
         {
-           
-            ActualRound = notification.ActualRound; //Only for simulation
+
+            _actualRound = notification.ActualRound; //Only for simulation
 
             notification.AllVehicles.ForEach(_map.AddVehicle);
             _leaderIdentifier = notification.LeaderIdentifier;
@@ -301,7 +331,6 @@ namespace Distributed.Cross.Common.Module
         {
             if (request.Identifier > _parentNode.Identifier)
             {
-                _leaderIdentifier = request.Identifier;
                 return new LeaderNotificationResponse
                 {
                     Acknowledge = true,
@@ -345,7 +374,10 @@ namespace Distributed.Cross.Common.Module
             {
                 _logger.LogInformation($"I'm LEADER and I left the cross! Bye bye");
 
-                 self.Tell(new VehicleRemoveCommand());
+                self.Tell(new VehicleRemoveCommand
+                {
+                    ActualRound = _actualRound
+                }); 
             }
 
             //Remove must be done before, otherwise new node can send a message of request acutal busy node before removing.
@@ -369,7 +401,10 @@ namespace Distributed.Cross.Common.Module
                 _logger.LogInformation($"I have cross!");
                 if (parentNode.Identifier != _leaderIdentifier)
                 {
-                     self.Tell(new VehicleRemoveCommand());
+                     self.Tell(new VehicleRemoveCommand
+                     {
+                         ActualRound = _actualRound
+                     });
                 }
                 else
                 {

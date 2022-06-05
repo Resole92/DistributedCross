@@ -7,6 +7,9 @@ namespace Distributed.Cross.Common.Communication.Messages
     public class VehicleRemoveCommand
     {
         public int? BrokenNode { get; set; }
+
+        //Only for simulation
+        public int ActualRound { get; set; }
     }
 
     public class VehicleExitNotification

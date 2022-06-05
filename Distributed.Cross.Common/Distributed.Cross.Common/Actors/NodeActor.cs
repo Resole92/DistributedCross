@@ -233,7 +233,10 @@ namespace Distributed.Cross.Common.Actors
             Receive<LeaderNotificationRequest>(message =>
             {
                 _logger.LogInformation($"An new leader is refused from node because I'm in crossing behaviour");
-                Sender.Tell(new LeaderNotificationResponse());
+                Sender.Tell(new LeaderNotificationResponse
+                {
+                    Acknowledge = false
+                });
 
             });
 
@@ -272,7 +275,7 @@ namespace Distributed.Cross.Common.Actors
 
             Receive<VehicleMoveCommand>(message =>
             {
-                _logger.LogInformation($"A new vehicle is crossing into this lane");
+                _logger.LogInformation($"A new vehicle is crossing into this lane on round {message.ActualRound}");
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Vehicle.UpdateCrossingStatus(message);
                 Vehicle.StartCrossing();
@@ -400,8 +403,8 @@ namespace Distributed.Cross.Common.Actors
         public void RemoveVehicle(VehicleRemoveCommand message)
         {
             var startLane = Vehicle.Data.InputLane;
-            var roundNumber = Vehicle.ActualRound;
-            _logger.LogInformation($"Vehicle is removed");
+            var roundNumber = message.ActualRound;
+            _logger.LogInformation($"Vehicle is removed on round {message.ActualRound}");
             Vehicle.RemoveParentNode();
             Vehicle = null;
 

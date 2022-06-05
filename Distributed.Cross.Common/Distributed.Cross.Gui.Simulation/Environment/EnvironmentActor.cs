@@ -276,6 +276,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 CreateJsonSimulation(_rounds);
                 _rounds.Clear();
+                CountCheckRound = 0;
             });
 
             Receive<SimulationSettingCommand>(message =>

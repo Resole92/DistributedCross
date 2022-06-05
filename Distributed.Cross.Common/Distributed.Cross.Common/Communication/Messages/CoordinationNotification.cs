@@ -10,6 +10,7 @@ namespace Distributed.Cross.Common.Communication.Messages
     {
         public List<VehicleDto> VehiclesDetail { get; set; }
         public List<int> BrokenNodes { get; set; }
+        public int LeaderIdentifier { get; set; }
 
         //Only for simulation
         public int ActualRound { get; set; }
