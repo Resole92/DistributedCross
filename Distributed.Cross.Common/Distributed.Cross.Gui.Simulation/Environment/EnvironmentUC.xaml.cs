@@ -480,15 +480,17 @@ namespace Distributed.Cross.Gui.Simulation.Environment
 
                         var entryLane = randInput.Next(1, 5);
                         var exitLane = randInput.Next(5, 9);
+                        //var speed = randInput.Next(1, 8);
                         if (i % 50 == 0)
                         {
                             Thread.Sleep(1000);
                         }
 
-                        environemt.Tell(new EnqueueNewVehicle(new Common.Data.VehicleDto
+                        environemt.Tell(new EnqueueNewVehicle(new VehicleDto
                         {
                             OutputLane = exitLane,
                             InputLane = entryLane,
+                            //Speed = speed,
                             Speed = 3.5,
                         }));
                     }
