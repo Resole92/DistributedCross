@@ -46,9 +46,20 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
                 var trajectoryEnvironment = new TrajectoryEnvironment();
 
                 var tests = new List<TrajectoryDataTest> { TrajectoryTest1, TrajectoryTest2, TrajectoryTest3, TrajectoryTest4, TrajectoryTest5 };
+
                 var results = tests.Select(trajectoryEnvironment.Test);
-                var resultsDisplayed = "Results are:" + string.Join(",", results);
-                MessageBox.Show(resultsDisplayed);
+                var allPositive = results.All(x => x);
+
+                if (allPositive)
+                {
+                    MessageBox.Show("All test passed!","Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    var resultsDisplayed = "Results are:" + string.Join(",", results);
+                    MessageBox.Show($"Some test failed. {resultsDisplayed}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+
             });
 
 
@@ -130,13 +141,19 @@ namespace Distributed.Cross.Gui.Simulation.AlgorithmSimulation
                 var collisionEnvironment = new CollisionEnvironment();
 
                 var tests = new List<CollisionDataTest> { CollisionTest1, CollisionTest2, CollisionTest3, CollisionTest4, CollisionTest5, CollisionTest6, CollisionTest7 };
-                //tests = new List<CollisionDataTest> { CollisionTest5 };
-
+                
                 var results = tests.Select(collisionEnvironment.Test);
-                var resultsDisplayed = "Results are:" + string.Join(",", results);
-                MessageBox.Show(resultsDisplayed);
+                var allPositive = results.All(x => x);
 
-
+                if(allPositive)
+                {
+                    MessageBox.Show("All test passed!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    var resultsDisplayed = "Results are:" + string.Join(",", results);
+                    MessageBox.Show($"Some test failed. {resultsDisplayed}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning );
+                }
 
             });
 
