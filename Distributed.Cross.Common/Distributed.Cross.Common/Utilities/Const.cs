@@ -12,6 +12,8 @@ namespace Distributed.Cross.Common.Utilities
         public static int BrokenIdentifier => 0;
         public static int EnvironmentIdentifier => -1;
 
+        public static int TimeoutLogicError => 20000;
+
         public static string ApplicationPath { get; private set; } = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
     }
 }

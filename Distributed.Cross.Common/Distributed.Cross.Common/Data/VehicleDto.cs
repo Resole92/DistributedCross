@@ -11,6 +11,8 @@ namespace Distributed.Cross.Common.Data
         public int OutputLane { get; set; }
         public double Speed { get; set; }
         public int? BrokenNode { get; set; }
+        public bool IsGhostOnEndRound { get; set; }
+        public bool IsGhostOnCoordination { get; set; }
         public int LicensePlate { get; set; }
 
 
@@ -22,6 +24,8 @@ namespace Distributed.Cross.Common.Data
             OutputLane = OutputLane,
             Speed = Speed,
             BrokenNode = BrokenNode,
+            IsGhostOnEndRound = IsGhostOnEndRound,
+            IsGhostOnCoordination = IsGhostOnCoordination,
             LicensePlate = LicensePlate,
         };
 

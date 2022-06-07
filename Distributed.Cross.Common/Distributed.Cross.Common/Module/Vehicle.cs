@@ -233,6 +233,12 @@ namespace Distributed.Cross.Common.Module
                 LeaderIdentifier = _parentNode.Identifier
             };
 
+            if(Data.IsGhostOnCoordination)
+            {
+                return new ElectionResult(ElectionResultType.Ghosted); 
+            }
+
+
             foreach (var vehicleThatHaveResponse in vehiclesThatHaveResponse)
             {
                 var targetActor = _parentNode.ActorsMap[vehicleThatHaveResponse.InputLane];
@@ -253,7 +259,7 @@ namespace Distributed.Cross.Common.Module
         /// </summary>
         /// <param name="coordinationRequest"></param>
         /// <returns></returns>
-        public bool CoordinationInformationReceive(CoordinationNotification coordinationRequest)
+        public (bool IsRunner, bool IsBlocked) CoordinationInformationReceive(CoordinationNotification coordinationRequest)
         {
             var actualRound = coordinationRequest.ActualRound;  //Only for simulation
 
@@ -265,6 +271,7 @@ namespace Distributed.Cross.Common.Module
             var collisionAlgorithm = new CollisionAlgorithm(_map);
             collisionAlgorithm.Calculate();
             var amIrunner = collisionAlgorithm.AmIRunner(Data.InputLane);
+            var isBlocked = false;
 
             var allRunner = new List<int>();
 
@@ -306,12 +313,15 @@ namespace Distributed.Cross.Common.Module
             }
             else
             {
+
+                isBlocked = !collisionAlgorithm.GetTrajectory(Data.InputLane).IsTrajectoryFound;
+
                 _leaderIdentifier = leaderIdentifier;
                 _logger.LogInformation($"Vehicle NOT CROSSING from lane {Data.InputLane} to lane {Data.OutputLane}...");
                 Data.Priority++;
             }
 
-            return amIrunner;
+            return (amIrunner, isBlocked);
         }
 
         private int _actualRound;
@@ -329,6 +339,7 @@ namespace Distributed.Cross.Common.Module
 
         public LeaderNotificationResponse LeaderElected(LeaderNotificationRequest request)
         {
+
             if (request.Identifier > _parentNode.Identifier)
             {
                 return new LeaderNotificationResponse
@@ -376,7 +387,8 @@ namespace Distributed.Cross.Common.Module
 
                 self.Tell(new VehicleRemoveCommand
                 {
-                    ActualRound = _actualRound
+                    ActualRound = _actualRound,
+                    IsGhost = Data.IsGhostOnEndRound
                 }); 
             }
 
@@ -386,7 +398,7 @@ namespace Distributed.Cross.Common.Module
         }
 
 
-        public void StartCrossing()
+        public bool StartCrossing()
         {
             var parentNode = _parentNode;
 
@@ -401,10 +413,12 @@ namespace Distributed.Cross.Common.Module
                 _logger.LogInformation($"I have cross!");
                 if (parentNode.Identifier != _leaderIdentifier)
                 {
-                     self.Tell(new VehicleRemoveCommand
-                     {
-                         ActualRound = _actualRound
-                     });
+
+                    self.Tell(new VehicleRemoveCommand
+                    {
+                        ActualRound = _actualRound,
+                        IsGhost = Data.IsGhostOnEndRound
+                    });
                 }
                 else
                 {
@@ -414,6 +428,8 @@ namespace Distributed.Cross.Common.Module
                     });
                 }
             });
+
+            return parentNode.Identifier == _leaderIdentifier;
         }
 
     }

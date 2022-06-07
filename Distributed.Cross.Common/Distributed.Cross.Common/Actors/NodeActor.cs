@@ -24,6 +24,8 @@ namespace Distributed.Cross.Common.Actors
         private CrossMap _map;
         private CancellationTokenSource _tokenAsk;
 
+        private CancellationTokenSource _timeoutLogicToken;
+
 
         public NodeActor(int identifier, CrossBuilder builder, Dictionary<int, IActorRef> actorsMap)
         {
@@ -58,12 +60,19 @@ namespace Distributed.Cross.Common.Actors
                 {
                     Identifier = Identifier
                 }, Self);
+
+                _timeoutLogicToken?.Cancel();
                 _tokenAsk = new CancellationTokenSource();
+
 
                 var self = Self;
                 var vehicle = Vehicle;
 
                 Become(ElectionBehaviour);
+
+                _timeoutLogicToken = new CancellationTokenSource();
+                Task.Run(() => TimeoutLogicCheck(self), _timeoutLogicToken.Token);
+
 
                 Task.Run(() =>
                     vehicle.LeaderRequestAsk(_tokenAsk.Token)
@@ -83,6 +92,7 @@ namespace Distributed.Cross.Common.Actors
             Receive<ElectionStart>(message =>
             {
                 _logger.LogInformation("An election is start...");
+                _timeoutLogicToken?.Cancel();
                 Self.Tell(new LeaderElectionRequest(), Self);
             });
 
@@ -180,20 +190,23 @@ namespace Distributed.Cross.Common.Actors
             Receive<ElectionStart>(message =>
             {
                 _logger.LogInformation($"An election start is refused because i'm coordination behaviour");
+
             });
 
             Receive<LeaderElectionRequest>(message =>
             {
+                _logger.LogInformation($"A election leader request is refused because I'm coordination behaviour");
                 Sender.Tell(new LeaderElectionResponse
                 {
                     Identifier = Identifier
                 });
-                _logger.LogInformation($"A election leader request is refused because I'm coordination behaviour");
+               
             });
 
             Receive<LeaderNotificationRequest>(message =>
             {
                 _logger.LogInformation($"An new leader is refused from node because I'm coordination behaviour");
+
                 Sender.Tell(new LeaderNotificationResponse
                 {
                     Acknowledge = false
@@ -241,7 +254,11 @@ namespace Distributed.Cross.Common.Actors
             });
 
             Receive<VehicleRemoveCommand>(RemoveCrossingVehicle);
-            Receive<RoundEndNotification>(Vehicle.EndRound);
+            Receive<RoundEndNotification>(message =>
+            {
+                _timeoutLogicToken?.Cancel();
+                Vehicle.EndRound(message);
+            });
             Receive<VehicleExitNotification>(Vehicle.CheckEndRound);
 
             BaseBehaviour();
@@ -278,7 +295,13 @@ namespace Distributed.Cross.Common.Actors
                 _logger.LogInformation($"A new vehicle is crossing into this lane on round {message.ActualRound}");
                 Vehicle = new Vehicle(message.Vehicle, _builder, this, _logger);
                 Vehicle.UpdateCrossingStatus(message);
-                Vehicle.StartCrossing();
+                if(Vehicle.StartCrossing())
+                {
+                    _timeoutLogicToken = new CancellationTokenSource();
+                    var self = Self;
+                    Task.Run(() => TimeoutLogicCheckCross(self), _timeoutLogicToken.Token);
+                }
+
                 SendBroadcastMessage(new VehicleMoveNotification(message.Vehicle, message.CrossNode));
 
                 Become(CrossingBehaviour);
@@ -350,6 +373,16 @@ namespace Distributed.Cross.Common.Actors
                             _logger.LogInformation("An election is conclude successfully. I'm elected");
                             break;
                         }
+                    case ElectionResultType.Ghosted:
+                        {
+                            _logger.LogInformation("An election is ghosted. Bye bye!");
+                            Self.Tell(new VehicleRemoveCommand
+                            {
+                                IsGhost = true
+                            });
+                            Become(EntryBehaviour);
+                            break;
+                        }
                 }
 
             });
@@ -370,8 +403,7 @@ namespace Distributed.Cross.Common.Actors
             {
                 var brokeNode = ActorsMap[Const.BrokenIdentifier];
                 brokeNode.Tell(new VehicleBrokenCommand(Vehicle.Data), Self);
-            }
-           
+            } 
         }
 
         private void CheckRunner(CoordinationNotification message)
@@ -380,8 +412,8 @@ namespace Distributed.Cross.Common.Actors
             {
                 _tokenAsk.Cancel();
                 _logger.LogInformation($"Coordination data received!");
-                var isRunner = Vehicle.CoordinationInformationReceive(message);
-                if (isRunner)
+                var result = Vehicle.CoordinationInformationReceive(message);
+                if (result.IsRunner)
                 {
                     Become(CoordinationBehaviour);
                 }
@@ -389,8 +421,45 @@ namespace Distributed.Cross.Common.Actors
                 {
                     SendBroadcastMessage(new PriorityNotification(Identifier, Vehicle.Data.Priority));
                     Become(EntryBehaviour);
+                    if(!result.IsBlocked)
+                    {
+                        _timeoutLogicToken = new CancellationTokenSource();
+                        var self = Self;
+                        Task.Run(() =>TimeoutLogicCheck(self), _timeoutLogicToken.Token);
+                    }
                 }
             }
+        }
+
+        private async void TimeoutLogicCheck(IActorRef self)
+        {
+            try
+            {
+                await Task.Delay(Const.TimeoutLogicError, _timeoutLogicToken.Token);
+            }
+            catch
+            {
+                return;
+            }
+
+            _logger.LogWarning("Timeout for logic error on coordination");
+            self.Tell(new ElectionStart(), self);
+        }
+
+        private async void TimeoutLogicCheckCross(IActorRef self)
+        {
+            try
+            {
+                await Task.Delay(Const.TimeoutLogicError, _timeoutLogicToken.Token);
+            }
+            catch
+            {
+                return;
+            }
+
+            _logger.LogWarning("Timeout for logic error on crossing leader");
+            self.Tell(new RoundEndNotification(), self);
+
         }
 
         public void RemoveCrossingVehicle(VehicleRemoveCommand message)
@@ -408,15 +477,25 @@ namespace Distributed.Cross.Common.Actors
             Vehicle.RemoveParentNode();
             Vehicle = null;
 
-            var exitMessage = new VehicleExitNotification
+            if(!message.IsGhost)
             {
-                InputLane = startLane,
-                Identifier = Identifier,
-                BrokenNode = message.BrokenNode,
-                ActualRound = roundNumber
+                var exitMessage = new VehicleExitNotification
+                {
+                    InputLane = startLane,
+                    Identifier = Identifier,
+                    BrokenNode = message.BrokenNode,
+                    ActualRound = roundNumber
+                };
 
-            };
-            SendBroadcastMessage(exitMessage);
+                SendBroadcastMessage(exitMessage);
+
+            }
+            else
+            {
+                _logger.LogInformation("I'm ghosted. I'm exit without notification!");
+            }
+
+
 
             Become(IdleBehaviour);
         }

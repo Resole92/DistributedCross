@@ -76,12 +76,36 @@ namespace Distributed.Cross.Gui.Simulation.Environment.Components
             }
         }
 
+        private bool _isGhostOnEndRound;
+        public bool IsGhostOnEndRound
+        {
+            get => _isGhostOnEndRound;
+            set
+            {
+                _isGhostOnEndRound = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isGhostOnCoordination;
+        public bool IsGhostOnCoordination
+        {
+            get => _isGhostOnCoordination;
+            set
+            {
+                _isGhostOnCoordination = value;
+                OnPropertyChanged();
+            }
+        }
+
         public VehicleGui(VehicleDto vehicle)
         {
             InputLane = vehicle.InputLane;
             OutputLane = vehicle.OutputLane;
             Speed = vehicle.Speed;
             BrokenNode = vehicle.BrokenNode;
+            IsGhostOnEndRound = vehicle.IsGhostOnEndRound;
+            IsGhostOnCoordination = vehicle.IsGhostOnCoordination;
             LicensePlate = vehicle.LicensePlate;
         }
     }

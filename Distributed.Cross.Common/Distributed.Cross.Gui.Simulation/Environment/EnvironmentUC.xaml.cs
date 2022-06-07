@@ -449,7 +449,7 @@ namespace Distributed.Cross.Gui.Simulation.Environment
                     MessageBox.Show("Time must be greater than 10 and lower whan 50", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
 
-                if (NumberVehicleForBroke < 5 || NumberVehicleForBroke > 10000)
+                if (NumberVehicleForBroke < 1|| NumberVehicleForBroke > 10000)
                 {
                     MessageBox.Show("Number of vehicles to spawn a broke vehicle must  be greater than 5 and lower whan 10000", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
 

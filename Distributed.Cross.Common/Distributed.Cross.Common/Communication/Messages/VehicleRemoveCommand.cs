@@ -10,6 +10,8 @@ namespace Distributed.Cross.Common.Communication.Messages
 
         //Only for simulation
         public int ActualRound { get; set; }
+
+        public bool IsGhost { get; set; }
     }
 
     public class VehicleExitNotification

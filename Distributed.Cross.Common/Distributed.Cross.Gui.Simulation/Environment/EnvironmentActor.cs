@@ -132,6 +132,8 @@ namespace Distributed.Cross.Common.Actors
                                 OutputLane = newVehicle.OutputLane,
                                 Speed = newVehicle.Speed,
                                 BrokenNode = newVehicle.BrokenNode,
+                                IsGhostOnCoordination = newVehicle.IsGhostOnCoordination,
+                                IsGhostOnEndRound = newVehicle.IsGhostOnEndRound,
                                 LicensePlate = _licensePlateCount++
                             });
 
@@ -304,7 +306,22 @@ namespace Distributed.Cross.Common.Actors
             {
                
 
+
+
                 Random randInput = new Random(Guid.NewGuid().GetHashCode());
+
+                var ghost = randInput.Next(1, 101);
+                if(ghost > 50)
+                {
+                    vehicle.IsGhostOnCoordination = true;
+                    return;
+                }
+                else
+                {
+                    vehicle.IsGhostOnEndRound = true;
+                    return;
+                }
+
                 var entryLane = randInput.Next(1, 101);
                 if(entryLane > 94)
                 {

@@ -1747,6 +1747,10 @@
                                                                 <Run Text="{Binding OutputLane}"></Run>
                                                                 <Run Text="Broken? "></Run>
                                                                 <Run Text="{Binding BrokenNode}"></Run>
+                                                                <Run Text="- LE Coord"></Run>
+                                                                <Run Text="{Binding IsGhostOnCoordination}"></Run>
+                                                                <Run Text="- LE Cross"></Run>
+                                                                <Run Text="{Binding IsGhostOnEndRound}"></Run>
                                                     </TextBlock>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>

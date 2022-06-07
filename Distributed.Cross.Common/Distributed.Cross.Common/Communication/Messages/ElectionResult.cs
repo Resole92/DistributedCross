@@ -24,6 +24,7 @@ namespace Distributed.Cross.Common.Communication.Messages
         Bully,
         LeaderAlreadyPresent,
         Elected,
-        NotHandled
+        NotHandled,
+        Ghosted,
     }
 }
